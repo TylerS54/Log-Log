@@ -5,6 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Log-Log 💩</title>
     <link rel="stylesheet" href="style.css">
+
+    <!-- ApexCharts -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-app.js"></script>
+
+    <!-- Firebase Realtime Database -->
+    <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-database.js"></script>
 </head>
 <body>
     <div id="app">
@@ -15,26 +24,15 @@
         <button onclick="incrementCounter('AJ')">AJ</button>
 
         <p id="confirmation" style="display: none;"></p>
-
         
         <h2>💩 Counts</h2>
-        <div id="counts">
-            <canvas id="clickChart"></canvas>
+        <div id="chart">
+            <!-- Chart will be rendered here -->
         </div>
         
         <h2>Highscores</h2>
         <div id="highscore">Loading...</div>
-
-
-        
     </div>
-    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
-    <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-app.js"></script>
-
-    <!-- Add Firebase Realtime Database -->
-    <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-database.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@latest"></script>
-
 
     <script src="script.js"></script>
 </body>
