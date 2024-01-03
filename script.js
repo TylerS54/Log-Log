@@ -48,7 +48,7 @@ function showConfirmation(name) {
 
 function updateDisplay() {
     var countsRef = database.ref('counts');
-    countsRef.once('value', function(snapshot) {
+    countsRef.on('value', function(snapshot) {
         var data = processSnapshot(snapshot);
         updateChart(data);
     });
