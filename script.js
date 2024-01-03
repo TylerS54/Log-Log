@@ -18,8 +18,10 @@ firebase.initializeApp(firebaseConfig);
 var database = firebase.database();
 
 function incrementCounter(name) {
-    var today = new Date().toISOString().split('T')[0]; // Get current date in YYYY-MM-DD format
-    var countRef = database.ref('counts/' + name + '/' + today);
+    var now = new Date();
+    var timestamp = now.toISOString().split(':')[0]; // Format: YYYY-MM-DDTHH:MM
+    var countRef = database.ref('counts/' + name + '/' + timestamp);
+
     countRef.transaction(function(currentCount) {
         return (currentCount || 0) + 1;
     });
@@ -87,43 +89,44 @@ function processSnapshot(snapshot) {
         datasets: []
     };
 
-    let dates = new Set(); // To store unique dates
+    let hourlyData = {}; // Object to store aggregated hourly data
 
-    // Process each user's data
     snapshot.forEach(function(userSnapshot) {
         let userData = {
             label: userSnapshot.key,
             data: [],
             fill: false,
-            borderColor: getRandomColor(), // Function to generate a random color
+            borderColor: getRandomColor(), // Assuming you have this function for colors
             lineTension: 0.1
         };
 
         userSnapshot.forEach(function(dateSnapshot) {
-            let date = dateSnapshot.key;
-            let count = dateSnapshot.val();
-
-            dates.add(date);
-
-            userData.data.push({
-                x: date,
-                y: count
-            });
+            let timestamp = dateSnapshot.key;
+            let hour = timestamp.substring(0, 13); // Get YYYY-MM-DDTHH part
+            hourlyData[hour] = (hourlyData[hour] || 0) + dateSnapshot.val();
         });
+
+        for (let hour in hourlyData) {
+            userData.data.push({
+                x: hour,
+                y: hourlyData[hour]
+            });
+        }
 
         chartData.datasets.push(userData);
     });
 
-    // Sort and add dates to labels
-    chartData.labels = Array.from(dates).sort();
-
-    // Sort data points in each dataset by date
-    chartData.datasets.forEach(dataset => {
-        dataset.data.sort((a, b) => chartData.labels.indexOf(a.x) - chartData.labels.indexOf(b.x));
-    });
+    // Generate hourly labels
+    chartData.labels = generateHourlyLabels(hourlyData);
 
     return chartData;
 }
+
+function generateHourlyLabels(hourlyData) {
+    let hours = Object.keys(hourlyData).sort();
+    return hours.map(hour => hour + ':00'); // Add ':00' to make it clear it's hourly
+}
+
 
 function getRandomColor() {
     var letters = '0123456789ABCDEF';
@@ -140,12 +143,36 @@ function updateChart(data) {
 
     if (!globalChart) {
         globalChart = new Chart(ctx, {
-            type: 'line', // or 'bar'
+            type: 'line',
             data: data,
             options: {
                 scales: {
+                    x: {
+                        type: 'time',
+                        time: {
+                            unit: 'hour',
+                            tooltipFormat: 'MMM D, hA' // Adjust the tooltip format as needed
+                        },
+                        title: {
+                            display: true,
+                            text: 'Hour'
+                        }
+                    },
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Clicks'
+                        }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            title: function(tooltipItems) {
+                                return tooltipItems[0].label.split('T').join(' at ');
+                            }
+                        }
                     }
                 }
             }
@@ -155,6 +182,7 @@ function updateChart(data) {
         globalChart.update();
     }
 }
+
 
 document.addEventListener('DOMContentLoaded', function() {
     updateDisplay();
