@@ -52,6 +52,13 @@ button:hover {
     max-width: 600px;
 }
 
+#highscore {
+    color: #826c7f; /* Pastel purple, or choose another color */
+    margin: 20px 0;
+    font-weight: bold;
+}
+
+
 #confirmation {
     color: #4a7c59; /* Green color for confirmation */
     margin-top: 20px;
