@@ -50,20 +50,24 @@ function updateHighscore(snapshot) {
         userSnapshot.forEach(function(dateSnapshot) {
             total += dateSnapshot.val();
         });
-
         userTotals.push({ user: userSnapshot.key, total: total });
     });
 
-    // Sort the users based on total counts
     userTotals.sort(function(a, b) {
         return b.total - a.total;
     });
 
-    // Create a list to display
-    let highscoreList = userTotals.map(item => `${item.user}: ${item.total}`).join('<br>');
+    let highscoreHTML = userTotals.map((item, index) => 
+        `<div class="highscore-entry">
+            <span class="rank">${index + 1}</span>
+            <span class="name">${item.user}</span>
+            <span class="score">${item.total}</span>
+        </div>`
+    ).join('');
 
-    document.getElementById('highscore').innerHTML = highscoreList;
+    document.getElementById('highscore').innerHTML = highscoreHTML;
 }
+
 
 
 
