@@ -31,11 +31,58 @@ function updateDisplay() {
 }
 
 function processSnapshot(snapshot) {
-    // Process the data from Firebase to a format suitable for Chart.js
-    // This might involve aggregating counts by date for each user
-    // ...
-    return processedData;
+    let chartData = {
+        labels: [],
+        datasets: []
+    };
+
+    let dates = new Set(); // To store unique dates
+
+    // Process each user's data
+    snapshot.forEach(function(userSnapshot) {
+        let userData = {
+            label: userSnapshot.key,
+            data: [],
+            fill: false,
+            borderColor: getRandomColor(), // Function to generate a random color
+            lineTension: 0.1
+        };
+
+        userSnapshot.forEach(function(dateSnapshot) {
+            let date = dateSnapshot.key;
+            let count = dateSnapshot.val();
+
+            dates.add(date);
+
+            userData.data.push({
+                x: date,
+                y: count
+            });
+        });
+
+        chartData.datasets.push(userData);
+    });
+
+    // Sort and add dates to labels
+    chartData.labels = Array.from(dates).sort();
+
+    // Sort data points in each dataset by date
+    chartData.datasets.forEach(dataset => {
+        dataset.data.sort((a, b) => chartData.labels.indexOf(a.x) - chartData.labels.indexOf(b.x));
+    });
+
+    return chartData;
 }
+
+function getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
+
 
 function updateChart(data) {
     var ctx = document.getElementById('clickChart').getContext('2d');
