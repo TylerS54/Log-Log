@@ -38,7 +38,7 @@ function disableButtons() {
 
 function showConfirmation(name) {
     var confirmationElement = document.getElementById('confirmation');
-    confirmationElement.innerText = `You clicked for ${name}. Thanks!`;
+    confirmationElement.innerText = `${name}'s 💩 has been logged.`;
     confirmationElement.style.display = 'block';
 }
 
