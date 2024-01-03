@@ -1,9 +1,69 @@
+/* Basic Reset */
+body, h1, h2, button, p {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
+    background-color: #f3f4f6; /* Light grey background */
+    color: #333; /* Dark grey text */
     text-align: center;
+    padding: 20px;
+}
+
+h1 {
+    color: #6a4f4b; /* Pastel dark pink */
+    margin-bottom: 20px;
+}
+
+h2 {
+    color: #826c7f; /* Pastel purple */
+    margin: 20px 0;
 }
 
 button {
+    background-color: #a0d2eb; /* Pastel blue */
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 20px;
     margin: 10px;
-    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+button:hover {
+    background-color: #f9a1bc; /* Pastel pink */
+    transform: scale(1.05);
+}
+
+#counts {
+    margin-top: 20px;
+}
+
+/* Chart Container for better control */
+#chart-container {
+    width: 80%;
+    margin: 0 auto;
+    max-width: 600px;
+}
+
+canvas {
+    background-color: #fff; /* White background for the chart */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    button {
+        width: 100%;
+        margin: 10px 0;
+    }
+
+    #chart-container {
+        width: 100%;
+    }
 }
