@@ -131,7 +131,7 @@ function renderChart(chartData) {
             },
             yaxis: {
                 title: {
-                    text: 'Clicks'
+                    text: 'Poopies'
                 },
                 min: 0
             },
