@@ -89,35 +89,44 @@ function processSnapshot(snapshot) {
         datasets: []
     };
 
-    let hourlyData = {}; // Object to store aggregated hourly data
+    let aggregatedData = {}; // Aggregate data by hour
 
+    snapshot.forEach(function(userSnapshot) {
+        userSnapshot.forEach(function(hourSnapshot) {
+            let hour = hourSnapshot.key;
+            let count = hourSnapshot.val();
+
+            if (!aggregatedData[hour]) {
+                aggregatedData[hour] = {};
+            }
+
+            aggregatedData[hour][userSnapshot.key] = count;
+        });
+    });
+
+    // Generate a sorted array of unique hours
+    chartData.labels = Object.keys(aggregatedData).sort();
+
+    // Create datasets for each user
     snapshot.forEach(function(userSnapshot) {
         let userData = {
             label: userSnapshot.key,
             data: [],
             fill: false,
-            borderColor: getRandomColor(), // Assuming you have this function for colors
+            borderColor: getRandomColor(),
             lineTension: 0.1
         };
 
-        userSnapshot.forEach(function(dateSnapshot) {
-            let timestamp = dateSnapshot.key;
-            let hour = timestamp.substring(0, 13); // Get YYYY-MM-DDTHH part
-            hourlyData[hour] = (hourlyData[hour] || 0) + dateSnapshot.val();
-        });
-
-        for (let hour in hourlyData) {
+        chartData.labels.forEach(function(hour) {
+            let count = aggregatedData[hour][userSnapshot.key] || 0;
             userData.data.push({
                 x: hour,
-                y: hourlyData[hour]
+                y: count
             });
-        }
+        });
 
         chartData.datasets.push(userData);
     });
-
-    // Generate hourly labels
-    chartData.labels = generateHourlyLabels(hourlyData);
 
     return chartData;
 }
