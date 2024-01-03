@@ -1,3 +1,8 @@
+// On page load
+updateDisplay();
+
+var globalChart; // Declare this at the top of your script
+
 var firebaseConfig = {
     apiKey: "AIzaSyCUCLvljUj90NhC3w_aUU6SwkFvOt-asDk",
     authDomain: "loglog-a3cf1.firebaseapp.com",
@@ -22,7 +27,7 @@ function incrementCounter(name) {
 
     disableButtons(); // Disable all buttons after a click
     showConfirmation(name); // Show confirmation message
-    
+    updateDisplay();    
 }
 
 function disableButtons() {
@@ -39,7 +44,6 @@ function showConfirmation(name) {
     confirmationElement.style.display = 'block';
 }
 
-updateDisplay();// Call updateDisplay to update the chart after a click (if needed)
 
 
 
@@ -107,17 +111,23 @@ function getRandomColor() {
 
 function updateChart(data) {
     var ctx = document.getElementById('clickChart').getContext('2d');
-    var clickChart = new Chart(ctx, {
-        type: 'line', // or 'bar' depending on your preference
-        data: data,
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
+
+    if (!globalChart) {
+        globalChart = new Chart(ctx, {
+            type: 'line', // or 'bar'
+            data: data,
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
                 }
             }
-        }
-    });
+        });
+    } else {
+        globalChart.data = data;
+        globalChart.update();
+    }
 }
 
 // Initialize display
