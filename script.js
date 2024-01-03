@@ -1,5 +1,4 @@
-// On page load
-updateDisplay();
+
 
 var globalChart; // Declare this at the top of your script
 
@@ -129,5 +128,7 @@ function updateChart(data) {
     }
 }
 
-// Initialize display
-updateDisplay();
+document.addEventListener('DOMContentLoaded', function() {
+    updateDisplay();
+});
+
