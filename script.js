@@ -14,22 +14,41 @@ firebase.initializeApp(firebaseConfig);
 var database = firebase.database();
 
 function incrementCounter(name) {
-    var countRef = database.ref('counts/' + name);
+    var today = new Date().toISOString().split('T')[0]; // Get current date in YYYY-MM-DD format
+    var countRef = database.ref('counts/' + name + '/' + today);
     countRef.transaction(function(currentCount) {
         return (currentCount || 0) + 1;
     });
 }
 
+
 function updateDisplay() {
-    var countsElement = document.getElementById('counts');
     var countsRef = database.ref('counts');
-    countsRef.on('value', function(snapshot) {
-        countsElement.innerHTML = '';
-        snapshot.forEach(function(childSnapshot) {
-            var name = childSnapshot.key;
-            var count = childSnapshot.val();
-            countsElement.innerHTML += `<p>${name}: ${count}</p>`;
-        });
+    countsRef.once('value', function(snapshot) {
+        var data = processSnapshot(snapshot);
+        updateChart(data);
+    });
+}
+
+function processSnapshot(snapshot) {
+    // Process the data from Firebase to a format suitable for Chart.js
+    // This might involve aggregating counts by date for each user
+    // ...
+    return processedData;
+}
+
+function updateChart(data) {
+    var ctx = document.getElementById('clickChart').getContext('2d');
+    var clickChart = new Chart(ctx, {
+        type: 'line', // or 'bar' depending on your preference
+        data: data,
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
     });
 }
 
