@@ -70,6 +70,20 @@ function updateHighscore(snapshot) {
     document.getElementById('highscore').innerHTML = highscoreHTML;
 }
 
+function convertToEasternTime(utcDate) {
+    const easternOffset = -5; // Eastern Standard Time offset from UTC
+    const daylightSavingTime = true; // Set this based on DST observance
+
+    let localOffset = utcDate.getTimezoneOffset() / 60;
+    let totalOffset = easternOffset - localOffset;
+
+    // Adjust for Daylight Saving Time
+    if (daylightSavingTime) {
+        totalOffset += 1;
+    }
+
+    return new Date(utcDate.getTime() + totalOffset * 3600 * 1000);
+}
 
 
 
@@ -80,9 +94,11 @@ function processSnapshot(snapshot) {
         let dataPoints = [];
         userSnapshot.forEach(timeSnapshot => {
             let time = timeSnapshot.key;
+            let utcDate = new Date(time.substring(0, 13).replace('T', ' ') + ':00:00');
+            let easternTime = convertToEasternTime(utcDate);
             let count = timeSnapshot.val();
             dataPoints.push({
-                x: new Date(time.substring(0, 13).replace('T', ' ') + ':00:00').getTime(),
+                x: easternTime.getTime(),
                 y: count
             });
         });
@@ -97,6 +113,7 @@ function processSnapshot(snapshot) {
         series: seriesData
     };
 }
+
 
 function renderChart(chartData) {
     if (!globalChart) {
