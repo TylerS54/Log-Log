@@ -55,8 +55,45 @@ button:hover {
 #highscore {
     text-align: left;
     margin: 20px auto;
-    max-width: 400px;
+    max-width: 600px; /* Adjust as needed */
+    background-color: #f8f9fa; /* Light background */
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 10px;
 }
+
+.highscore-entry {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #eaeaea;
+    padding: 8px 0;
+}
+
+.highscore-entry:last-child {
+    border-bottom: none;
+}
+
+.rank {
+    font-size: 20px;
+    font-weight: bold;
+    color: #4a7c59; /* Rank color */
+    width: 30px;
+}
+
+.name {
+    font-size: 18px;
+    flex-grow: 1;
+    padding: 0 10px;
+}
+
+.score {
+    font-size: 18px;
+    font-weight: bold;
+    color: #826c7f; /* Score color */
+    min-width: 50px;
+    text-align: right;
+}
+
 
 
 #confirmation {
