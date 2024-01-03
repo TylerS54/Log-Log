@@ -99,44 +99,50 @@ function processSnapshot(snapshot) {
 }
 
 function renderChart(chartData) {
-    var options = {
-        series: chartData.series,
-        chart: {
-            type: 'line',
-            height: 350
-        },
-        xaxis: {
-            type: 'datetime',
-            title: {
-                text: 'Time'
-            }
-        },
-        yaxis: {
-            title: {
-                text: 'Clicks'
+    if (!globalChart) {
+        var options = {
+            series: chartData.series,
+            chart: {
+                type: 'line',
+                height: 350
             },
-            min: 0
-        },
-        tooltip: {
-            x: {
-                format: 'dd MMM yyyy HH:mm'
+            xaxis: {
+                type: 'datetime',
+                title: {
+                    text: 'Time'
+                }
+            },
+            yaxis: {
+                title: {
+                    text: 'Clicks'
+                },
+                min: 0
+            },
+            tooltip: {
+                x: {
+                    format: 'dd MMM yyyy HH:mm'
+                }
             }
-        }
-    };
+        };
 
-    var chart = new ApexCharts(document.querySelector("#chart"), options);
-    chart.render();
+        globalChart = new ApexCharts(document.querySelector("#chart"), options);
+        globalChart.render();
+    } else {
+        globalChart.updateOptions({
+            series: chartData.series
+        });
+    }
 }
-
-document.addEventListener('DOMContentLoaded', function() {
-    updateDisplay();
-});
 
 function updateDisplay() {
     var countsRef = database.ref('counts');
-    countsRef.once('value', function(snapshot) {
+    countsRef.on('value', function(snapshot) { // Changed from 'once' to 'on'
         var chartData = processSnapshot(snapshot);
         renderChart(chartData);
         updateHighscore(snapshot); 
     });
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    updateDisplay();
+});
