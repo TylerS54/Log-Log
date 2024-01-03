@@ -19,7 +19,27 @@ function incrementCounter(name) {
     countRef.transaction(function(currentCount) {
         return (currentCount || 0) + 1;
     });
+
+    disableButtons(); // Disable all buttons after a click
+    showConfirmation(name); // Show confirmation message
 }
+
+function disableButtons() {
+    var buttons = document.querySelectorAll('button');
+    buttons.forEach(function(button) {
+        button.disabled = true;
+        button.style.opacity = 0.5; // Reduce opacity to indicate disabled state
+    });
+}
+
+function showConfirmation(name) {
+    var confirmationElement = document.getElementById('confirmation');
+    confirmationElement.innerText = `You clicked for ${name}. Thanks!`;
+    confirmationElement.style.display = 'block';
+}
+
+// Call updateDisplay to update the chart after a click (if needed)
+
 
 
 function updateDisplay() {
