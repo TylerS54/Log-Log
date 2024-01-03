@@ -27,7 +27,6 @@ function incrementCounter(name) {
 
     disableButtons(); // Disable all buttons after a click
     showConfirmation(name); // Show confirmation message
-    updateDisplay();    
 }
 
 function disableButtons() {
