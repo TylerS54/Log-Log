@@ -43,8 +43,7 @@ function showConfirmation(name) {
 }
 
 function updateHighscore(snapshot) {
-    let highscore = 0;
-    let highscoreUser = '';
+    let userTotals = [];
 
     snapshot.forEach(function(userSnapshot) {
         let total = 0;
@@ -52,14 +51,20 @@ function updateHighscore(snapshot) {
             total += dateSnapshot.val();
         });
 
-        if (total > highscore) {
-            highscore = total;
-            highscoreUser = userSnapshot.key;
-        }
+        userTotals.push({ user: userSnapshot.key, total: total });
     });
 
-    document.getElementById('highscore').innerText = `Highest count is ${highscore}, by ${highscoreUser}`;
+    // Sort the users based on total counts
+    userTotals.sort(function(a, b) {
+        return b.total - a.total;
+    });
+
+    // Create a list to display
+    let highscoreList = userTotals.map(item => `${item.user}: ${item.total}`).join('<br>');
+
+    document.getElementById('highscore').innerHTML = highscoreList;
 }
+
 
 
 
