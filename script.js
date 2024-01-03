@@ -42,12 +42,31 @@ function showConfirmation(name) {
     confirmationElement.style.display = 'block';
 }
 
+function updateHighscore(snapshot) {
+    let highscore = 0;
+    let highscoreUser = '';
+
+    snapshot.forEach(function(userSnapshot) {
+        let total = 0;
+        userSnapshot.forEach(function(dateSnapshot) {
+            total += dateSnapshot.val();
+        });
+
+        if (total > highscore) {
+            highscore = total;
+            highscoreUser = userSnapshot.key;
+        }
+    });
+
+    document.getElementById('highscore').innerText = `Highest count is ${highscore}, by ${highscoreUser}`;
+}
 
 
 
 function updateDisplay() {
     var countsRef = database.ref('counts');
     countsRef.on('value', function(snapshot) {
+        updateHighscore(snapshot); // Update the highscore
         var data = processSnapshot(snapshot);
         updateChart(data);
     });
