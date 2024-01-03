@@ -22,7 +22,7 @@ function incrementCounter(name) {
 
     disableButtons(); // Disable all buttons after a click
     showConfirmation(name); // Show confirmation message
-    updateDisplay();
+    
 }
 
 function disableButtons() {
@@ -39,7 +39,7 @@ function showConfirmation(name) {
     confirmationElement.style.display = 'block';
 }
 
-// Call updateDisplay to update the chart after a click (if needed)
+updateDisplay();// Call updateDisplay to update the chart after a click (if needed)
 
 
 
