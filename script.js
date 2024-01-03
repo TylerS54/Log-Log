@@ -26,15 +26,15 @@ function incrementCounter(name) {
         return (currentCount || 0) + 1;
     });
 
-    disableButtons(); // Disable all buttons after a click
-    showConfirmation(name); // Show confirmation message
+    disableButtons();
+    showConfirmation(name);
 }
 
 function disableButtons() {
     var buttons = document.querySelectorAll('button');
     buttons.forEach(function(button) {
         button.disabled = true;
-        button.style.opacity = 0.5; // Reduce opacity to indicate disabled state
+        button.style.opacity = 0.5;
     });
 }
 
@@ -74,126 +74,69 @@ function updateHighscore(snapshot) {
 
 
 
-function updateDisplay() {
-    var countsRef = database.ref('counts');
-    countsRef.on('value', function(snapshot) {
-        updateHighscore(snapshot); // Update the highscore
-        var data = processSnapshot(snapshot);
-        updateChart(data);
-    });
-}
-
 function processSnapshot(snapshot) {
-    let chartData = {
-        labels: [],
-        datasets: []
-    };
-
-    let aggregatedData = {}; // Aggregate data by hour
-
-    snapshot.forEach(function(userSnapshot) {
-        userSnapshot.forEach(function(hourSnapshot) {
-            let hour = hourSnapshot.key;
-            let count = hourSnapshot.val();
-
-            if (!aggregatedData[hour]) {
-                aggregatedData[hour] = {};
-            }
-
-            aggregatedData[hour][userSnapshot.key] = count;
-        });
-    });
-
-    // Generate a sorted array of unique hours
-    chartData.labels = Object.keys(aggregatedData).sort();
-
-    // Create datasets for each user
-    snapshot.forEach(function(userSnapshot) {
-        let userData = {
-            label: userSnapshot.key,
-            data: [],
-            fill: false,
-            borderColor: getRandomColor(),
-            lineTension: 0.1
-        };
-
-        chartData.labels.forEach(function(hour) {
-            let count = aggregatedData[hour][userSnapshot.key] || 0;
-            userData.data.push({
-                x: hour,
+    let seriesData = [];
+    snapshot.forEach(userSnapshot => {
+        let dataPoints = [];
+        userSnapshot.forEach(timeSnapshot => {
+            let time = timeSnapshot.key;
+            let count = timeSnapshot.val();
+            dataPoints.push({
+                x: new Date(time.substring(0, 13).replace('T', ' ') + ':00:00').getTime(),
                 y: count
             });
         });
 
-        chartData.datasets.push(userData);
+        seriesData.push({
+            name: userSnapshot.key,
+            data: dataPoints
+        });
     });
 
-    return chartData;
+    return {
+        series: seriesData
+    };
 }
 
-function generateHourlyLabels(hourlyData) {
-    let hours = Object.keys(hourlyData).sort();
-    return hours.map(hour => hour + ':00'); // Add ':00' to make it clear it's hourly
-}
-
-
-function getRandomColor() {
-    var letters = '0123456789ABCDEF';
-    var color = '#';
-    for (var i = 0; i < 6; i++) {
-        color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-}
-
-
-function updateChart(data) {
-    var ctx = document.getElementById('clickChart').getContext('2d');
-
-    if (!globalChart) {
-        globalChart = new Chart(ctx, {
+function renderChart(chartData) {
+    var options = {
+        series: chartData.series,
+        chart: {
             type: 'line',
-            data: data,
-            options: {
-                scales: {
-                    x: {
-                        type: 'time',
-                        time: {
-                            unit: 'hour',
-                            tooltipFormat: 'MMM D, hA' // Adjust the tooltip format as needed
-                        },
-                        title: {
-                            display: true,
-                            text: 'Hour'
-                        }
-                    },
-                    y: {
-                        beginAtZero: true,
-                        title: {
-                            display: true,
-                            text: 'Clicks'
-                        }
-                    }
-                },
-                plugins: {
-                    tooltip: {
-                        callbacks: {
-                            title: function(tooltipItems) {
-                                return tooltipItems[0].label.split('T').join(' at ');
-                            }
-                        }
-                    }
-                }
+            height: 350
+        },
+        xaxis: {
+            type: 'datetime',
+            title: {
+                text: 'Time'
             }
-        });
-    } else {
-        globalChart.data = data;
-        globalChart.update();
-    }
-}
+        },
+        yaxis: {
+            title: {
+                text: 'Clicks'
+            },
+            min: 0
+        },
+        tooltip: {
+            x: {
+                format: 'dd MMM yyyy HH:mm'
+            }
+        }
+    };
 
+    var chart = new ApexCharts(document.querySelector("#chart"), options);
+    chart.render();
+}
 
 document.addEventListener('DOMContentLoaded', function() {
     updateDisplay();
 });
 
+function updateDisplay() {
+    var countsRef = database.ref('counts');
+    countsRef.once('value', function(snapshot) {
+        var chartData = processSnapshot(snapshot);
+        renderChart(chartData);
+        updateHighscore(snapshot); 
+    });
+}
