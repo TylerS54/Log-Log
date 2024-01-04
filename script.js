@@ -30,7 +30,7 @@ function incrementCounter(name) {
     showConfirmation(name);
 }
 
-function sendMessageToTelegram(name) {
+function sendTelegramMessage(name) {
     const botToken = '6741155054:AAGSjlsqa7xbJGHkKq9uEREUjNSO22yn6KE'; // This is not secure
     const chatId = '-1002084507637';
     const text = `Message triggered by ${name}`;
