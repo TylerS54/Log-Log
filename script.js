@@ -30,6 +30,18 @@ function incrementCounter(name) {
     showConfirmation(name);
 }
 
+function sendMessageToTelegram(name) {
+    const botToken = '6741155054:AAGSjlsqa7xbJGHkKq9uEREUjNSO22yn6KE'; // This is not secure
+    const chatId = '-1002084507637';
+    const text = `Message triggered by ${name}`;
+    const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(text)}`;
+
+    fetch(url)
+        .then(response => response.json())
+        .then(data => console.log(data))
+        .catch(error => console.error(error));
+}
+
 function disableButtons() {
     var buttons = document.querySelectorAll('button');
     buttons.forEach(function(button) {
