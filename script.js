@@ -377,7 +377,7 @@ function renderCumulativeChart(chartData) {
 
 function updateDisplay(chartView) {
     var countsRef = database.ref('counts');
-    countsRef.once('value', function(snapshot) {
+    countsRef.on('value', function(snapshot) {
         var chartData = processSnapshot(snapshot, chartView);
         renderChart(chartData);
 
