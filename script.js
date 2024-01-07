@@ -263,30 +263,22 @@ function processSnapshot(snapshot, chartView) {
         let dataPoints = {};
         userSnapshot.forEach(timeSnapshot => {
             let time = timeSnapshot.key;
-            let utcDate = new Date(time.substring(0, 13).replace('T', ' ') + ':00:00');
-            let dateKey = utcDate.toISOString().split('T')[0]; // YYYY-MM-DD
-            if (chartView === 'weekly') {
-                dateKey = `${utcDate.getFullYear()}-W${getWeekNumber(utcDate)}`;
-            }
+            let date = new Date(time.substring(0, 13).replace('T', ' ') + ':00:00');
+            let dateKey = chartView === 'daily' ? date.toISOString().split('T')[0] : `${date.getFullYear()}-W${getWeekNumber(date)}`;
+            
             dataPoints[dateKey] = (dataPoints[dateKey] || 0) + timeSnapshot.val();
-        });
-
-        let formattedData = Object.keys(dataPoints).sort().map(key => {
-            return {
-                x: new Date(key).getTime(),
-                y: dataPoints[key]
-            };
         });
 
         seriesData.push({
             name: userSnapshot.key,
-            data: formattedData
+            data: Object.entries(dataPoints).map(([key, value]) => ({
+                x: new Date(key).getTime(),
+                y: value
+            }))
         });
     });
 
-    return {
-        series: seriesData
-    };
+    return { series: seriesData };
 }
 
 function processCumulativeSnapshot(snapshot) {
@@ -389,8 +381,10 @@ function updateDisplay(chartView) {
         var chartData = processSnapshot(snapshot, chartView);
         renderChart(chartData);
 
-        var cumulativeData = processCumulativeSnapshot(snapshot);
-        renderCumulativeChart(cumulativeData);
+        if (!globalCumulativeChart) {
+            var cumulativeData = processCumulativeSnapshot(snapshot);
+            renderCumulativeChart(cumulativeData);
+        }
 
         updateHighscore(snapshot);
     });
@@ -404,8 +398,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Trigger the initial chart update based on the default selected view
-    updateDisplay(document.querySelector('input[name="chartView"]:checked').value);
+    updateDisplay('daily'); // Initialize with the 'daily' view
 });
-
 
