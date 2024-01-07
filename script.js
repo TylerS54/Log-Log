@@ -1,5 +1,3 @@
-
-
 var globalChart, globalCumulativeChart;
 
 var firebaseConfig = {
@@ -16,19 +14,6 @@ var firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 var database = firebase.database();
-
-function incrementCounter(name) {
-    var now = new Date();
-    var timestamp = now.toISOString().split(':')[0]; // Format: YYYY-MM-DDTHH:MM
-    var countRef = database.ref('counts/' + name + '/' + timestamp);
-
-    countRef.transaction(function(currentCount) {
-        return (currentCount || 0) + 1;
-    });
-
-    disableButtons();
-    showConfirmation(name);
-}
 
 function sendTelegramMessage(name) {
     const botToken = '6741155054:AAGSjlsqa7xbJGHkKq9uEREUjNSO22yn6KE'; // This is not secure
@@ -209,19 +194,6 @@ function sendTelegramMessage(name) {
         .catch(error => console.error(error));
 }
 
-function disableButtons() {
-    var buttons = document.querySelectorAll('button');
-    buttons.forEach(function(button) {
-        button.disabled = true;
-        button.style.opacity = 0.5;
-    });
-}
-
-function showConfirmation(name) {
-    var confirmationElement = document.getElementById('confirmation');
-    confirmationElement.innerText = `${name}'s 💩 has been logged.`;
-    confirmationElement.style.display = 'block';
-}
 
 function updateHighscore(snapshot) {
     let userTotals = [];
@@ -249,33 +221,41 @@ function updateHighscore(snapshot) {
     document.getElementById('highscore').innerHTML = highscoreHTML;
 }
 
-function convertToEasternTime(utcDate) {
-    const easternOffset = -5; // Eastern Standard Time offset from UTC
-    const daylightSavingTime = true; // Set this based on DST observance
 
-    let localOffset = utcDate.getTimezoneOffset() / 60;
-    let totalOffset = easternOffset - localOffset;
+function incrementCounter(name) {
+    var now = new Date();
+    var timestamp = now.toISOString().split(':')[0]; // Format: YYYY-MM-DDTHH:MM
+    var countRef = database.ref('counts/' + name + '/' + timestamp);
 
-    // Adjust for Daylight Saving Time
-    if (daylightSavingTime) {
-        totalOffset += 1;
-    }
+    countRef.transaction(function(currentCount) {
+        return (currentCount || 0) + 1;
+    });
 
-    return new Date(utcDate.getTime() + totalOffset * 3600 * 1000);
+    disableButtons();
+    showConfirmation(name);
 }
 
-
-function formatDateForChart(dateString, chartView) {
-    let date = new Date(dateString);
-    if (chartView === 'daily') {
-        return date.toISOString().split('T')[0]; // Format as YYYY-MM-DD
-    } else { // weekly
-        let weekStart = new Date(date.setDate(date.getDate() - date.getDay()));
-        let weekEnd = new Date(date.setDate(date.getDate() - date.getDay() + 6));
-        return weekStart.toISOString().split('T')[0] + ' to ' + weekEnd.toISOString().split('T')[0];
-    }
+function disableButtons() {
+    var buttons = document.querySelectorAll('button');
+    buttons.forEach(function(button) {
+        button.disabled = true;
+        button.style.opacity = 0.5;
+    });
 }
 
+function showConfirmation(name) {
+    var confirmationElement = document.getElementById('confirmation');
+    confirmationElement.innerText = `${name}'s 💩 has been logged.`;
+    confirmationElement.style.display = 'block';
+}
+
+function getWeekNumber(d) {
+    d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+    d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
+    var yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+    var weekNo = Math.ceil(((d - yearStart) / 86400000 + 1) / 7);
+    return weekNo;
+}
 
 function processSnapshot(snapshot, chartView) {
     let seriesData = [];
@@ -284,25 +264,16 @@ function processSnapshot(snapshot, chartView) {
         userSnapshot.forEach(timeSnapshot => {
             let time = timeSnapshot.key;
             let utcDate = new Date(time.substring(0, 13).replace('T', ' ') + ':00:00');
-            let dateKey;
-            if (chartView === 'daily') {
-                dateKey = utcDate.toISOString().split('T')[0]; // YYYY-MM-DD
-            } else { // weekly
+            let dateKey = utcDate.toISOString().split('T')[0]; // YYYY-MM-DD
+            if (chartView === 'weekly') {
                 dateKey = `${utcDate.getFullYear()}-W${getWeekNumber(utcDate)}`;
             }
             dataPoints[dateKey] = (dataPoints[dateKey] || 0) + timeSnapshot.val();
         });
 
-        let formattedData = Object.entries(dataPoints).map(([key, value]) => {
+        let formattedData = Object.keys(dataPoints).sort().map(key => {
             return {
-                x: formatDateForChart(key, chartView),
-                y: value
-            };
-        });
-        
-        let formattedData = Object.keys(dataPoints).map(key => {
-            return {
-                x: key,
+                x: new Date(key).getTime(),
                 y: dataPoints[key]
             };
         });
@@ -327,12 +298,6 @@ function processCumulativeSnapshot(snapshot) {
             total += timeSnapshot.val();
             let time = timeSnapshot.key;
             let utcDate = new Date(time.substring(0, 13).replace('T', ' ') + ':00:00');
-            let formattedData = dataPoints.map(point => {
-                return {
-                    x: new Date(point.x).toISOString().split('T')[0], // Convert to YYYY-MM-DD format
-                    y: point.y
-                };
-            });
             dataPoints.push({
                 x: utcDate.getTime(),
                 y: total
@@ -350,145 +315,95 @@ function processCumulativeSnapshot(snapshot) {
     };
 }
 
-
-function renderCumulativeChart(chartData) {
-    if (!globalCumulativeChart) {
-        var options = {
-            series: chartData.series,
-            chart: {
-                type: 'line',
-                height: 350
-            },
-            xaxis: {
-                type: 'category',
-                title: {
-                    text: 'Date'
-                }
-            },
-            yaxis: {
-                title: {
-                    text: 'Total Clicks'
-                },
-                min: 0
-            }
-        };
-
-        globalCumulativeChart = new ApexCharts(document.querySelector("#cumulativeChart"), options);
-        globalCumulativeChart.render();
-    } else {
-        globalCumulativeChart.updateOptions({
-            series: chartData.series
-        });
-    }
-}
-
-
-function getWeekNumber(d) {
-    d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-    d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
-    var yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
-    var weekNo = Math.ceil(((d - yearStart) / 86400000 + 1) / 7);
-    return weekNo;
-}
-
-function processSnapshotForWeekly(snapshot) {
-    let seriesData = [];
-    let weeklyData = {};
-
-    snapshot.forEach(function(userSnapshot) {
-        userSnapshot.forEach(function(timeSnapshot) {
-            let time = timeSnapshot.key;
-            let date = new Date(time.substring(0, 13).replace('T', ' ') + ':00:00');
-            let weekNumber = getWeekNumber(date).join('-');
-            
-            if (!weeklyData[weekNumber]) {
-                weeklyData[weekNumber] = {};
-            }
-            if (!weeklyData[weekNumber][userSnapshot.key]) {
-                weeklyData[weekNumber][userSnapshot.key] = 0;
-            }
-            weeklyData[weekNumber][userSnapshot.key] += timeSnapshot.val();
-        });
-    });
-
-    Object.keys(weeklyData).sort().forEach(function(week) {
-        let weekData = { name: week, data: [] };
-        Object.keys(weeklyData[week]).forEach(function(user) {
-            weekData.data.push({
-                x: user,
-                y: weeklyData[week][user]
-            });
-        });
-        seriesData.push(weekData);
-    });
-
-    return {
-        series: seriesData
-    };
-}
-
-
-
-
 function renderChart(chartData) {
-    if (!globalChart) {
-        var options = {
-            series: chartData.series,
-            chart: {
-                type: 'line',
-                height: 350
-            },
-            xaxis: {
-                type: 'datetime',
-                title: {
-                    text: 'Time'
-                }
-            },
-            yaxis: {
-                title: {
-                    text: 'Poopies'
-                },
-                min: 0
-            },
-            tooltip: {
-                x: {
-                    format: 'dd MMM yyyy HH:mm'
-                }
+    var options = {
+        series: chartData.series,
+        chart: {
+            type: 'line',
+            height: 350
+        },
+        xaxis: {
+            type: 'datetime',
+            title: {
+                text: 'Date'
             }
-        };
+        },
+        yaxis: {
+            title: {
+                text: 'Clicks'
+            },
+            min: 0
+        },
+        tooltip: {
+            x: {
+                format: 'dd MMM yyyy'
+            }
+        }
+    };
 
+    if (!globalChart) {
         globalChart = new ApexCharts(document.querySelector("#chart"), options);
         globalChart.render();
     } else {
-        globalChart.updateOptions({
-            series: chartData.series
-        });
+        globalChart.updateOptions(options, true);
     }
 }
 
-function setupChartToggle() {
-    var radios = document.querySelectorAll('input[type="radio"][name="chartToggle"]');
-    radios.forEach(radio => {
-        radio.addEventListener('change', function() {
-            updateDisplay(this.value);
-        });
-    });
+function renderCumulativeChart(chartData) {
+    var cumulativeOptions = {
+        series: chartData.series,
+        chart: {
+            type: 'line',
+            height: 350
+        },
+        xaxis: {
+            type: 'datetime',
+            title: {
+                text: 'Date'
+            }
+        },
+        yaxis: {
+            title: {
+                text: 'Cumulative Clicks'
+            },
+            min: 0
+        },
+        tooltip: {
+            x: {
+                format: 'dd MMM yyyy'
+            }
+        }
+    };
+
+    if (!globalCumulativeChart) {
+        globalCumulativeChart = new ApexCharts(document.querySelector("#cumulativeChart"), cumulativeOptions);
+        globalCumulativeChart.render();
+    } else {
+        globalCumulativeChart.updateOptions(cumulativeOptions, true);
+    }
 }
 
-function updateDisplay(viewType = 'daily') {
+function updateDisplay(chartView = 'daily') {
     var countsRef = database.ref('counts');
     countsRef.once('value', function(snapshot) {
-        var chartData = viewType === 'daily' ? processSnapshot(snapshot) : processSnapshotForWeekly(snapshot);
+        var chartData = processSnapshot(snapshot, chartView);
         renderChart(chartData);
 
         var cumulativeData = processCumulativeSnapshot(snapshot);
         renderCumulativeChart(cumulativeData);
-
-        updateHighscore(snapshot);
     });
 }
 
 document.addEventListener('DOMContentLoaded', function() {
+    var chartViewRadios = document.querySelectorAll('input[type="radio"][name="chartView"]');
+    chartViewRadios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            updateDisplay(this.value);
+        });
+    });
+
     updateDisplay();
-    setupChartToggle();
 });
+
+
+
