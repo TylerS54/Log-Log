@@ -383,7 +383,7 @@ function renderCumulativeChart(chartData) {
     }
 }
 
-function updateDisplay(chartView = 'daily') {
+function updateDisplay(chartView) {
     var countsRef = database.ref('counts');
     countsRef.once('value', function(snapshot) {
         var chartData = processSnapshot(snapshot, chartView);
@@ -404,7 +404,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    updateDisplay();
+    // Initialize with the default view
+    updateDisplay(document.querySelector('input[name="chartView"]:checked').value);
 });
+
 
 
