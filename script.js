@@ -194,7 +194,6 @@ function sendTelegramMessage(name) {
         .catch(error => console.error(error));
 }
 
-
 function updateHighscore(snapshot) {
     let userTotals = [];
 
@@ -220,6 +219,7 @@ function updateHighscore(snapshot) {
 
     document.getElementById('highscore').innerHTML = highscoreHTML;
 }
+
 
 
 function incrementCounter(name) {
@@ -391,6 +391,8 @@ function updateDisplay(chartView = 'daily') {
 
         var cumulativeData = processCumulativeSnapshot(snapshot);
         renderCumulativeChart(cumulativeData);
+
+        updateHighscore(snapshot);
     });
 }
 
@@ -404,6 +406,5 @@ document.addEventListener('DOMContentLoaded', function() {
 
     updateDisplay();
 });
-
 
 
