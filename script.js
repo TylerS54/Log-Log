@@ -265,7 +265,16 @@ function convertToEasternTime(utcDate) {
 }
 
 
-
+function formatDateForChart(dateString, chartView) {
+    let date = new Date(dateString);
+    if (chartView === 'daily') {
+        return date.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+    } else { // weekly
+        let weekStart = new Date(date.setDate(date.getDate() - date.getDay()));
+        let weekEnd = new Date(date.setDate(date.getDate() - date.getDay() + 6));
+        return weekStart.toISOString().split('T')[0] + ' to ' + weekEnd.toISOString().split('T')[0];
+    }
+}
 
 
 function processSnapshot(snapshot, chartView) {
@@ -284,6 +293,13 @@ function processSnapshot(snapshot, chartView) {
             dataPoints[dateKey] = (dataPoints[dateKey] || 0) + timeSnapshot.val();
         });
 
+        let formattedData = Object.entries(dataPoints).map(([key, value]) => {
+            return {
+                x: formatDateForChart(key, chartView),
+                y: value
+            };
+        });
+        
         let formattedData = Object.keys(dataPoints).map(key => {
             return {
                 x: key,
@@ -311,6 +327,12 @@ function processCumulativeSnapshot(snapshot) {
             total += timeSnapshot.val();
             let time = timeSnapshot.key;
             let utcDate = new Date(time.substring(0, 13).replace('T', ' ') + ':00:00');
+            let formattedData = dataPoints.map(point => {
+                return {
+                    x: new Date(point.x).toISOString().split('T')[0], // Convert to YYYY-MM-DD format
+                    y: point.y
+                };
+            });
             dataPoints.push({
                 x: utcDate.getTime(),
                 y: total
@@ -329,17 +351,25 @@ function processCumulativeSnapshot(snapshot) {
 }
 
 
-function renderCumulativeChart(cumulativeData) {
-    // Function to render the cumulative chart
+function renderCumulativeChart(chartData) {
     if (!globalCumulativeChart) {
         var options = {
-            series: cumulativeData.series,
+            series: chartData.series,
             chart: {
-                type: 'bar',
+                type: 'line',
                 height: 350
             },
             xaxis: {
-                categories: cumulativeData.series.map(s => s.name)
+                type: 'category',
+                title: {
+                    text: 'Date'
+                }
+            },
+            yaxis: {
+                title: {
+                    text: 'Total Clicks'
+                },
+                min: 0
             }
         };
 
@@ -347,10 +377,11 @@ function renderCumulativeChart(cumulativeData) {
         globalCumulativeChart.render();
     } else {
         globalCumulativeChart.updateOptions({
-            series: cumulativeData.series
+            series: chartData.series
         });
     }
 }
+
 
 function getWeekNumber(d) {
     d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
