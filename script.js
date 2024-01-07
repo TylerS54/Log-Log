@@ -1,6 +1,6 @@
 
 
-var globalChart; // Declare this at the top of your script
+var globalChart, globalCumulativeChart;
 
 var firebaseConfig = {
     apiKey: "AIzaSyCUCLvljUj90NhC3w_aUU6SwkFvOt-asDk",
@@ -293,6 +293,99 @@ function processSnapshot(snapshot) {
     };
 }
 
+function processSnapshotForCumulative(snapshot) {
+    // Function to process data for the cumulative chart
+    let seriesData = [];
+    snapshot.forEach(userSnapshot => {
+        let total = 0;
+        userSnapshot.forEach(timeSnapshot => {
+            total += timeSnapshot.val();
+        });
+        seriesData.push({
+            name: userSnapshot.key,
+            data: [total]
+        });
+    });
+
+    return {
+        series: seriesData
+    };
+}
+
+function renderCumulativeChart(cumulativeData) {
+    // Function to render the cumulative chart
+    if (!globalCumulativeChart) {
+        var options = {
+            series: cumulativeData.series,
+            chart: {
+                type: 'bar',
+                height: 350
+            },
+            xaxis: {
+                categories: cumulativeData.series.map(s => s.name)
+            }
+        };
+
+        globalCumulativeChart = new ApexCharts(document.querySelector("#cumulativeChart"), options);
+        globalCumulativeChart.render();
+    } else {
+        globalCumulativeChart.updateOptions({
+            series: cumulativeData.series
+        });
+    }
+}
+
+function getWeekNumber(d) {
+    // Copy date so don't modify original
+    d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+    // Set to nearest Thursday: current date + 4 - day number, make Sunday's day number 7
+    d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
+    // Get first day of year
+    var yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+    // Calculate full weeks to nearest Thursday
+    var weekNo = Math.ceil(((d - yearStart) / 86400000 + 1) / 7);
+    // Return array of year and week number
+    return [d.getUTCFullYear(), weekNo];
+}
+
+function processSnapshotForWeekly(snapshot) {
+    let seriesData = [];
+    let weeklyData = {};
+
+    snapshot.forEach(function(userSnapshot) {
+        userSnapshot.forEach(function(timeSnapshot) {
+            let time = timeSnapshot.key;
+            let date = new Date(time.substring(0, 13).replace('T', ' ') + ':00:00');
+            let weekNumber = getWeekNumber(date).join('-');
+            
+            if (!weeklyData[weekNumber]) {
+                weeklyData[weekNumber] = {};
+            }
+            if (!weeklyData[weekNumber][userSnapshot.key]) {
+                weeklyData[weekNumber][userSnapshot.key] = 0;
+            }
+            weeklyData[weekNumber][userSnapshot.key] += timeSnapshot.val();
+        });
+    });
+
+    Object.keys(weeklyData).sort().forEach(function(week) {
+        let weekData = { name: week, data: [] };
+        Object.keys(weeklyData[week]).forEach(function(user) {
+            weekData.data.push({
+                x: user,
+                y: weeklyData[week][user]
+            });
+        });
+        seriesData.push(weekData);
+    });
+
+    return {
+        series: seriesData
+    };
+}
+
+
+
 
 function renderChart(chartData) {
     if (!globalChart) {
@@ -330,15 +423,29 @@ function renderChart(chartData) {
     }
 }
 
-function updateDisplay() {
+function setupChartToggle() {
+    var radios = document.querySelectorAll('input[type="radio"][name="chartToggle"]');
+    radios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            updateDisplay(this.value);
+        });
+    });
+}
+
+function updateDisplay(viewType = 'daily') {
     var countsRef = database.ref('counts');
-    countsRef.on('value', function(snapshot) { // Changed from 'once' to 'on'
-        var chartData = processSnapshot(snapshot);
+    countsRef.once('value', function(snapshot) {
+        var chartData = viewType === 'daily' ? processSnapshot(snapshot) : processSnapshotForWeekly(snapshot);
         renderChart(chartData);
-        updateHighscore(snapshot); 
+
+        var cumulativeData = processSnapshotForCumulative(snapshot);
+        renderCumulativeChart(cumulativeData);
+
+        updateHighscore(snapshot);
     });
 }
 
 document.addEventListener('DOMContentLoaded', function() {
     updateDisplay();
+    setupChartToggle();
 });
