@@ -404,9 +404,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Initialize with the default view
+    // Trigger the initial chart update based on the default selected view
     updateDisplay(document.querySelector('input[name="chartView"]:checked').value);
 });
-
 
 
