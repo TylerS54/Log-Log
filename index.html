@@ -29,8 +29,20 @@
         <p id="confirmation" style="display: none;"></p>
         
         <h2>💩 Counts</h2>
+
+        <!-- Toggle for Daily/Weekly View -->
+        <div>
+            <label><input type="radio" name="chartToggle" value="daily" checked> Daily</label>
+            <label><input type="radio" name="chartToggle" value="weekly"> Weekly</label>
+        </div>
+        
         <div id="chart">
-            <!-- Chart will be rendered here -->
+            <!-- First chart will be rendered here -->
+        </div>
+
+        <!-- Container for the Cumulative Chart -->
+        <div id="cumulativeChart">
+            <!-- Second Chart will be rendered here -->
         </div>
         
         <h2>Highscores</h2>
