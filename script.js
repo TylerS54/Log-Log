@@ -267,18 +267,53 @@ function convertToEasternTime(utcDate) {
 
 
 
-function processSnapshot(snapshot) {
+
+function processSnapshot(snapshot, chartView) {
     let seriesData = [];
     snapshot.forEach(userSnapshot => {
-        let dataPoints = [];
+        let dataPoints = {};
         userSnapshot.forEach(timeSnapshot => {
             let time = timeSnapshot.key;
             let utcDate = new Date(time.substring(0, 13).replace('T', ' ') + ':00:00');
-            let easternTime = convertToEasternTime(utcDate);
-            let count = timeSnapshot.val();
+            let dateKey;
+            if (chartView === 'daily') {
+                dateKey = utcDate.toISOString().split('T')[0]; // YYYY-MM-DD
+            } else { // weekly
+                dateKey = `${utcDate.getFullYear()}-W${getWeekNumber(utcDate)}`;
+            }
+            dataPoints[dateKey] = (dataPoints[dateKey] || 0) + timeSnapshot.val();
+        });
+
+        let formattedData = Object.keys(dataPoints).map(key => {
+            return {
+                x: key,
+                y: dataPoints[key]
+            };
+        });
+
+        seriesData.push({
+            name: userSnapshot.key,
+            data: formattedData
+        });
+    });
+
+    return {
+        series: seriesData
+    };
+}
+
+function processCumulativeSnapshot(snapshot) {
+    let seriesData = [];
+    snapshot.forEach(userSnapshot => {
+        let total = 0;
+        let dataPoints = [];
+        userSnapshot.forEach(timeSnapshot => {
+            total += timeSnapshot.val();
+            let time = timeSnapshot.key;
+            let utcDate = new Date(time.substring(0, 13).replace('T', ' ') + ':00:00');
             dataPoints.push({
-                x: easternTime.getTime(),
-                y: count
+                x: utcDate.getTime(),
+                y: total
             });
         });
 
@@ -293,24 +328,6 @@ function processSnapshot(snapshot) {
     };
 }
 
-function processSnapshotForCumulative(snapshot) {
-    // Function to process data for the cumulative chart
-    let seriesData = [];
-    snapshot.forEach(userSnapshot => {
-        let total = 0;
-        userSnapshot.forEach(timeSnapshot => {
-            total += timeSnapshot.val();
-        });
-        seriesData.push({
-            name: userSnapshot.key,
-            data: [total]
-        });
-    });
-
-    return {
-        series: seriesData
-    };
-}
 
 function renderCumulativeChart(cumulativeData) {
     // Function to render the cumulative chart
@@ -336,16 +353,11 @@ function renderCumulativeChart(cumulativeData) {
 }
 
 function getWeekNumber(d) {
-    // Copy date so don't modify original
     d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-    // Set to nearest Thursday: current date + 4 - day number, make Sunday's day number 7
     d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
-    // Get first day of year
     var yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
-    // Calculate full weeks to nearest Thursday
     var weekNo = Math.ceil(((d - yearStart) / 86400000 + 1) / 7);
-    // Return array of year and week number
-    return [d.getUTCFullYear(), weekNo];
+    return weekNo;
 }
 
 function processSnapshotForWeekly(snapshot) {
@@ -438,7 +450,7 @@ function updateDisplay(viewType = 'daily') {
         var chartData = viewType === 'daily' ? processSnapshot(snapshot) : processSnapshotForWeekly(snapshot);
         renderChart(chartData);
 
-        var cumulativeData = processSnapshotForCumulative(snapshot);
+        var cumulativeData = processCumulativeSnapshot(snapshot);
         renderCumulativeChart(cumulativeData);
 
         updateHighscore(snapshot);
