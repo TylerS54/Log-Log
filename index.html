@@ -23,12 +23,12 @@
     <div id="app">
         <h1>Log Your Log 💩</h1>
         <div class="buttons-container">
-            <button onclick="incrementCounter('Ziggy'); sendTelegramMessage('Ziggy'); triggerConfetti()">Ziggy</button>
-            <button onclick="incrementCounter('Mikey'); sendTelegramMessage('Mikey'); triggerConfetti()">Mikey</button>
-            <button onclick="incrementCounter('TT'); sendTelegramMessage('TT'); triggerConfetti()">TT</button>
-            <button onclick="incrementCounter('AJ'); sendTelegramMessage('AJ'); triggerConfetti()">AJ</button>
-            <button onclick="incrementCounter('GGK'); sendTelegramMessage('GGK'); triggerConfetti()">GGK</button>
-            <button onclick="incrementCounter('Teddy'); sendTelegramMessage('Teddy'); triggerConfetti()">Teddy</button>
+            <button onclick="incrementCounter('Ziggy'); sendTelegramMessage('Ziggy'); triggerConfetti(); playFartNoise()">Ziggy</button>
+            <button onclick="incrementCounter('Mikey'); sendTelegramMessage('Mikey'); triggerConfetti(); playFartNoise()">Mikey</button>
+            <button onclick="incrementCounter('TT'); sendTelegramMessage('TT'); triggerConfetti(); playFartNoise()">TT</button>
+            <button onclick="incrementCounter('AJ'); sendTelegramMessage('AJ'); triggerConfetti(); playFartNoise()">AJ</button>
+            <button onclick="incrementCounter('GGK'); sendTelegramMessage('GGK'); triggerConfetti(); playFartNoise()">GGK</button>
+            <button onclick="incrementCounter('Teddy'); sendTelegramMessage('Teddy'); triggerConfetti(); playFartNoise()">Teddy</button>
         </div>
 
         <p id="confirmation" style="display: none;"></p>
@@ -51,6 +51,9 @@
         <h2>Highscores</h2>
         <div id="highscore">Loading...</div>
     </div>
+
+    <!-- Add the audio element for fart noise -->
+    <audio id="fart-noise" src="fart-sound.mp3" preload="auto"></audio>
 
     <script src="script.js"></script>
 </body>

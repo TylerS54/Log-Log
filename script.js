@@ -226,7 +226,7 @@ function updateHighscore(snapshot) {
         return `
             <div class="highscore-entry">
                 <span class="rank ${rankClass}">${icon}</span>
-                <span class="name">${item.user}</span>
+                <span class="name ${rankClass}">${item.user}</span>
                 <span class="score">${item.total}</span>
             </div>
         `;
@@ -234,6 +234,7 @@ function updateHighscore(snapshot) {
 
     document.getElementById('highscore').innerHTML = highscoreHTML;
 }
+
 
 function incrementCounter(name) {
     var now = new Date();
@@ -247,6 +248,7 @@ function incrementCounter(name) {
     disableButtons();
     showConfirmation(name);
     triggerConfetti();
+    playFartNoise(); // Play fart noise when button is clicked
 }
 
 function disableButtons() {
@@ -429,10 +431,8 @@ function updateDisplay(chartView) {
         updateHighscore(snapshot);
     });
 }
-var scalar = 1;
-
+var scalar = 1; 
 var poo = confetti.shapeFromText({ text: '💩', scalar });
-
 
 function triggerConfetti() {
     confetti({
@@ -441,6 +441,11 @@ function triggerConfetti() {
         spread: 70,
         origin: { y: 0.6 }
     });
+}
+
+function playFartNoise() {
+    const audio = document.getElementById('fart-noise');
+    audio.play();
 }
 
 document.addEventListener('DOMContentLoaded', function() {

@@ -137,6 +137,21 @@ canvas {
     z-index: 9999;
 }
 
+/* Add glowing effect for top 3 ranks */
+.rank-1 .name, .rank-2 .name, .rank-3 .name {
+    animation: glow 1s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+    from {
+        text-shadow: 0 0 10px #fff, 0 0 20px #ff4500, 0 0 30px #ff4500, 0 0 40px #ff4500, 0 0 50px #ff4500, 0 0 60px #ff4500, 0 0 70px #ff4500;
+    }
+    to {
+        text-shadow: 0 0 20px #fff, 0 0 30px #ff4500, 0 0 40px #ff4500, 0 0 50px #ff4500, 0 0 60px #ff4500, 0 0 70px #ff4500, 0 0 80px #ff4500;
+    }
+}
+
+
 /* Responsive Design */
 @media (max-width: 600px) {
     body {
