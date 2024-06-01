@@ -58,6 +58,14 @@ button:hover {
     max-width: 700px;
 }
 
+/* Day of Week Chart Container */
+#dayOfWeekChart {
+    width: 90%;
+    margin: 0 auto;
+    max-width: 700px;
+}
+
+
 #highscore {
     text-align: left;
     margin: 20px auto;

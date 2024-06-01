@@ -1,4 +1,4 @@
-var globalChart, globalCumulativeChart;
+var globalChart, globalCumulativeChart, globalDayOfWeekChart;
 
 var firebaseConfig = {
     apiKey: "AIzaSyCUCLvljUj90NhC3w_aUU6SwkFvOt-asDk",
@@ -241,8 +241,6 @@ function updateHighscore(snapshot) {
     document.getElementById('highscore').innerHTML = highscoreHTML;
 }
 
-
-
 function incrementCounter(name) {
     var now = new Date();
     var timestamp = now.toISOString().split(':')[0]; // Format: YYYY-MM-DDTHH:MM
@@ -289,17 +287,32 @@ function processSnapshot(snapshot, chartView) {
         userSnapshot.forEach(timeSnapshot => {
             let time = timeSnapshot.key;
             let date = new Date(time.substring(0, 13).replace('T', ' ') + ':00:00');
-            let dateKey = chartView === 'daily' ? date.toISOString().split('T')[0] : `${date.getFullYear()}-W${getWeekNumber(date)}`;
-            
+            let dateKey;
+            if (chartView === 'daily') {
+                dateKey = date.toISOString().split('T')[0];
+            } else if (chartView === 'weekly') {
+                let weekNumber = getWeekNumber(date);
+                dateKey = `${date.getFullYear()}-W${weekNumber}`;
+            }
+
             dataPoints[dateKey] = (dataPoints[dateKey] || 0) + timeSnapshot.val();
         });
 
         seriesData.push({
             name: userSnapshot.key,
-            data: Object.entries(dataPoints).map(([key, value]) => ({
-                x: new Date(key).getTime(),
-                y: value
-            })),
+            data: Object.entries(dataPoints).map(([key, value]) => {
+                let date;
+                if (chartView === 'daily') {
+                    date = new Date(key);
+                } else if (chartView === 'weekly') {
+                    let [year, week] = key.split('-W');
+                    date = new Date(year, 0, (week - 1) * 7 + 1);
+                }
+                return {
+                    x: date.getTime(),
+                    y: value
+                };
+            }),
             color: colors[colorIndex % colors.length]
         });
         colorIndex++;
@@ -336,6 +349,33 @@ function processCumulativeSnapshot(snapshot) {
     return {
         series: seriesData
     };
+}
+
+function processDayOfWeekSnapshot(snapshot) {
+    let seriesData = {};
+    let daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+    snapshot.forEach(userSnapshot => {
+        let user = userSnapshot.key;
+        seriesData[user] = new Array(7).fill(0);
+
+        userSnapshot.forEach(timeSnapshot => {
+            let time = timeSnapshot.key;
+            let date = new Date(time.substring(0, 13).replace('T', ' ') + ':00:00');
+            let day = date.getDay();
+            seriesData[user][day] += timeSnapshot.val();
+        });
+    });
+
+    let formattedData = daysOfWeek.map((day, index) => {
+        let data = { x: day };
+        for (let user in seriesData) {
+            data[user] = seriesData[user][index];
+        }
+        return data;
+    });
+
+    return formattedData;
 }
 
 function renderChart(chartData) {
@@ -424,20 +464,79 @@ function renderCumulativeChart(chartData) {
     }
 }
 
+function renderDayOfWeekChart(chartData) {
+    let series = Object.keys(chartData[0]).filter(key => key !== 'x').map(user => ({
+        name: user,
+        data: chartData.map(data => data[user])
+    }));
+
+    var options = {
+        series: series,
+        chart: {
+            type: 'bar',
+            height: 350,
+            stacked: true,
+        },
+        plotOptions: {
+            bar: {
+                horizontal: false,
+                borderRadius: 10,
+            },
+        },
+        xaxis: {
+            categories: chartData.map(data => data.x),
+        },
+        yaxis: {
+            title: {
+                text: 'Poops'
+            },
+            min: 0
+        },
+        fill: {
+            opacity: 1
+        },
+        colors: ['#FF5733', '#33FF57', '#3357FF', '#F333FF', '#FF8333', '#FF33A1', '#33FFF3']
+    };
+
+    if (!globalDayOfWeekChart) {
+        globalDayOfWeekChart = new ApexCharts(document.querySelector("#dayOfWeekChart"), options);
+        globalDayOfWeekChart.render();
+    } else {
+        globalDayOfWeekChart.updateOptions(options, true);
+    }
+}
+
 function updateDisplay(chartView) {
     var countsRef = database.ref('counts');
     countsRef.on('value', function(snapshot) {
-        var chartData = processSnapshot(snapshot, chartView);
-        renderChart(chartData);
+        if (chartView === 'daily' || chartView === 'weekly') {
+            var chartData = processSnapshot(snapshot, chartView);
+            renderChart(chartData);
 
-        if (!globalCumulativeChart) {
-            var cumulativeData = processCumulativeSnapshot(snapshot);
-            renderCumulativeChart(cumulativeData);
+            if (!globalCumulativeChart) {
+                var cumulativeData = processCumulativeSnapshot(snapshot);
+                renderCumulativeChart(cumulativeData);
+            }
         }
-
         updateHighscore(snapshot);
+
+        // Always render the Day of Week chart
+        var dayOfWeekData = processDayOfWeekSnapshot(snapshot);
+        renderDayOfWeekChart(dayOfWeekData);
     });
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    var chartViewRadios = document.querySelectorAll('input[type="radio"][name="chartView"]');
+    chartViewRadios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            updateDisplay(this.value);
+        });
+    });
+
+    updateDisplay('daily'); // Initialize with the 'daily' view
+});
+
 var scalar = 1; 
 var poo = confetti.shapeFromText({ text: '💩', scalar });
 
@@ -454,14 +553,3 @@ function playFartNoise() {
     const audio = document.getElementById('fart-noise');
     audio.play();
 }
-
-document.addEventListener('DOMContentLoaded', function() {
-    var chartViewRadios = document.querySelectorAll('input[type="radio"][name="chartView"]');
-    chartViewRadios.forEach(radio => {
-        radio.addEventListener('change', function() {
-            updateDisplay(this.value);
-        });
-    });
-
-    updateDisplay('daily'); // Initialize with the 'daily' view
-});
