@@ -220,8 +220,6 @@ function updateHighscore(snapshot) {
     document.getElementById('highscore').innerHTML = highscoreHTML;
 }
 
-
-
 function incrementCounter(name) {
     var now = new Date();
     var timestamp = now.toISOString().split(':')[0]; // Format: YYYY-MM-DDTHH:MM
@@ -326,9 +324,18 @@ function renderChart(chartData) {
             },
             min: 0
         },
-        tooltip: {
-            x: {
-                format: 'dd MMM yyyy'
+        colors: ['#FF5733', '#33FF57', '#3357FF', '#F333FF', '#FF8333'],
+        fill: {
+            type: 'gradient',
+            gradient: {
+                shade: 'dark',
+                type: 'horizontal',
+                shadeIntensity: 0.5,
+                gradientToColors: ['#33FF57', '#3357FF', '#F333FF', '#FF8333', '#FF5733'],
+                inverseColors: true,
+                opacityFrom: 0.7,
+                opacityTo: 0.9,
+                stops: [0, 100]
             }
         }
     };
@@ -360,9 +367,18 @@ function renderCumulativeChart(chartData) {
             },
             min: 0
         },
-        tooltip: {
-            x: {
-                format: 'dd MMM yyyy'
+        colors: ['#FF5733', '#33FF57', '#3357FF', '#F333FF', '#FF8333'],
+        fill: {
+            type: 'gradient',
+            gradient: {
+                shade: 'dark',
+                type: 'horizontal',
+                shadeIntensity: 0.5,
+                gradientToColors: ['#33FF57', '#3357FF', '#F333FF', '#FF8333', '#FF5733'],
+                inverseColors: true,
+                opacityFrom: 0.7,
+                opacityTo: 0.9,
+                stops: [0, 100]
             }
         }
     };
@@ -400,4 +416,3 @@ document.addEventListener('DOMContentLoaded', function() {
 
     updateDisplay('daily'); // Initialize with the 'daily' view
 });
-
