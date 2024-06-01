@@ -212,21 +212,27 @@ function updateHighscore(snapshot) {
     let highscoreHTML = userTotals.map((item, index) => {
         let rankClass = '';
         let icon = '';
+        let title = '';
         if (index === 0) {
             rankClass = 'rank-1';
             icon = '🥇';
+            title = 'Poop King 👑';
         } else if (index === 1) {
             rankClass = 'rank-2';
             icon = '🥈';
+            title = 'Toilet Titan 🚽';
         } else if (index === 2) {
             rankClass = 'rank-3';
             icon = '🥉';
+            title = 'Dookie Duke 💩';
+        } else {
+            title = 'Regular Pooper';
         }
 
         return `
             <div class="highscore-entry">
                 <span class="rank ${rankClass}">${icon}</span>
-                <span class="name ${rankClass}">${item.user}</span>
+                <span class="name ${rankClass}">${item.user} - ${title}</span>
                 <span class="score">${item.total}</span>
             </div>
         `;
@@ -234,6 +240,7 @@ function updateHighscore(snapshot) {
 
     document.getElementById('highscore').innerHTML = highscoreHTML;
 }
+
 
 
 function incrementCounter(name) {
@@ -346,7 +353,7 @@ function renderChart(chartData) {
         },
         yaxis: {
             title: {
-                text: 'Clicks'
+                text: 'Poops'
             },
             min: 0
         },
@@ -389,7 +396,7 @@ function renderCumulativeChart(chartData) {
         },
         yaxis: {
             title: {
-                text: 'Cumulative Clicks'
+                text: 'Cumulative Poops'
             },
             min: 0
         },
