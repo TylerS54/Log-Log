@@ -151,7 +151,27 @@ canvas {
     }
 }
 
+/* Venmo Button */
+.venmo-button-container {
+    margin-top: 20px;
+}
 
+.venmo-button {
+    background-color: #3D95CE; /* Venmo blue */
+    color: #fff;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    padding: 15px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.venmo-button:hover {
+    background-color: #0077b5; /* Darker blue */
+    transform: scale(1.05);
+}
 /* Responsive Design */
 @media (max-width: 600px) {
     body {
