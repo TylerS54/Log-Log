@@ -10,12 +10,6 @@
     <!-- ApexCharts -->
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
-    <!-- Firebase App (the core Firebase SDK) -->
-    <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-app.js"></script>
-
-    <!-- Firebase Realtime Database -->
-    <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-database.js"></script>
-
     <!-- Canvas Confetti -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 </head>
@@ -33,7 +27,7 @@
 
         <p id="confirmation" style="display: none;"></p>
         
-        <h2>💩 Counts 💩</h2>
+        <h2>💩 Poopies 💩</h2>
         <div class="toggle-container">
             <label><input type="radio" name="chartView" value="daily" checked> Daily</label>
             <label><input type="radio" name="chartView" value="weekly"> Weekly</label>
@@ -43,7 +37,7 @@
             <!-- Volume chart will be rendered here -->
         </div>
 
-        <h2>💩 Cumulative Counts 💩</h2>
+        <h2>💩 Cumulative Poops 💩</h2>
         <div id="cumulativeChart">
             <!-- Cumulative chart will be rendered here -->
         </div>
@@ -53,8 +47,14 @@
             <!-- Day of Week chart will be rendered here -->
         </div>
         
-        <h2>Highscores</h2>
+        <h2>💩👑 Highscores 👑💩</h2>
         <div id="highscore">Loading...</div>
+
+        <h2>💩👑 Daily Leader 👑💩</h2>
+        <div id="daily-leader">Loading...</div>
+
+        <h2>💩👑 Weekly Leader 👑💩</h2>
+        <div id="weekly-leader">Loading...</div>
     </div>
 
     <!-- Add the audio element for fart noise -->

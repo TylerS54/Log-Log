@@ -1,20 +1,5 @@
 var globalChart, globalCumulativeChart, globalDayOfWeekChart;
 
-var firebaseConfig = {
-    apiKey: "AIzaSyCUCLvljUj90NhC3w_aUU6SwkFvOt-asDk",
-    authDomain: "loglog-a3cf1.firebaseapp.com",
-    databaseURL: "https://loglog-a3cf1-default-rtdb.firebaseio.com",
-    projectId: "loglog-a3cf1",
-    storageBucket: "loglog-a3cf1.appspot.com",
-    messagingSenderId: "1056500947260",
-    appId: "1:1056500947260:web:4635c3a82b4fa2777b2639",
-    measurementId: "G-TGSND834KX"
-};
-
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-var database = firebase.database();
-
 function sendTelegramMessage(name) {
     const botToken = '6741155054:AAGSjlsqa7xbJGHkKq9uEREUjNSO22yn6KE';
     const chatId = '-1002084507637';
@@ -194,20 +179,18 @@ function sendTelegramMessage(name) {
         .catch(error => console.error(error));
 }
 
-function updateHighscore(snapshot) {
+function updateHighscore(data) {
     let userTotals = [];
 
-    snapshot.forEach(function(userSnapshot) {
+    for (let user in data) {
         let total = 0;
-        userSnapshot.forEach(function(dateSnapshot) {
-            total += dateSnapshot.val();
-        });
-        userTotals.push({ user: userSnapshot.key, total: total });
-    });
+        for (let date in data[user]) {
+            total += data[user][date];
+        }
+        userTotals.push({ user: user, total: total });
+    }
 
-    userTotals.sort(function(a, b) {
-        return b.total - a.total;
-    });
+    userTotals.sort((a, b) => b.total - a.total);
 
     let highscoreHTML = userTotals.map((item, index) => {
         let rankClass = '';
@@ -239,21 +222,122 @@ function updateHighscore(snapshot) {
     }).join('');
 
     document.getElementById('highscore').innerHTML = highscoreHTML;
+
+    // Update daily and weekly leaders
+    updateDailyAndWeeklyLeaders(data);
 }
+
+function updateDailyAndWeeklyLeaders(data) {
+    let maxDailyCounts = {};
+    let maxWeeklyCounts = {};
+
+    for (let user in data) {
+        maxDailyCounts[user] = 0;
+        maxWeeklyCounts[user] = 0;
+
+        let userDailyCounts = {};
+        let userWeeklyCounts = {};
+
+        for (let timestamp in data[user]) {
+            let date = new Date(timestamp.substring(0, 13).replace('T', ' ') + ':00:00');
+            let dateKey = date.toISOString().split('T')[0];
+            let weekNumber = getWeekNumber(date);
+            let weekKey = `${date.getFullYear()}-W${weekNumber}`;
+
+            // Aggregate daily counts
+            if (!userDailyCounts[dateKey]) {
+                userDailyCounts[dateKey] = 0;
+            }
+            userDailyCounts[dateKey] += data[user][timestamp];
+
+            // Aggregate weekly counts
+            if (!userWeeklyCounts[weekKey]) {
+                userWeeklyCounts[weekKey] = 0;
+            }
+            userWeeklyCounts[weekKey] += data[user][timestamp];
+        }
+
+        // Find the max daily count for the user
+        for (let day in userDailyCounts) {
+            if (userDailyCounts[day] > maxDailyCounts[user]) {
+                maxDailyCounts[user] = userDailyCounts[day];
+            }
+        }
+
+        // Find the max weekly count for the user
+        for (let week in userWeeklyCounts) {
+            if (userWeeklyCounts[week] > maxWeeklyCounts[user]) {
+                maxWeeklyCounts[user] = userWeeklyCounts[week];
+            }
+        }
+    }
+
+    // Determine the overall daily and weekly leaders
+    let dailyLeader = getOverallLeader(maxDailyCounts);
+    let weeklyLeader = getOverallLeader(maxWeeklyCounts);
+
+    let dailyLeaderHTML = dailyLeader ? 
+        `<div class="leader-entry">
+            <span class="name">${dailyLeader.user}</span>
+            <span class="score">${dailyLeader.count}</span>
+        </div>` : `<div class="leader-entry">No data available</div>`;
+
+    let weeklyLeaderHTML = weeklyLeader ? 
+        `<div class="leader-entry">
+            <span class="name">${weeklyLeader.user}</span>
+            <span class="score">${weeklyLeader.count}</span>
+        </div>` : `<div class="leader-entry">No data available</div>`;
+
+    document.getElementById('daily-leader').innerHTML = dailyLeaderHTML;
+    document.getElementById('weekly-leader').innerHTML = weeklyLeaderHTML;
+}
+
+function getOverallLeader(counts) {
+    let leader = { user: null, count: 0 };
+
+    for (let user in counts) {
+        if (counts[user] > leader.count) {
+            leader = { user: user, count: counts[user] };
+        }
+    }
+
+    return leader;
+}
+
+
+function getLeader(leaderData) {
+    if (!leaderData) return null;
+    let leader = { user: null, count: 0 };
+
+    for (let user in leaderData) {
+        if (leaderData[user] > leader.count) {
+            leader = { user: user, count: leaderData[user] };
+        }
+    }
+
+    return leader;
+}
+
 
 function incrementCounter(name) {
     var now = new Date();
     var timestamp = now.toISOString().split(':')[0]; // Format: YYYY-MM-DDTHH:MM
-    var countRef = database.ref('counts/' + name + '/' + timestamp);
 
-    countRef.transaction(function(currentCount) {
-        return (currentCount || 0) + 1;
-    });
-
-    disableButtons();
-    showConfirmation(name);
-    triggerConfetti();
-    playFartNoise(); // Play fart noise when button is clicked
+    fetch('https://us-central1-loglog-a3cf1.cloudfunctions.net/incrementCounter', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ name, timestamp })
+    })
+    .then(response => response.json())
+    .then(data => {
+        disableButtons();
+        showConfirmation(name);
+        triggerConfetti();
+        playFartNoise();
+    })
+    .catch(error => console.error('Error:', error));
 }
 
 function disableButtons() {
@@ -278,14 +362,14 @@ function getWeekNumber(d) {
     return weekNo;
 }
 
-function processSnapshot(snapshot, chartView) {
+function processSnapshot(data, chartView) {
     let seriesData = [];
     let colors = ['#FF5733', '#33FF57', '#3357FF', '#F333FF', '#FF8333', '#FF33A1', '#33FFF3']; // Add more colors as needed
     let colorIndex = 0;
-    snapshot.forEach(userSnapshot => {
+
+    for (let user in data) {
         let dataPoints = {};
-        userSnapshot.forEach(timeSnapshot => {
-            let time = timeSnapshot.key;
+        for (let time in data[user]) {
             let date = new Date(time.substring(0, 13).replace('T', ' ') + ':00:00');
             let dateKey;
             if (chartView === 'daily') {
@@ -295,11 +379,11 @@ function processSnapshot(snapshot, chartView) {
                 dateKey = `${date.getFullYear()}-W${weekNumber}`;
             }
 
-            dataPoints[dateKey] = (dataPoints[dateKey] || 0) + timeSnapshot.val();
-        });
+            dataPoints[dateKey] = (dataPoints[dateKey] || 0) + data[user][time];
+        }
 
         seriesData.push({
-            name: userSnapshot.key,
+            name: user,
             data: Object.entries(dataPoints).map(([key, value]) => {
                 let date;
                 if (chartView === 'daily') {
@@ -316,56 +400,54 @@ function processSnapshot(snapshot, chartView) {
             color: colors[colorIndex % colors.length]
         });
         colorIndex++;
-    });
+    }
 
     return { series: seriesData };
 }
 
-function processCumulativeSnapshot(snapshot) {
+function processCumulativeSnapshot(data) {
     let seriesData = [];
     let colors = ['#FF5733', '#33FF57', '#3357FF', '#F333FF', '#FF8333', '#FF33A1', '#33FFF3']; // Add more colors as needed
     let colorIndex = 0;
-    snapshot.forEach(userSnapshot => {
+
+    for (let user in data) {
         let total = 0;
         let dataPoints = [];
-        userSnapshot.forEach(timeSnapshot => {
-            total += timeSnapshot.val();
-            let time = timeSnapshot.key;
+        for (let time in data[user]) {
+            total += data[user][time];
             let utcDate = new Date(time.substring(0, 13).replace('T', ' ') + ':00:00');
             dataPoints.push({
                 x: utcDate.getTime(),
                 y: total
             });
-        });
+        }
 
         seriesData.push({
-            name: userSnapshot.key,
+            name: user,
             data: dataPoints,
             color: colors[colorIndex % colors.length]
         });
         colorIndex++;
-    });
+    }
 
     return {
         series: seriesData
     };
 }
 
-function processDayOfWeekSnapshot(snapshot) {
+function processDayOfWeekSnapshot(data) {
     let seriesData = {};
     let daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
-    snapshot.forEach(userSnapshot => {
-        let user = userSnapshot.key;
+    for (let user in data) {
         seriesData[user] = new Array(7).fill(0);
 
-        userSnapshot.forEach(timeSnapshot => {
-            let time = timeSnapshot.key;
+        for (let time in data[user]) {
             let date = new Date(time.substring(0, 13).replace('T', ' ') + ':00:00');
             let day = date.getDay();
-            seriesData[user][day] += timeSnapshot.val();
-        });
-    });
+            seriesData[user][day] += data[user][time];
+        }
+    }
 
     let formattedData = daysOfWeek.map((day, index) => {
         let data = { x: day };
@@ -507,23 +589,25 @@ function renderDayOfWeekChart(chartData) {
 }
 
 function updateDisplay(chartView) {
-    var countsRef = database.ref('counts');
-    countsRef.on('value', function(snapshot) {
+    fetch('https://us-central1-loglog-a3cf1.cloudfunctions.net/getCounts')
+    .then(response => response.json())
+    .then(data => {
         if (chartView === 'daily' || chartView === 'weekly') {
-            var chartData = processSnapshot(snapshot, chartView);
+            var chartData = processSnapshot(data, chartView);
             renderChart(chartData);
 
             if (!globalCumulativeChart) {
-                var cumulativeData = processCumulativeSnapshot(snapshot);
+                var cumulativeData = processCumulativeSnapshot(data);
                 renderCumulativeChart(cumulativeData);
             }
         }
-        updateHighscore(snapshot);
+        updateHighscore(data);
 
         // Always render the Day of Week chart
-        var dayOfWeekData = processDayOfWeekSnapshot(snapshot);
+        var dayOfWeekData = processDayOfWeekSnapshot(data);
         renderDayOfWeekChart(dayOfWeekData);
-    });
+    })
+    .catch(error => console.error('Error:', error));
 }
 
 document.addEventListener('DOMContentLoaded', function() {
