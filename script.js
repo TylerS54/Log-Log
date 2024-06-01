@@ -16,7 +16,7 @@ firebase.initializeApp(firebaseConfig);
 var database = firebase.database();
 
 function sendTelegramMessage(name) {
-    const botToken = '6741155054:AAGSjlsqa7xbJGHkKq9uEREUjNSO22yn6KE'; // This is not secure
+    const botToken = '6741155054:AAGSjlsqa7xbJGHkKq9uEREUjNSO22yn6KE';
     const chatId = '-1002084507637';
     const messages = [
         `${name} just released a tortured scream from the depths of their bowels.`,
@@ -257,6 +257,8 @@ function getWeekNumber(d) {
 
 function processSnapshot(snapshot, chartView) {
     let seriesData = [];
+    let colors = ['#FF5733', '#33FF57', '#3357FF', '#F333FF', '#FF8333', '#FF33A1', '#33FFF3']; // Add more colors as needed
+    let colorIndex = 0;
     snapshot.forEach(userSnapshot => {
         let dataPoints = {};
         userSnapshot.forEach(timeSnapshot => {
@@ -272,8 +274,10 @@ function processSnapshot(snapshot, chartView) {
             data: Object.entries(dataPoints).map(([key, value]) => ({
                 x: new Date(key).getTime(),
                 y: value
-            }))
+            })),
+            color: colors[colorIndex % colors.length]
         });
+        colorIndex++;
     });
 
     return { series: seriesData };
@@ -281,6 +285,8 @@ function processSnapshot(snapshot, chartView) {
 
 function processCumulativeSnapshot(snapshot) {
     let seriesData = [];
+    let colors = ['#FF5733', '#33FF57', '#3357FF', '#F333FF', '#FF8333', '#FF33A1', '#33FFF3']; // Add more colors as needed
+    let colorIndex = 0;
     snapshot.forEach(userSnapshot => {
         let total = 0;
         let dataPoints = [];
@@ -296,8 +302,10 @@ function processCumulativeSnapshot(snapshot) {
 
         seriesData.push({
             name: userSnapshot.key,
-            data: dataPoints
+            data: dataPoints,
+            color: colors[colorIndex % colors.length]
         });
+        colorIndex++;
     });
 
     return {
@@ -324,14 +332,14 @@ function renderChart(chartData) {
             },
             min: 0
         },
-        colors: ['#FF5733', '#33FF57', '#3357FF', '#F333FF', '#FF8333'],
+        colors: chartData.series.map(s => s.color), // Use the colors specified in series
         fill: {
             type: 'gradient',
             gradient: {
                 shade: 'dark',
                 type: 'horizontal',
                 shadeIntensity: 0.5,
-                gradientToColors: ['#33FF57', '#3357FF', '#F333FF', '#FF8333', '#FF5733'],
+                gradientToColors: chartData.series.map(s => s.color),
                 inverseColors: true,
                 opacityFrom: 0.7,
                 opacityTo: 0.9,
@@ -367,14 +375,14 @@ function renderCumulativeChart(chartData) {
             },
             min: 0
         },
-        colors: ['#FF5733', '#33FF57', '#3357FF', '#F333FF', '#FF8333'],
+        colors: chartData.series.map(s => s.color), // Use the colors specified in series
         fill: {
             type: 'gradient',
             gradient: {
                 shade: 'dark',
                 type: 'horizontal',
                 shadeIntensity: 0.5,
-                gradientToColors: ['#33FF57', '#3357FF', '#F333FF', '#FF8333', '#FF5733'],
+                gradientToColors: chartData.series.map(s => s.color),
                 inverseColors: true,
                 opacityFrom: 0.7,
                 opacityTo: 0.9,

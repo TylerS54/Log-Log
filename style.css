@@ -7,34 +7,45 @@ body, h1, h2, button, p {
 
 body {
     font-family: 'Comic Sans MS', cursive, sans-serif;
-    background: url('https://source.unsplash.com/1600x900/?nature,water') no-repeat center center fixed;
-    background-size: cover;
+    background: linear-gradient(135deg, #ff00ff 25%, #00ffff 75%);
+    background-size: 400% 400%;
+    animation: gradientBackground 10s ease infinite;
     color: #fff;
     text-align: center;
     padding: 20px;
-    animation: backgroundAnimation 15s infinite;
 }
 
-@keyframes backgroundAnimation {
-    0% { background-size: 100%; }
-    50% { background-size: 110%; }
-    100% { background-size: 100%; }
+@keyframes gradientBackground {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
 
 h1 {
     color: #ff00ff; /* Vibrant pink */
     margin-bottom: 20px;
-    text-shadow: 2px 2px 4px #000;
+    text-shadow: 2px 2px 8px #000;
+    animation: textGlow 1.5s ease-in-out infinite alternate;
 }
 
 h2 {
     color: #00ffff; /* Cyan */
     margin: 20px 0;
-    text-shadow: 2px 2px 4px #000;
+    text-shadow: 2px 2px 8px #000;
+    animation: textGlow 1.5s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes textGlow {
+    from {
+        text-shadow: 2px 2px 8px #fff, 0 0 10px #fff, 0 0 20px #ff00ff, 0 0 30px #ff00ff, 0 0 40px #ff00ff, 0 0 50px #ff00ff, 0 0 60px #ff00ff, 0 0 70px #ff00ff;
+    }
+    to {
+        text-shadow: 2px 2px 8px #fff, 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 30px #00ffff, 0 0 40px #00ffff, 0 0 50px #00ffff, 0 0 60px #00ffff, 0 0 70px #00ffff;
+    }
 }
 
 button {
-    background: linear-gradient(45deg, #ff0000, #ff00ff);
+    background: linear-gradient(45deg, #ff0000, #ff00ff, #00ff00, #00ffff);
     color: #fff;
     font-weight: bold;
     text-shadow: 2px 2px 4px #000;
@@ -47,9 +58,9 @@ button {
 }
 
 button:hover {
-    background: linear-gradient(45deg, #00ff00, #00ffff);
-    transform: scale(1.1);
-    box-shadow: 0 0 10px #fff;
+    background: linear-gradient(45deg, #00ff00, #00ffff, #ff0000, #ff00ff);
+    transform: scale(1.2);
+    box-shadow: 0 0 20px #fff;
 }
 
 #counts {
@@ -58,16 +69,16 @@ button:hover {
 
 /* Chart Container for better control */
 #chart-container {
-    width: 80%;
+    width: 90%;
     margin: 0 auto;
-    max-width: 600px;
+    max-width: 700px;
 }
 
 #highscore {
     text-align: left;
     margin: 20px auto;
-    max-width: 600px; /* Adjust as needed */
-    background-color: rgba(255, 255, 255, 0.8);
+    max-width: 700px;
+    background-color: rgba(255, 255, 255, 0.9);
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     padding: 10px;
@@ -86,45 +97,69 @@ button:hover {
 }
 
 .rank {
-    font-size: 20px;
+    font-size: 24px;
     font-weight: bold;
-    color: #ff00ff; /* Rank color */
-    width: 30px;
+    color: #ff00ff;
+    width: 40px;
 }
 
 .name {
-    font-size: 18px;
+    font-size: 20px;
     flex-grow: 1;
     padding: 0 10px;
 }
 
 .score {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: bold;
-    color: #00ffff; /* Score color */
-    min-width: 50px;
+    color: #00ffff;
+    min-width: 60px;
     text-align: right;
 }
 
 #confirmation {
-    color: #00ff00; /* Green color for confirmation */
+    color: #00ff00;
     margin-top: 20px;
+    animation: fadeInOut 3s ease-in-out;
+}
+
+@keyframes fadeInOut {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 1; }
 }
 
 canvas {
-    background-color: rgba(255, 255, 255, 0.8); /* White background for the chart */
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
 /* Responsive Design */
 @media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 1.5em;
+    }
+
+    h2 {
+        font-size: 1.2em;
+    }
+
     button {
         width: 100%;
         margin: 10px 0;
+        padding: 15px 10px;
     }
 
-    #chart-container {
+    #chart-container, #highscore {
         width: 100%;
+        padding: 10px;
+    }
+
+    .highscore-entry {
+        font-size: 0.9em;
     }
 }
