@@ -15,23 +15,26 @@
 
     <!-- Firebase Realtime Database -->
     <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-database.js"></script>
+
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 </head>
 <body>
     <div id="app">
-        <h1>Click your name to log your log 💩</h1>
-        <button onclick="incrementCounter('Ziggy'); sendTelegramMessage('Ziggy')">Ziggy</button>
-        <button onclick="incrementCounter('Mikey'); sendTelegramMessage('Mikey')">Mikey</button>
-        <button onclick="incrementCounter('TT'); sendTelegramMessage('TT')">TT</button>
-        <button onclick="incrementCounter('AJ'); sendTelegramMessage('AJ')">AJ</button>
-        <button onclick="incrementCounter('GGK'); sendTelegramMessage('GGK')">GGK</button>
-        <button onclick="incrementCounter('Teddy'); sendTelegramMessage('Teddy')">Teddy</button>
+        <h1>Log Your Log 💩</h1>
+        <div class="buttons-container">
+            <button onclick="incrementCounter('Ziggy'); sendTelegramMessage('Ziggy'); triggerConfetti()">Ziggy</button>
+            <button onclick="incrementCounter('Mikey'); sendTelegramMessage('Mikey'); triggerConfetti()">Mikey</button>
+            <button onclick="incrementCounter('TT'); sendTelegramMessage('TT'); triggerConfetti()">TT</button>
+            <button onclick="incrementCounter('AJ'); sendTelegramMessage('AJ'); triggerConfetti()">AJ</button>
+            <button onclick="incrementCounter('GGK'); sendTelegramMessage('GGK'); triggerConfetti()">GGK</button>
+            <button onclick="incrementCounter('Teddy'); sendTelegramMessage('Teddy'); triggerConfetti()">Teddy</button>
+        </div>
 
         <p id="confirmation" style="display: none;"></p>
         
         <h2>💩 Counts</h2>
-
-        <!-- Toggle for Daily/Weekly View -->
-        <div>
+        <div class="toggle-container">
             <label><input type="radio" name="chartView" value="daily" checked> Daily</label>
             <label><input type="radio" name="chartView" value="weekly"> Weekly</label>
         </div>

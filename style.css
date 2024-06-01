@@ -6,61 +6,45 @@ body, h1, h2, button, p {
 }
 
 body {
-    font-family: 'Comic Sans MS', cursive, sans-serif;
-    background: linear-gradient(135deg, #ff00ff 25%, #00ffff 75%);
-    background-size: 400% 400%;
-    animation: gradientBackground 10s ease infinite;
-    color: #fff;
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f0f0; /* Light grey background */
+    color: #333; /* Dark grey text */
     text-align: center;
     padding: 20px;
 }
 
-@keyframes gradientBackground {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
 h1 {
-    color: #ff00ff; /* Vibrant pink */
+    color: #ff4500; /* Orange */
     margin-bottom: 20px;
-    text-shadow: 2px 2px 8px #000;
-    animation: textGlow 1.5s ease-in-out infinite alternate;
 }
 
 h2 {
-    color: #00ffff; /* Cyan */
+    color: #ff4500; /* Orange */
     margin: 20px 0;
-    text-shadow: 2px 2px 8px #000;
-    animation: textGlow 1.5s ease-in-out infinite alternate-reverse;
 }
 
-@keyframes textGlow {
-    from {
-        text-shadow: 2px 2px 8px #fff, 0 0 10px #fff, 0 0 20px #ff00ff, 0 0 30px #ff00ff, 0 0 40px #ff00ff, 0 0 50px #ff00ff, 0 0 60px #ff00ff, 0 0 70px #ff00ff;
-    }
-    to {
-        text-shadow: 2px 2px 8px #fff, 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 30px #00ffff, 0 0 40px #00ffff, 0 0 50px #00ffff, 0 0 60px #00ffff, 0 0 70px #00ffff;
-    }
+.buttons-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
 }
 
 button {
-    background: linear-gradient(45deg, #ff0000, #ff00ff, #00ff00, #00ffff);
-    color: #fff;
+    background-color: #ff6347; /* Tomato */
+    color: #fff; /* White text */
     font-weight: bold;
-    text-shadow: 2px 2px 4px #000;
     border: none;
-    border-radius: 50px;
-    padding: 10px 20px;
-    margin: 10px;
+    border-radius: 10px;
+    padding: 15px 20px;
     cursor: pointer;
-    transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+    transition: background-color 0.3s, transform 0.3s;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
 button:hover {
-    background: linear-gradient(45deg, #00ff00, #00ffff, #ff0000, #ff00ff);
-    transform: scale(1.2);
-    box-shadow: 0 0 20px #fff;
+    background-color: #ff4500; /* Darker orange */
+    transform: scale(1.05);
 }
 
 #counts {
@@ -77,12 +61,11 @@ button:hover {
 #highscore {
     text-align: left;
     margin: 20px auto;
-    max-width: 700px;
-    background-color: rgba(255, 255, 255, 0.9);
+    max-width: 700px; /* Adjust as needed */
+    background-color: #fff; /* White background */
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     padding: 10px;
-    color: #000;
 }
 
 .highscore-entry {
@@ -97,41 +80,61 @@ button:hover {
 }
 
 .rank {
-    font-size: 24px;
+    font-size: 20px;
     font-weight: bold;
-    color: #ff00ff;
-    width: 40px;
+    width: 30px;
+}
+
+.rank.rank-1 {
+    color: gold;
+}
+
+.rank.rank-2 {
+    color: silver;
+}
+
+.rank.rank-3 {
+    color: bronze;
+}
+
+.rank-icon {
+    margin-right: 10px;
 }
 
 .name {
-    font-size: 20px;
+    font-size: 18px;
     flex-grow: 1;
     padding: 0 10px;
 }
 
 .score {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: bold;
-    color: #00ffff;
-    min-width: 60px;
+    color: #ff6347; /* Tomato */
+    min-width: 50px;
     text-align: right;
 }
 
 #confirmation {
-    color: #00ff00;
+    color: #32cd32; /* Lime green */
     margin-top: 20px;
-    animation: fadeInOut 3s ease-in-out;
-}
-
-@keyframes fadeInOut {
-    0%, 100% { opacity: 0; }
-    50% { opacity: 1; }
 }
 
 canvas {
-    background-color: rgba(255, 255, 255, 0.9);
-    border-radius: 15px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    background-color: #fff; /* White background for the chart */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+}
+
+/* Confetti animation container */
+#confetti-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9999;
 }
 
 /* Responsive Design */
@@ -148,10 +151,13 @@ canvas {
         font-size: 1.2em;
     }
 
+    .buttons-container {
+        flex-direction: column;
+    }
+
     button {
         width: 100%;
         margin: 10px 0;
-        padding: 15px 10px;
     }
 
     #chart-container, #highscore {

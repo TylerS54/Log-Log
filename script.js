@@ -209,13 +209,28 @@ function updateHighscore(snapshot) {
         return b.total - a.total;
     });
 
-    let highscoreHTML = userTotals.map((item, index) => 
-        `<div class="highscore-entry">
-            <span class="rank">${index + 1}</span>
-            <span class="name">${item.user}</span>
-            <span class="score">${item.total}</span>
-        </div>`
-    ).join('');
+    let highscoreHTML = userTotals.map((item, index) => {
+        let rankClass = '';
+        let icon = '';
+        if (index === 0) {
+            rankClass = 'rank-1';
+            icon = '🥇';
+        } else if (index === 1) {
+            rankClass = 'rank-2';
+            icon = '🥈';
+        } else if (index === 2) {
+            rankClass = 'rank-3';
+            icon = '🥉';
+        }
+
+        return `
+            <div class="highscore-entry">
+                <span class="rank ${rankClass}">${icon}</span>
+                <span class="name">${item.user}</span>
+                <span class="score">${item.total}</span>
+            </div>
+        `;
+    }).join('');
 
     document.getElementById('highscore').innerHTML = highscoreHTML;
 }
@@ -231,6 +246,7 @@ function incrementCounter(name) {
 
     disableButtons();
     showConfirmation(name);
+    triggerConfetti();
 }
 
 function disableButtons() {
@@ -411,6 +427,19 @@ function updateDisplay(chartView) {
         }
 
         updateHighscore(snapshot);
+    });
+}
+var scalar = 1;
+
+var poo = confetti.shapeFromText({ text: '💩', scalar });
+
+
+function triggerConfetti() {
+    confetti({
+        shapes: [poo],
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 }
     });
 }
 
