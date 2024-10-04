@@ -6,21 +6,28 @@ body, h1, h2, button, p {
 }
 
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f0f0f0; /* Light grey background */
-    color: #333; /* Dark grey text */
+    font-family: 'Roboto', sans-serif;
+    background-color: #1a1a1a; /* Dark background */
+    color: #f0f0f0; /* Light text */
     text-align: center;
     padding: 20px;
+    background-image: url('https://example.com/path-to-your-spooky-background.jpg');
+    background-size: cover;
+    background-attachment: fixed;
 }
 
 h1 {
-    color: #ff4500; /* Orange */
+    font-family: 'Creepster', cursive;
+    color: #ff6600; /* Orange */
     margin-bottom: 20px;
+    text-shadow: 2px 2px 4px #000000;
 }
 
 h2 {
-    color: #ff4500; /* Orange */
+    font-family: 'Creepster', cursive;
+    color: #ff6600; /* Orange */
     margin: 20px 0;
+    text-shadow: 2px 2px 4px #000000;
 }
 
 .buttons-container {
@@ -31,7 +38,7 @@ h2 {
 }
 
 button {
-    background-color: #ff6347; /* Tomato */
+    background-color: #8b0000; /* Dark red */
     color: #fff; /* White text */
     font-weight: bold;
     border: none;
@@ -39,11 +46,11 @@ button {
     padding: 15px 20px;
     cursor: pointer;
     transition: background-color 0.3s, transform 0.3s;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 6px rgba(255,102,0,0.3);
 }
 
 button:hover {
-    background-color: #ff4500; /* Darker orange */
+    background-color: #ff4500; /* Brighter orange */
     transform: scale(1.05);
 }
 
@@ -52,34 +59,30 @@ button:hover {
 }
 
 /* Chart Container for better control */
-#chart-container {
+#chart-container, #chart, #cumulativeChart, #dayOfWeekChart {
     width: 90%;
-    margin: 0 auto;
+    margin: 20px auto;
     max-width: 700px;
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(255, 102, 0, 0.5);
+    padding: 10px;
 }
 
-/* Day of Week Chart Container */
-#dayOfWeekChart {
-    width: 90%;
-    margin: 0 auto;
-    max-width: 700px;
-}
-
-
-#highscore {
+#highscore, #daily-leader, #weekly-leader {
     text-align: left;
     margin: 20px auto;
-    max-width: 700px; /* Adjust as needed */
-    background-color: #fff; /* White background */
+    max-width: 700px;
+    background-color: rgba(0, 0, 0, 0.7);
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 0 10px rgba(255, 102, 0, 0.5);
     padding: 10px;
 }
 
 .highscore-entry {
     display: flex;
     align-items: center;
-    border-bottom: 1px solid #eaeaea;
+    border-bottom: 1px solid #ff6600;
     padding: 8px 0;
 }
 
@@ -94,19 +97,15 @@ button:hover {
 }
 
 .rank.rank-1 {
-    color: gold;
+    color: #ffd700; /* Gold */
 }
 
 .rank.rank-2 {
-    color: silver;
+    color: #c0c0c0; /* Silver */
 }
 
 .rank.rank-3 {
-    color: bronze;
-}
-
-.rank-icon {
-    margin-right: 10px;
+    color: #cd7f32; /* Bronze */
 }
 
 .name {
@@ -118,20 +117,15 @@ button:hover {
 .score {
     font-size: 18px;
     font-weight: bold;
-    color: #ff6347; /* Tomato */
+    color: #ff6600; /* Orange */
     min-width: 50px;
     text-align: right;
 }
 
 #confirmation {
-    color: #32cd32; /* Lime green */
+    color: #00ff00; /* Bright green */
     margin-top: 20px;
-}
-
-canvas {
-    background-color: #fff; /* White background for the chart */
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+    text-shadow: 0 0 5px #00ff00;
 }
 
 /* Confetti animation container */
@@ -152,10 +146,10 @@ canvas {
 
 @keyframes glow {
     from {
-        text-shadow: 0 0 10px #fff, 0 0 20px #ff4500, 0 0 30px #ff4500, 0 0 40px #ff4500, 0 0 50px #ff4500, 0 0 60px #ff4500, 0 0 70px #ff4500;
+        text-shadow: 0 0 5px #fff, 0 0 10px #ff6600, 0 0 15px #ff6600, 0 0 20px #ff6600;
     }
     to {
-        text-shadow: 0 0 20px #fff, 0 0 30px #ff4500, 0 0 40px #ff4500, 0 0 50px #ff4500, 0 0 60px #ff4500, 0 0 70px #ff4500, 0 0 80px #ff4500;
+        text-shadow: 0 0 10px #fff, 0 0 20px #ff6600, 0 0 30px #ff6600, 0 0 40px #ff6600;
     }
 }
 
@@ -173,13 +167,47 @@ canvas {
     padding: 15px 20px;
     cursor: pointer;
     transition: background-color 0.3s, transform 0.3s;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 6px rgba(255,102,0,0.3);
 }
 
 .venmo-button:hover {
     background-color: #0077b5; /* Darker blue */
     transform: scale(1.05);
 }
+
+/* Toggle Container */
+.toggle-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.toggle-container input[type="radio"] {
+    display: none;
+}
+
+.toggle-container label {
+    padding: 10px 20px;
+    background-color: #8b0000;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.toggle-container label:first-of-type {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.toggle-container label:last-of-type {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.toggle-container input[type="radio"]:checked + label {
+    background-color: #ff4500;
+}
+
 /* Responsive Design */
 @media (max-width: 600px) {
     body {
@@ -203,7 +231,7 @@ canvas {
         margin: 10px 0;
     }
 
-    #chart-container, #highscore {
+    #chart-container, #chart, #cumulativeChart, #dayOfWeekChart, #highscore, #daily-leader, #weekly-leader {
         width: 100%;
         padding: 10px;
     }

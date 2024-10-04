@@ -1,70 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Log-Log 💩</title>
+    <title>Spooky Poop Tracker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-
-    <!-- ApexCharts -->
-    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-
-    <!-- Canvas Confetti -->
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 </head>
 <body>
     <div id="app">
-        <h1>💩 Log Your Log 💩</h1>
+        <h1>🎃 Spooky Dookies 💀</h1>
+
         <div class="buttons-container">
-            <button onclick="incrementCounter('Ziggy'); sendTelegramMessage('Ziggy'); triggerConfetti(); playFartNoise()">Ziggy</button>
-            <button onclick="incrementCounter('Mikey'); sendTelegramMessage('Mikey'); triggerConfetti(); playFartNoise()">Mikey</button>
-            <button onclick="incrementCounter('TT'); sendTelegramMessage('TT'); triggerConfetti(); playFartNoise()">TT</button>
-            <button onclick="incrementCounter('AJ'); sendTelegramMessage('AJ'); triggerConfetti(); playFartNoise()">AJ</button>
-            <button onclick="incrementCounter('GGK'); sendTelegramMessage('GGK'); triggerConfetti(); playFartNoise()">GGK</button>
-            <button onclick="incrementCounter('Teddy'); sendTelegramMessage('Teddy'); triggerConfetti(); playFartNoise()">Teddy</button>
+            <button onclick="incrementCounter('Ziggy'); sendTelegramMessage('Ziggy');">Ziggy</button>
+            <button onclick="incrementCounter('Mikey'); sendTelegramMessage('Mikey');">Mikey</button>
+            <button onclick="incrementCounter('TT'); sendTelegramMessage('TT');">TT</button>
+            <button onclick="incrementCounter('AJ'); sendTelegramMessage('AJ');">AJ</button>
+            <button onclick="incrementCounter('GGK'); sendTelegramMessage('GGK');">GGK</button>
+            <button onclick="incrementCounter('Teddy'); sendTelegramMessage('Teddy');">Teddy</button>
         </div>
 
-        <p id="confirmation" style="display: none;"></p>
-        
-        <h2>💩 Poopies 💩</h2>
+        <h2>🧟‍♂️ Haunted Poopies 🧟‍♀️</h2>
         <div class="toggle-container">
-            <label><input type="radio" name="chartView" value="daily" checked> Daily</label>
-            <label><input type="radio" name="chartView" value="weekly"> Weekly</label>
+            <input type="radio" id="daily" name="chartView" value="daily" checked>
+            <label for="daily">Daily</label>
+            <input type="radio" id="weekly" name="chartView" value="weekly">
+            <label for="weekly">Weekly</label>
         </div>
-        
-        <div id="chart">
-            <!-- Volume chart will be rendered here -->
-        </div>
+        <div id="chart"></div>
 
-        <h2>💩 Cumulative Poops 💩</h2>
-        <div id="cumulativeChart">
-            <!-- Cumulative chart will be rendered here -->
-        </div>
+        <h2>👻 Cumulative Ghost Poops 👻</h2>
+        <div id="cumulativeChart"></div>
 
-        <h2>💩 By Day of the Week 💩</h2>
-        <div id="dayOfWeekChart">
-            <!-- Day of Week chart will be rendered here -->
-        </div>
-        
-        <h2>💩👑 Highscores 👑💩</h2>
+        <h2>🎃 Pumpkin Spice Poops by Day 🎃</h2>
+        <div id="dayOfWeekChart"></div>
+
+        <h2>💀👑 Spooky Highscores 👑💀</h2>
         <div id="highscore">Loading...</div>
 
-        <h2>💩👑 Daily Leader 👑💩</h2>
+        <h2>🧛‍♂️👑 Daily Vampire Leader 👑🧛‍♀️</h2>
         <div id="daily-leader">Loading...</div>
 
-        <h2>💩👑 Weekly Leader 👑💩</h2>
+        <h2>🐺👑 Weekly Werewolf Leader 👑🐺</h2>
         <div id="weekly-leader">Loading...</div>
     </div>
 
-    <!-- Add the audio element for fart noise -->
-    <audio id="fart-noise" src="fart-sound.mp3" preload="auto"></audio>
-
-    <!-- Venmo Button -->
     <div class="venmo-button-container">
-        <button class="venmo-button" onclick="window.location.href='https://venmo.com/u/Tyler-Shaller'">+1 Log Logged - $0.99</button>
+        <button class="venmo-button">+1 Cursed Log - $0.99</button>
     </div>
 
+    <audio id="fart-noise" src="path/to/your/spooky-fart.mp3"></audio>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
