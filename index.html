@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spooky Poop Tracker</title>
-    <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <title>🦃 GOBBLE GOBBLE BATHROOM WOBBLE 🦃</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vollkorn:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div id="app">
-        <h1>🎃 Spooky Dookies 💀</h1>
+        <h1>🦃 GOBBLE GOBBLE BATHROOM WOBBLE 🦃</h1>
 
         <div class="buttons-container">
             <button onclick="incrementCounter('Ziggy'); sendTelegramMessage('Ziggy');">Ziggy</button>
@@ -20,38 +20,40 @@
             <button onclick="incrementCounter('Teddy'); sendTelegramMessage('Teddy');">Teddy</button>
         </div>
 
-        <h2>🧟‍♂️ Haunted Poopies 🧟‍♀️</h2>
+        <h2>🍗 STUFFING STATUS 🍗</h2>
+
         <div class="toggle-container">
             <input type="radio" id="daily" name="chartView" value="daily" checked>
             <label for="daily">Daily</label>
             <input type="radio" id="weekly" name="chartView" value="weekly">
             <label for="weekly">Weekly</label>
         </div>
-        <div id="chart"></div>
 
-        <h2>👻 Cumulative Ghost Poops 👻</h2>
-        <div id="cumulativeChart"></div>
+        <div id="chart" class="chart-container"></div>
 
-        <h2>🎃 Pumpkin Spice Poops by Day 🎃</h2>
-        <div id="dayOfWeekChart"></div>
+        <h2>🌽 CORNUCOPIA COUNTER 🌽</h2>
+        <div id="cumulativeChart" class="chart-container"></div>
 
-        <h2>💀👑 Spooky Highscores 👑💀</h2>
-        <div id="highscore">Loading...</div>
+        <h2>🥧 GRAVY GRAPH 🥧</h2>
+        <div id="dayOfWeekChart" class="chart-container"></div>
 
-        <h2>🧛‍♂️👑 Daily Vampire Leader 👑🧛‍♀️</h2>
-        <div id="daily-leader">Loading...</div>
+        <h2>🦃 TURKEY THRONE CHAMPIONS 🦃</h2>
+        <div id="highscore" class="stats-card"></div>
 
-        <h2>🐺👑 Weekly Werewolf Leader 👑🐺</h2>
-        <div id="weekly-leader">Loading...</div>
+        <h2>🍗 DAILY DRUMSTICK DESTROYER 🍗</h2>
+        <div id="daily-leader" class="stats-card"></div>
+
+        <h2>🍽️ WEEKLY WISHBONE WARRIOR 🍽️</h2>
+        <div id="weekly-leader" class="stats-card"></div>
     </div>
 
     <div class="venmo-button-container">
-        <button class="venmo-button">+1 Cursed Log - $0.99</button>
+        <button class="venmo-button">+1 GRAVY TRAIN TICKET - $0.99</button>
     </div>
 
-    <audio id="fart-noise" src="path/to/your/spooky-fart.mp3"></audio>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <audio id="fart-noise" src="fart-sound.mp3"></audio>
     <script src="script.js"></script>
 </body>
 </html>
