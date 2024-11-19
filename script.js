@@ -809,26 +809,31 @@ function updateTimeOfDay(stats) {
         Math.max(...stats.hourlyDistribution)
     );
     
-        document.getElementById('timeOfDay').innerHTML = `
+    // Convert UTC to ET
+    const peakHourET = (peakHour - 4 + 24) % 24;
+    
+    // For morning (6-12 ET), need UTC 10-16
+    const morningCount = stats.hourlyDistribution
+        .slice(10, 16)
+        .reduce((a, b) => a + b, 0);
+    
+    // For evening (12-20 ET), need UTC 16-24
+    const eveningCount = stats.hourlyDistribution
+        .slice(16, 24)
+        .reduce((a, b) => a + b, 0);
+
+    document.getElementById('timeOfDay').innerHTML = `
         <div class="stat-item">
             <div class="stat-label">Peak Hour (ET)</div>
-            <div class="stat-value">${String((peakHour - 4 + 24) % 24).padStart(2, '0')}:00</div>
+            <div class="stat-value">${String(peakHourET).padStart(2, '0')}:00</div>
         </div>
         <div class="stat-item">
             <div class="stat-label">Morning (6-12 ET)</div>
-            <div class="stat-value">${
-                [...stats.hourlyDistribution.slice((6 + 4) % 24), 
-                    ...stats.hourlyDistribution.slice(0, (12 + 4) % 24)]
-                    .reduce((a, b) => a + b, 0)
-            }</div>
+            <div class="stat-value">${morningCount}</div>
         </div>
         <div class="stat-item">
             <div class="stat-label">Evening (12-20 ET)</div>
-            <div class="stat-value">${
-                [...stats.hourlyDistribution.slice((12 + 4) % 24),
-                    ...stats.hourlyDistribution.slice(0, (20 + 4) % 24)]
-                    .reduce((a, b) => a + b, 0)
-            }</div>
+            <div class="stat-value">${eveningCount}</div>
         </div>
     `;
 }
