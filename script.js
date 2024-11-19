@@ -616,6 +616,320 @@ document.addEventListener('DOMContentLoaded', function() {
     updateDisplay('daily'); // Initialize with the 'daily' view
 });
 
+// Add these chart rendering functions to script.js
+
+function renderHeatmap(userStats) {
+    const heatmapOptions = {
+        series: [{
+            name: 'Logs',
+            data: userStats.heatmapData.map(item => ({
+                x: new Date(item.date).getTime(),
+                y: item.value
+            }))
+        }],
+        chart: {
+            type: 'heatmap',
+            height: 250
+        },
+        dataLabels: { enabled: false },
+        colors: ["#8B4513"],
+        plotOptions: {
+            heatmap: {
+                shadeIntensity: 0.5,
+                colorScale: {
+                    ranges: [{
+                        from: 0,
+                        to: 1,
+                        name: 'low',
+                        color: '#FFE5CC'
+                    }, {
+                        from: 2,
+                        to: 3,
+                        name: 'medium',
+                        color: '#D2691E'
+                    }, {
+                        from: 4,
+                        to: 999,
+                        name: 'high',
+                        color: '#8B4513'
+                    }]
+                }
+            }
+        },
+        xaxis: {
+            type: 'datetime',
+            labels: {
+                datetimeUTC: false
+            }
+        },
+        title: {
+            text: 'Daily Activity Heatmap',
+            style: {
+                color: '#5C3D2E'
+            }
+        }
+    };
+
+    new ApexCharts(document.querySelector("#heatmap"), heatmapOptions).render();
+}
+
+function renderTimeTrend(userStats) {
+    const timeOptions = {
+        series: [{
+            name: 'Hourly Activity',
+            data: userStats.hourlyDistribution
+        }],
+        chart: {
+            type: 'bar',
+            height: 250
+        },
+        plotOptions: {
+            bar: {
+                borderRadius: 4,
+                columnWidth: '80%',
+            }
+        },
+        colors: ['#8B4513'],
+        xaxis: {
+            categories: Array.from({length: 24}, (_, i) => 
+                `${String(i).padStart(2, '0')}:00`
+            ),
+            labels: {
+                rotate: -45
+            }
+        },
+        yaxis: {
+            title: {
+                text: 'Total Logs',
+                style: {
+                    color: '#5C3D2E'
+                }
+            }
+        },
+        title: {
+            text: 'Time of Day Distribution',
+            style: {
+                color: '#5C3D2E'
+            }
+        },
+        fill: {
+            type: 'gradient',
+            gradient: {
+                shade: 'dark',
+                type: 'vertical',
+                shadeIntensity: 0.5,
+                gradientToColors: ['#D2691E'],
+                inverseColors: false,
+                opacityFrom: 0.8,
+                opacityTo: 0.9,
+                stops: [0, 100]
+            }
+        }
+    };
+
+    new ApexCharts(document.querySelector("#timeTrend"), timeOptions).render();
+}
+
+function updatePersonalBests(stats) {
+    document.getElementById('personalBests').innerHTML = `
+        <div class="stat-item">
+            <div class="stat-label">Daily Best</div>
+            <div class="stat-value">${stats.dailyMax}</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-label">Weekly Best</div>
+            <div class="stat-value">${stats.weeklyMax}</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-label">Monthly Best</div>
+            <div class="stat-value">${stats.monthlyMax}</div>
+        </div>
+    `;
+}
+
+function updateTimeOfDay(stats) {
+    const peakHour = stats.hourlyDistribution.indexOf(
+        Math.max(...stats.hourlyDistribution)
+    );
+    
+    document.getElementById('timeOfDay').innerHTML = `
+        <div class="stat-item">
+            <div class="stat-label">Peak Hour</div>
+            <div class="stat-value">${String(peakHour).padStart(2, '0')}:00</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-label">Morning (6-12)</div>
+            <div class="stat-value">${
+                stats.hourlyDistribution.slice(6, 12)
+                    .reduce((a, b) => a + b, 0)
+            }</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-label">Evening (12-20)</div>
+            <div class="stat-value">${
+                stats.hourlyDistribution.slice(12, 20)
+                    .reduce((a, b) => a + b, 0)
+            }</div>
+        </div>
+    `;
+}
+
+function updateActiveStreak(stats) {
+    document.getElementById('activeStreak').innerHTML = `
+        <div class="stat-item">
+            <div class="stat-label">Longest Streak</div>
+            <div class="stat-value">${stats.activeStreak} days</div>
+        </div>
+    `;
+}
+
+function updateMonthlyAvg(stats) {
+    document.getElementById('monthlyAvg').innerHTML = `
+        <div class="stat-item">
+            <div class="stat-label">Monthly Average</div>
+            <div class="stat-value">${stats.monthlyAvg.toFixed(1)}</div>
+        </div>
+    `;
+}
+
+function showUserMetrics(username, data) {
+    const userModal = document.getElementById('userModal');
+    const userName = document.getElementById('userName');
+    userName.textContent = username;
+
+    // Calculate metrics
+    const userStats = calculateUserStats(username, data[username]);
+    
+    // Update UI
+    updatePersonalBests(userStats);
+    updateTimeOfDay(userStats);
+    updateActiveStreak(userStats);
+    updateMonthlyAvg(userStats);
+    renderHeatmap(userStats);
+    renderTimeTrend(userStats);
+
+    userModal.style.display = 'block';
+}
+
+function calculateUserStats(username, userData) {
+    const stats = {
+        dailyMax: 0,
+        weeklyMax: 0,
+        monthlyMax: 0,
+        hourlyDistribution: new Array(24).fill(0),
+        activeStreak: 0,
+        monthlyAvg: 0,
+        timeData: [],
+        heatmapData: []
+    };
+
+    // Process each timestamp
+    const dailyCounts = {};
+    const weeklyCounts = {};
+    const monthlyCounts = {};
+
+    for (let timestamp in userData) {
+        const date = new Date(timestamp.substring(0, 13).replace('T', ' ') + ':00:00');
+        const dateKey = date.toISOString().split('T')[0];
+        const weekKey = `${date.getFullYear()}-W${getWeekNumber(date)}`;
+        const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+        const hour = date.getHours();
+
+        // Daily counts
+        dailyCounts[dateKey] = (dailyCounts[dateKey] || 0) + userData[timestamp];
+        stats.dailyMax = Math.max(stats.dailyMax, dailyCounts[dateKey]);
+
+        // Weekly counts
+        weeklyCounts[weekKey] = (weeklyCounts[weekKey] || 0) + userData[timestamp];
+        stats.weeklyMax = Math.max(stats.weeklyMax, weeklyCounts[weekKey]);
+
+        // Monthly counts
+        monthlyCounts[monthKey] = (monthlyCounts[monthKey] || 0) + userData[timestamp];
+        stats.monthlyMax = Math.max(stats.monthlyMax, monthlyCounts[monthKey]);
+
+        // Hourly distribution
+        stats.hourlyDistribution[hour] += userData[timestamp];
+
+        // Time series data
+        stats.timeData.push({
+            x: date.getTime(),
+            y: userData[timestamp]
+        });
+    }
+
+    // Calculate monthly average
+    const months = Object.keys(monthlyCounts).length;
+    const totalCount = Object.values(monthlyCounts).reduce((a, b) => a + b, 0);
+    stats.monthlyAvg = months > 0 ? totalCount / months : 0;
+
+    // Calculate active streak
+    stats.activeStreak = calculateStreak(dailyCounts);
+
+    // Generate heatmap data
+    stats.heatmapData = generateHeatmapData(dailyCounts);
+
+    return stats;
+}
+
+function calculateStreak(dailyCounts) {
+    const dates = Object.keys(dailyCounts).sort();
+    let currentStreak = 0;
+    let maxStreak = 0;
+
+    for (let i = 0; i < dates.length; i++) {
+        if (i > 0) {
+            const curr = new Date(dates[i]);
+            const prev = new Date(dates[i-1]);
+            const diffDays = Math.floor((curr - prev) / (1000 * 60 * 60 * 24));
+            
+            if (diffDays === 1) {
+                currentStreak++;
+            } else {
+                currentStreak = 1;
+            }
+        } else {
+            currentStreak = 1;
+        }
+        maxStreak = Math.max(maxStreak, currentStreak);
+    }
+
+    return maxStreak;
+}
+
+function generateHeatmapData(dailyCounts) {
+    return Object.entries(dailyCounts).map(([date, count]) => ({
+        date,
+        value: count
+    }));
+}
+
+// Add event listeners
+document.addEventListener('DOMContentLoaded', function() {
+    // Add click handlers to highscore entries
+    document.getElementById('highscore').addEventListener('click', function(e) {
+        const entry = e.target.closest('.highscore-entry');
+        if (entry) {
+            const username = entry.querySelector('.name').textContent.split(' - ')[0];
+            fetch('https://us-central1-loglog-a3cf1.cloudfunctions.net/getCounts')
+                .then(response => response.json())
+                .then(data => showUserMetrics(username, data));
+        }
+    });
+
+    // Close modal
+    document.querySelector('.close').addEventListener('click', function() {
+        document.getElementById('userModal').style.display = 'none';
+    });
+
+    // Close modal when clicking outside
+    window.addEventListener('click', function(e) {
+        const modal = document.getElementById('userModal');
+        if (e.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
+});
+
 function triggerConfetti() {
     const colors = [
         '#8B4513',  // Saddle brown

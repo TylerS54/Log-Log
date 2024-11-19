@@ -159,7 +159,122 @@ button:active {
     animation: wobble 3s infinite;
 }
 
-@media (max-width: 600px) {
+/* Modal styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(139, 69, 19, 0.9);
+    z-index: 1000;
+    overflow-y: auto;
+}
+
+.modal-content {
+    position: relative;
+    background: var(--background);
+    margin: 0;
+    padding: 16px;
+    width: 100%;
+    min-height: 100%;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.close {
+    position: fixed;
+    right: 16px;
+    top: 16px;
+    font-size: 32px;
+    color: #8B4513;
+    z-index: 1001;
+    background: var(--background);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin: 16px 0;
+}
+
+.stat-card, .chart-card {
+    background: var(--card-bg);
+    padding: 12px;
+    border-radius: 12px;
+    margin: 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+#modalTitle {
+    font-size: 1.5em;
+    margin-top: 8px;
+    padding-right: 40px;
+}
+
+.chart-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin: 16px 0;
+}
+
+
+/* Make highscore entries clickable */
+.highscore-entry {
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.highscore-entry:hover {
+    transform: translateX(10px) scale(1.02);
+}
+
+.stat-item {
+    padding: 10px;
+    margin: 5px 0;
+    border-bottom: 1px dashed #8B4513;
+}
+
+.stat-item:last-child {
+    border-bottom: none;
+}
+
+.stat-label {
+    font-size: 0.9em;
+    color: #5C3D2E;
+    margin-bottom: 5px;
+}
+
+.stat-value {
+    font-size: 1.4em;
+    font-weight: bold;
+    color: #8B4513;
+}
+
+/* Ensure charts clear previous renders */
+#heatmap, #timeTrend {
+    min-height: 250px;
+}
+
+/* Style tooltips */
+.apexcharts-tooltip {
+    background: #FFF3E4 !important;
+    border: 1px solid #8B4513 !important;
+    box-shadow: 2px 2px 0 #8B4513 !important;
+}
+
+@media (min-width: 768px) {
     h1 { font-size: 2em; }
     .buttons-container { 
         grid-template-columns: 1fr;
@@ -168,5 +283,21 @@ button:active {
     .chart-container, .stats-card {
         transform: rotate(0deg);
         margin: 16px 8px;
+    }
+    .modal-content {
+        margin: 20px auto;
+        padding: 24px;
+        width: 90%;
+        max-width: 1200px;
+        min-height: auto;
+        border: 3px solid #8B4513;
+        border-radius: 16px;
+        box-shadow: 8px 8px 0 #8B4513;
+    }
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .chart-grid {
+        grid-template-columns: 1fr;
     }
 }
