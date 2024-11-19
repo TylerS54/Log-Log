@@ -619,59 +619,116 @@ document.addEventListener('DOMContentLoaded', function() {
 // Add these chart rendering functions to script.js
 
 function renderHeatmap(userStats) {
-    const heatmapOptions = {
+    const calendarOptions = {
         series: [{
             name: 'Logs',
             data: userStats.heatmapData.map(item => ({
                 x: new Date(item.date).getTime(),
                 y: item.value
-            }))
+            })).sort((a, b) => a.x - b.x)
         }],
         chart: {
+            height: 350,
             type: 'heatmap',
-            height: 250
+            toolbar: {
+                show: true
+            },
+            animations: {
+                enabled: false
+            }
         },
-        dataLabels: { enabled: false },
-        colors: ["#8B4513"],
+        dataLabels: {
+            enabled: false
+        },
         plotOptions: {
             heatmap: {
-                shadeIntensity: 0.5,
+                enableShades: true,
+                distributed: true,
+                radius: 0,
+                useFillColorAsStroke: true,
                 colorScale: {
-                    ranges: [{
-                        from: 0,
-                        to: 1,
-                        name: 'low',
-                        color: '#FFE5CC'
-                    }, {
-                        from: 2,
-                        to: 3,
-                        name: 'medium',
-                        color: '#D2691E'
-                    }, {
-                        from: 4,
-                        to: 999,
-                        name: 'high',
-                        color: '#8B4513'
-                    }]
+                    ranges: [
+                        {
+                            from: 0,
+                            to: 0,
+                            color: '#FFF3E4',
+                            name: '0 logs',
+                        },
+                        {
+                            from: 1,
+                            to: 1,
+                            color: '#CD853F',
+                            name: '1 log',
+                        },
+                        {
+                            from: 2,
+                            to: 2,
+                            color: '#A0522D',
+                            name: '2 logs',
+                        },
+                        {
+                            from: 3,
+                            to: 999,
+                            color: '#8B4513',
+                            name: '3+ logs',
+                        }
+                    ]
+                }
+            }
+        },
+        legend: {
+            show: true,
+            position: 'bottom',
+            fontSize: '14px',
+            onItemHover: {
+                highlightDataSeries: false
+            }
+        },
+        grid: {
+            padding: {
+                top: 0,
+                right: 0,
+                bottom: 0,
+                left: 0
+            },
+            xaxis: {
+                lines: {
+                    show: false
                 }
             }
         },
         xaxis: {
             type: 'datetime',
             labels: {
-                datetimeUTC: false
+                format: 'MM/dd',
+                style: {
+                    fontSize: '12px'
+                }
+            },
+            axisBorder: {
+                show: false
+            },
+            axisTicks: {
+                show: false
             }
         },
-        title: {
-            text: 'Daily Activity Heatmap',
-            style: {
-                color: '#5C3D2E'
+        yaxis: {
+            show: false
+        },
+        tooltip: {
+            custom: function({series, seriesIndex, dataPointIndex, w}) {
+                const date = new Date(w.globals.seriesX[seriesIndex][dataPointIndex]);
+                const value = series[seriesIndex][dataPointIndex];
+                return `<div class="apexcharts-tooltip-title">${date.toLocaleDateString()}</div>
+                        <div class="apexcharts-tooltip-series-group">
+                            <span>Logs: ${value}</span>
+                        </div>`;
             }
         }
     };
-
-    new ApexCharts(document.querySelector("#heatmap"), heatmapOptions).render();
-}
+ 
+    new ApexCharts(document.querySelector("#heatmap"), calendarOptions).render();
+ }
 
 function renderTimeTrend(userStats) {
     const timeOptions = {
@@ -707,7 +764,7 @@ function renderTimeTrend(userStats) {
             }
         },
         title: {
-            text: 'Time of Day Distribution',
+            text: 'Time of Day Distribution (UTC)',
             style: {
                 color: '#5C3D2E'
             }
@@ -752,22 +809,24 @@ function updateTimeOfDay(stats) {
         Math.max(...stats.hourlyDistribution)
     );
     
-    document.getElementById('timeOfDay').innerHTML = `
+        document.getElementById('timeOfDay').innerHTML = `
         <div class="stat-item">
-            <div class="stat-label">Peak Hour</div>
-            <div class="stat-value">${String(peakHour).padStart(2, '0')}:00</div>
+            <div class="stat-label">Peak Hour (ET)</div>
+            <div class="stat-value">${String((peakHour - 4 + 24) % 24).padStart(2, '0')}:00</div>
         </div>
         <div class="stat-item">
-            <div class="stat-label">Morning (6-12)</div>
+            <div class="stat-label">Morning (6-12 ET)</div>
             <div class="stat-value">${
-                stats.hourlyDistribution.slice(6, 12)
+                [...stats.hourlyDistribution.slice((6 + 4) % 24), 
+                    ...stats.hourlyDistribution.slice(0, (12 + 4) % 24)]
                     .reduce((a, b) => a + b, 0)
             }</div>
         </div>
         <div class="stat-item">
-            <div class="stat-label">Evening (12-20)</div>
+            <div class="stat-label">Evening (12-20 ET)</div>
             <div class="stat-value">${
-                stats.hourlyDistribution.slice(12, 20)
+                [...stats.hourlyDistribution.slice((12 + 4) % 24),
+                    ...stats.hourlyDistribution.slice(0, (20 + 4) % 24)]
                     .reduce((a, b) => a + b, 0)
             }</div>
         </div>
@@ -903,18 +962,27 @@ function generateHeatmapData(dailyCounts) {
     }));
 }
 
-// Add event listeners
+// Replace the existing click handler with this:
 document.addEventListener('DOMContentLoaded', function() {
-    // Add click handlers to highscore entries
-    document.getElementById('highscore').addEventListener('click', function(e) {
-        const entry = e.target.closest('.highscore-entry');
-        if (entry) {
-            const username = entry.querySelector('.name').textContent.split(' - ')[0];
-            fetch('https://us-central1-loglog-a3cf1.cloudfunctions.net/getCounts')
-                .then(response => response.json())
-                .then(data => showUserMetrics(username, data));
-        }
-    });
+    const highscoreDiv = document.getElementById('highscore');
+    
+    if (highscoreDiv) {
+        const clickHandler = function(e) {
+            const entry = e.target.closest('.highscore-entry');
+            if (entry) {
+                e.preventDefault();
+                const username = entry.querySelector('.name').textContent.split(' - ')[0];
+                fetch('https://us-central1-loglog-a3cf1.cloudfunctions.net/getCounts')
+                    .then(response => response.json())
+                    .then(data => showUserMetrics(username, data));
+            }
+        };
+
+        // Remove any existing listeners
+        highscoreDiv.removeEventListener('click', clickHandler);
+        // Add the new listener
+        highscoreDiv.addEventListener('click', clickHandler);
+    }
 
     // Close modal
     document.querySelector('.close').addEventListener('click', function() {
