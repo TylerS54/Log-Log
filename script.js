@@ -944,15 +944,51 @@ function triggerConfetti() {
         '#FFD700',  // Gold
         '#FFFFFF'   // Snow White
     ];
-    const shapes = ['🎄', '🎅', '🦌', '🎁', '⛄'];
     
+    // Create multiple bursts of confetti
+    const duration = 3000;
+    const end = Date.now() + duration;
+
+    (function frame() {
+        confetti({
+            particleCount: 2,
+            angle: 60,
+            spread: 55,
+            origin: { x: 0 },
+            colors: colors
+        });
+        confetti({
+            particleCount: 2,
+            angle: 120,
+            spread: 55,
+            origin: { x: 1 },
+            colors: colors
+        });
+
+        if (Date.now() < end) {
+            requestAnimationFrame(frame);
+        }
+    }());
+
+    // Add emoji confetti
+    const shapes = ['🎄', '🎅', '🦌', '🎁', '⛄'];
     confetti({
-        particleCount: 100,
-        spread: 70,
-        origin: { y: 0.6 },
-        colors: colors
+        shapes: shapes.map(shape => {
+            return () => {
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+                canvas.width = 16;
+                canvas.height = 16;
+                context.font = '16px serif';
+                context.fillText(shape, 0, 16);
+                return canvas;
+            };
+        }),
+        particleCount: 15,
+        spread: 90,
+        origin: { y: 0.6 }
     });
- }
+}
 
 function playFartNoise() {
     const audio = document.getElementById('fart-noise');

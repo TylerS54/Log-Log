@@ -8,19 +8,55 @@
 }
 
 @keyframes snowfall {
-    0% { transform: translateY(0) rotate(0deg); }
-    100% { transform: translateY(10px) rotate(360deg); }
+    0%, 100% { transform: translateY(0) rotate(-1deg); }
+    50% { transform: translateY(2px) rotate(1deg); }
 }
 
 @keyframes santaBounce {
     0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+    50% { transform: translateY(-5px); }
+}
+
+/* Christmas Lights Effect */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg,
+        #C41E3A 0%,
+        #FFD700 25%,
+        #228B22 50%,
+        #C41E3A 75%,
+        #FFD700 100%
+    );
+    animation: christmasLights 2s linear infinite;
+    z-index: 1000;
+}
+
+body::after {
+    content: '';
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg,
+        #FFD700 0%,
+        #228B22 25%,
+        #C41E3A 50%,
+        #FFD700 75%,
+        #228B22 100%
+    );
+    animation: christmasLights 2s linear infinite reverse;
+    z-index: 1000;
 }
 
 @keyframes christmasLights {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 150%; }
-    100% { background-position: 0% 50%; }
+    0% { background-position: 0px; }
+    100% { background-position: 60px; }
 }
 
 body {
