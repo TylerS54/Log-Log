@@ -1,39 +1,39 @@
 :root {
-    --primary: #B85C38;
-    --secondary: #E2703A;
-    --accent: #FCA311;
-    --background: #FFF3E4;
-    --text: #5C3D2E;
-    --card-bg: rgba(255, 243, 228, 0.9);
+    --primary: #C41E3A;    /* Christmas Red */
+    --secondary: #228B22;  /* Forest Green */
+    --accent: #FFD700;     /* Gold */
+    --background: #F8F9FA; /* Snow White */
+    --text: #1C2833;       /* Dark Pine */
+    --card-bg: rgba(248, 249, 250, 0.9);
 }
 
-@keyframes turkeyFloat {
-    0%, 100% { transform: rotate(-5deg) translateY(0); }
-    50% { transform: rotate(5deg) translateY(-10px); }
+@keyframes snowfall {
+    0% { transform: translateY(0) rotate(0deg); }
+    100% { transform: translateY(10px) rotate(360deg); }
 }
 
-@keyframes gravy {
+@keyframes santaBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes christmasLights {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 150%; }
     100% { background-position: 0% 50%; }
 }
 
-@keyframes wobble {
-    0%, 100% { transform: rotate(-3deg); }
-    50% { transform: rotate(3deg); }
-}
-
 body {
     font-family: 'Vollkorn', serif;
     background: linear-gradient(45deg, 
-        #8B4513 0%,
-        #D2691E 25%,
-        #CD853F 50%,
-        #DEB887 75%,
-        #F4A460 100%
+        #C41E3A 0%,   /* Christmas Red */
+        #228B22 25%,  /* Forest Green */
+        #C41E3A 50%,  /* Christmas Red */
+        #228B22 75%,  /* Forest Green */
+        #C41E3A 100%  /* Christmas Red */
     );
     background-size: 400% 400%;
-    animation: gravy 15s ease infinite;
+    animation: christmasLights 15s ease infinite;
     color: var(--text);
     text-align: center;
     padding: 16px;
@@ -43,16 +43,17 @@ body {
 
 h1 {
     font-size: 3em;
-    animation: turkeyFloat 3s ease-in-out infinite;
-    text-shadow: 3px 3px 0 #8B4513, 
-                 6px 6px 0 #D2691E;
+    animation: santaBounce 3s ease-in-out infinite;
+    text-shadow: 3px 3px 0 #C41E3A, 
+                 6px 6px 0 #228B22;
     margin: 40px 0;
+    color: #FFD700; /* Gold */
 }
 
 h2 {
-    animation: wobble 4s ease-in-out infinite;
-    color: #B85C38;
-    text-shadow: 2px 2px 4px rgba(92, 61, 46, 0.4);
+    animation: snowfall 4s ease-in-out infinite;
+    color: #C41E3A; /* Christmas Red */
+    text-shadow: 2px 2px 4px rgba(28, 40, 51, 0.4);
 }
 
 .buttons-container {
@@ -66,38 +67,38 @@ h2 {
 }
 
 button {
-    background: linear-gradient(45deg, var(--secondary), var(--accent));
+    background: linear-gradient(45deg, var(--primary), var(--secondary));
     color: #FFF;
     font-family: 'Vollkorn', serif;
     font-weight: bold;
-    border: 3px solid #8B4513;
+    border: 3px solid #C41E3A;
     border-radius: 12px;
     padding: 16px;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 5px 5px 0 #8B4513;
+    box-shadow: 5px 5px 0 #228B22;
     transform-origin: center;
 }
 
 button:hover {
-    animation: turkeyFloat 1s infinite;
-    box-shadow: 8px 8px 0 #8B4513;
+    animation: santaBounce 1s infinite;
+    box-shadow: 8px 8px 0 #228B22;
     transform: scale(1.05);
 }
 
 button:active {
     transform: scale(0.95);
-    box-shadow: 2px 2px 0 #8B4513;
+    box-shadow: 2px 2px 0 #228B22;
 }
 
 .chart-container {
     background: var(--card-bg);
     border-radius: 16px;
-    border: 3px solid #8B4513;
+    border: 3px solid #C41E3A;
     padding: 16px;
     margin: 24px auto;
     max-width: 800px;
-    box-shadow: 8px 8px 0 #8B4513;
+    box-shadow: 8px 8px 0 #228B22;
     transform: rotate(1deg);
 }
 
@@ -107,56 +108,56 @@ button:active {
 
 .stats-card {
     background: var(--card-bg);
-    border: 3px solid #8B4513;
+    border: 3px solid #C41E3A;
     border-radius: 16px;
     padding: 20px;
     margin: 24px auto;
     max-width: 800px;
-    box-shadow: 8px 8px 0 #8B4513;
+    box-shadow: 8px 8px 0 #228B22;
     transform: rotate(-1deg);
 }
 
 .stats-entry {
     padding: 12px;
-    border-bottom: 2px dashed #8B4513;
+    border-bottom: 2px dashed #C41E3A;
     transition: all 0.3s ease;
 }
 
 .stats-entry:hover {
     transform: translateX(10px);
-    background: rgba(139, 69, 19, 0.1);
+    background: rgba(196, 30, 58, 0.1);
 }
 
 .rank-1 { 
-    color: #DAA520; 
-    text-shadow: 2px 2px 0 #8B4513;
+    color: #FFD700; /* Gold */
+    text-shadow: 2px 2px 0 #C41E3A;
     font-size: 1.2em;
 }
 
 .rank-2 { 
-    color: #808080;
-    text-shadow: 1px 1px 0 #8B4513;
+    color: #C0C0C0; /* Silver */
+    text-shadow: 1px 1px 0 #228B22;
 }
 
 .rank-3 { 
-    color: #CD7F32;
-    text-shadow: 1px 1px 0 #8B4513;
+    color: #CD7F32; /* Bronze */
+    text-shadow: 1px 1px 0 #C41E3A;
 }
 
 #confirmation {
     background: var(--card-bg);
-    border: 3px solid #8B4513;
+    border: 3px solid #C41E3A;
     border-radius: 16px;
     padding: 15px;
     margin: 20px auto;
     max-width: 300px;
-    animation: turkeyFloat 2s infinite;
-    box-shadow: 5px 5px 0 #8B4513;
+    animation: santaBounce 2s infinite;
+    box-shadow: 5px 5px 0 #228B22;
 }
 
 .venmo-button {
-    background: #008CFF !important;
-    animation: wobble 3s infinite;
+    background: #C41E3A !important;
+    animation: snowfall 3s infinite;
 }
 
 /* Modal styles */
@@ -167,7 +168,7 @@ button:active {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(139, 69, 19, 0.9);
+    background: rgba(196, 30, 58, 0.9);
     z-index: 1000;
     overflow-y: auto;
 }

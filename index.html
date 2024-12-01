@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🦃 GOBBLE GOBBLE BATHROOM WOBBLE 🦃</title>
+    <title>🎄 CHRISTMAS THRONE CHRONICLES 🎄</title>
     <link href="https://fonts.googleapis.com/css2?family=Vollkorn:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div id="app">
-        <h1>🦃 GOBBLE GOBBLE BATHROOM WOBBLE 🦃</h1>
+        <h1>🎄 CHRISTMAS THRONE CHRONICLES 🎄</h1>
 
         <div class="buttons-container">
             <button onclick="incrementCounter('Ziggy'); sendTelegramMessage('Ziggy');">Ziggy</button>
@@ -20,7 +20,7 @@
             <button onclick="incrementCounter('Teddy'); sendTelegramMessage('Teddy');">Teddy</button>
         </div>
 
-        <h2>🍗 STUFFING STATUS 🍗</h2>
+        <h2>🎁 GIFT DELIVERY STATUS 🎁</h2>
 
         <div class="toggle-container">
             <input type="radio" id="daily" name="chartView" value="daily" checked>
@@ -31,57 +31,57 @@
 
         <div id="chart" class="chart-container"></div>
 
-        <h2>🌽 CORNUCOPIA COUNTER 🌽</h2>
+        <h2>🎄 CHRISTMAS TREE COUNTER 🎄</h2>
         <div id="cumulativeChart" class="chart-container"></div>
 
-        <h2>🥧 GRAVY GRAPH 🥧</h2>
+        <h2>⛄ SNOW GLOBE STATISTICS ⛄</h2>
         <div id="dayOfWeekChart" class="chart-container"></div>
 
-        <h2>🦃 TURKEY THRONE CHAMPIONS 🦃</h2>
+        <h2>🎅 SANTA'S HALL OF FAME 🎅</h2>
         <div id="highscore" class="stats-card"></div>
 
-        <h2>🍗 DAILY DRUMSTICK DESTROYER 🍗</h2>
+        <h2>🦌 DAILY REINDEER CHAMPION 🦌</h2>
         <div id="daily-leader" class="stats-card"></div>
 
-        <h2>🍽️ WEEKLY WISHBONE WARRIOR 🍽️</h2>
+        <h2>🧝 WEEKLY WORKSHOP WINNER 🧝</h2>
         <div id="weekly-leader" class="stats-card"></div>
     </div>
 
     <div id="userModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <h2 id="modalTitle">🦃 Turkey Stats for <span id="userName"></span> 🦃</h2>
+            <h2 id="modalTitle">🎄 Christmas Stats for <span id="userName"></span> 🎄</h2>
             
             <div class="stats-grid">
                 <div class="stat-card">
-                    <h3>🏆 Personal Bests</h3>
+                    <h3>🎁 Personal Bests</h3>
                     <div id="personalBests"></div>
                 </div>
                 
                 <div class="stat-card">
-                    <h3>⏰ Prime Time</h3>
+                    <h3>⏰ North Pole Time</h3>
                     <div id="timeOfDay"></div>
                 </div>
 
                 <div class="stat-card">
-                    <h3>📅 Active Days</h3>
+                    <h3>📅 Workshop Days</h3>
                     <div id="activeStreak"></div>
                 </div>
 
                 <div class="stat-card">
-                    <h3>📊 Monthly Average</h3>
+                    <h3>📊 Monthly Miracles</h3>
                     <div id="monthlyAvg"></div>
                 </div>
             </div>
 
             <div class="chart-grid">
                 <div class="chart-card">
-                    <h3>🗓️ Activity Heatmap</h3>
+                    <h3>🎄 Holiday Heatmap</h3>
                     <div id="heatmap"></div>
                 </div>
                 
                 <div class="chart-card">
-                    <h3>📈 Time Trends</h3>
+                    <h3>📈 Festive Trends</h3>
                     <div id="timeTrend"></div>
                 </div>
             </div>
@@ -89,7 +89,7 @@
     </div>
 
     <div class="venmo-button-container">
-        <button class="venmo-button">+1 GRAVY TRAIN TICKET - $0.99</button>
+        <button class="venmo-button">+1 SANTA'S HELPER TICKET - $0.99</button>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>

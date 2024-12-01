@@ -4,116 +4,41 @@ function sendTelegramMessage(name) {
     const botToken = '6741155054:AAGSjlsqa7xbJGHkKq9uEREUjNSO22yn6KE';
     const chatId = '-1002084507637';
     const messages = [
-        `${name} just unleashed a gravy flood in the porcelain cornucopia.`,
-        `${name} just carved a turkey... from the wrong end.`,
-        `${name} just made their own cranberry sauce in the toilet bowl.`,
-        `${name} just freed a gobbler from their haunted colon.`,
-        `${name} just performed the sacred ritual of the Squatting Pilgrim.`,
-        `${name} just exorcised last night's turkey demon.`,
-        `${name} just made stuffing come out the wrong way.`,
-        `${name} just turned the bathroom into Plymouth Shock.`,
-        `${name} just discovered why they call it a turkey dump.`,
-        `${name} just made their own pumpkin pie... in reverse.`,
-        `${name} just had their own Boston Pee Party.`,
-        `${name} just gave birth to a food baby from hell.`,
-        `${name} just made the toilet wish it was never carved.`,
-        `${name} just performed a stuffing exorcism.`,
-        `${name} just gave new meaning to "Turkey Day Dump".`,
-        `${name} just made their own autumn harvest... in the bowl.`,
-        `${name} just turned their insides into cranberry sauce.`,
-        `${name} just had a feast exit through the wrong door.`,
-        `${name} just made mashed potatoes look appetizing again.`,
-        `${name} just gave thanks... to the toilet paper.`,
-        `${name} just sparked the great turkey rebellion of 2024.`,
-        `${name} just made the toilet regret its life choices.`,
-        `${name} just created their own dark meat disaster.`,
-        `${name} just stuffed the wrong turkey.`,
-        `${name} just made the bathroom smell like grandma's cooking... gone wrong.`,
-        `${name} just turned the bowl into a gravy boat from hell.`,
-        `${name} just gave new meaning to "passing the potatoes".`,
-        `${name} just made the toilet wish it was a garbage disposal instead.`,
-        `${name} just created their own butternut squash nightmare.`,
-        `${name} just showed the toilet what food coma really means.`,
-        `${name} just made Black Friday come early... for the toilet.`,
-        `${name} just pardoned a turkey... straight into the bowl.`,
-        `${name} just turned their colon into a cornucopia.`,
-        `${name} just gave birth to last year's leftovers.`,
-        `${name} just made the toilet question its thanksgiving dinner.`,
-        `${name} just created their own dark meat special.`,
-        `${name} just had a pilgrim's revenge.`,
-        `${name} just made the mayflower look like a pleasure cruise.`,
-        `${name} just gave thanks for extra-strength toilet paper.`,
-        `${name} just made their own autumn wind... indoors.`,
-        `${name} just turned the bathroom into a horror story about stuffing.`,
-        `${name} just gave the toilet PTSD from thanksgiving dinner.`,
-        `${name} just made their own fall harvest... in winter.`,
-        `${name} just created a feast the pilgrims never wrote about.`,
-        `${name} just made the toilet consider vegetarianism.`,
-        `${name} just gave new meaning to "turkey with all the trimmings".`,
-        `${name} just made the bathroom smell like autumn... in hell.`,
-        `${name} just turned their digestion into a horror story.`,
-        `${name} just created their own dark chapter of thanksgiving history.`,
-        `${name} just made the toilet wish it was at kids' table instead.`,
-        `${name} just unleashed a cornucopia of horrors.`,
-        `${name} just gave new meaning to "turkey day parade".`,
-        `${name} just made their mark on thanksgiving tradition.`,
-        `${name} just created their own fall festival... of horror.`,
-        `${name} just gave the toilet something to be thankful for.`,
-        `${name} just made their own pumpkin spice nightmare.`,
-        `${name} just turned the bathroom into a pilgrim's worst nightmare.`,
-        `${name} just created their own thanksgiving massacre.`,
-        `${name} just made the toilet reconsider its career choice.`,
-        `${name} just gave birth to the dark side of thanksgiving.`,
-        `${name} just turned their colon into a haunted hayride.`,
-        `${name} just made the bathroom smell like Satan's kitchen.`,
-        `${name} just created their own fall colors... all brown.`,
-        `${name} just gave the toilet a reason to fear November.`,
-        `${name} just made their own autumn leaves... from the inside.`,
-        `${name} just turned dinner into a horror show.`,
-        `${name} just made the toilet wish it was a compost bin.`,
-        `${name} just created their own twisted thanksgiving tradition.`,
-        `${name} just gave new meaning to "stuffed turkey".`,
-        `${name} just made the bathroom mirror fog up in terror.`,
-        `${name} just unleashed last night's feast from hell.`,
-        `${name} just turned the toilet into a crime scene.`,
-        `${name} just made their own dark harvest.`,
-        `${name} just gave the plumber job security.`,
-        `${name} just created their own fall foliage... in the bowl.`,
-        `${name} just made the toilet consider early retirement.`,
-        `${name} just turned thanksgiving into thanks-grieving.`,
-        `${name} just made their own autumn storm... indoors.`,
-        `${name} just gave the toilet something to remember.`,
-        `${name} just created their own fall festival finale.`,
-        `${name} just made the bathroom air freshener quit its job.`,
-        `${name} just turned their digestion into a horror movie.`,
-        `${name} just made their own cranberry nightmare.`,
-        `${name} just gave the toilet a reason to hate holidays.`,
-        `${name} just created their own autumn apocalypse.`,
-        `${name} just made the bathroom declare a state of emergency.`,
-        `${name} just turned thanksgiving dinner into a revenge plot.`,
-        `${name} just made their own fall from grace.`,
-        `${name} just gave the toilet bowl PTSD.`,
-        `${name} just created their own turkey day tragedy.`,
-        `${name} just made the bathroom tiles try to escape.`,
-        `${name} just turned the toilet into a witness protection program.`,
-        `${name} just made their own autumn exodus.`,
-        `${name} just gave new meaning to "turkey shoot".`,
-        `${name} just created their own pilgrim's progress... backwards.`,
-        `${name} just made the toilet question its life purpose.`,
-        `${name} just turned thanksgiving into a cautionary tale.`,
-        `${name} just made their own fall finale.`,
-        `${name} just gave the sewers something to gossip about.`,
-        `${name} just created their own thanksgiving horror story.`,
-        `${name} just made the toilet wish it was a bird bath.`,
-        `${name} just turned dinner into a dark comedy.`,
-        `${name} just made their own autumn ritual gone wrong.`,
-        `${name} just gave the bathroom a reason to call therapy.`,
-        `${name} just created their own fall from heaven.`,
-        `${name} just made the toilet contemplate its existence.`,
-        `${name} just turned the feast into a nightmare.`,
-        `${name} just made their own autumn sacrifice.`,
-        `${name} just gave the bathroom something to write home about.`
+        `${name} just made their own Christmas pudding... the wrong way.`,
+        `${name} just dropped off a gift at the North Pole.`,
+        `${name} just gave Santa's elves something to clean up.`,
+        `${name} just made the bathroom smell like Christmas cookies gone wrong.`,
+        `${name} just laid a Yule log.`,
+        `${name} just gave new meaning to "Christmas dump".`,
+        `${name} just made the toilet wish it was a chimney instead.`,
+        `${name} just had their own Silent Night... not so silent.`,
+        `${name} just decked the halls with something fowl.`,
+        `${name} just made the reindeer grateful they're outside.`,
+        `${name} just gave Santa's workshop a new project.`,
+        `${name} just created their own winter wonderland... in the bowl.`,
+        `${name} just made the mistletoe wilt.`,
+        `${name} just gave new meaning to "Christmas spirit".`,
+        `${name} just made the North Pole seem pleasant.`,
+        `${name} just gave Jack Frost something to run from.`,
+        `${name} just made the elves request hazard pay.`,
+        `${name} just turned "Ho Ho Ho" into "Oh No No".`,
+        `${name} just gave the bathroom a Christmas miracle.`,
+        `${name} just made the stockings grateful they're by the chimney.`,
+        `${name} just created their own brown Christmas.`,
+        `${name} just made Santa check the naughty list twice.`,
+        `${name} just gave Rudolph a reason to keep his distance.`,
+        `${name} just made the gingerbread men flee in terror.`,
+        `${name} just turned Silent Night into Violent Night.`,
+        `${name} just made the Christmas tree air freshener give up.`,
+        `${name} just gave Santa's sleigh a reason to fly faster.`,
+        `${name} just made the snowmen melt in disgust.`,
+        `${name} just turned Jingle Bells into Jungle Smells.`,
+        `${name} just gave Christmas a whole new meaning.`
     ];
+
+
+
+    
     const text = messages[Math.floor(Math.random() * messages.length)];
     const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(text)}`;
 
@@ -143,17 +68,17 @@ function updateHighscore(data) {
         if (index === 0) {
             rankClass = 'rank-1';
             icon = '🥇';
-            title = '🦃 Grand Gobbler';
+            title = '🎅 Santa\'s Favorite';
         } else if (index === 1) {
             rankClass = 'rank-2';
             icon = '🥈';
-            title = '🦃 Deputy Drumstick';
+            title = '🦌 Rudolph\'s Runner-up';
         } else if (index === 2) {
             rankClass = 'rank-3';
             icon = '🥉';
-            title = '🦃 Bronze Butterball';
+            title = '🧝 Edging Elf';
         } else {
-            title = 'Regular Pooper';
+            title = 'Workshop Elf';
         }
 
         return `
@@ -308,15 +233,15 @@ function getWeekNumber(d) {
 
 function processSnapshot(data, chartView) {
     let seriesData = [];
+
     let colors = [
-        '#8B4513',  // Saddle brown
-        '#D2691E',  // Chocolate
-        '#CD853F',  // Peru
-        '#A0522D',  // Sienna
-        '#B8860B',  // Dark goldenrod
-        '#DAA520',  // Goldenrod
-        '#CC5500'   // Burnt orange
-     ]; // Add more colors as needed
+        '#C41E3A',  // Christmas Red
+        '#228B22',  // Forest Green
+        '#FFD700',  // Gold
+        '#A91B0D',  // Dark Red
+        '#1B4D3E',  // Dark Green
+        '#B8860B'   // Dark Gold
+    ];
     let colorIndex = 0;
 
     for (let user in data) {
@@ -360,14 +285,13 @@ function processSnapshot(data, chartView) {
 function processCumulativeSnapshot(data) {
     let seriesData = [];
     let colors = [
-        '#8B4513',  // Saddle brown
-        '#D2691E',  // Chocolate
-        '#CD853F',  // Peru
-        '#A0522D',  // Sienna
-        '#B8860B',  // Dark goldenrod
-        '#DAA520',  // Goldenrod
-        '#CC5500'   // Burnt orange
-     ];
+        '#C41E3A',  // Christmas Red
+        '#228B22',  // Forest Green
+        '#FFD700',  // Gold
+        '#A91B0D',  // Dark Red
+        '#1B4D3E',  // Dark Green
+        '#B8860B'   // Dark Gold
+    ];
     let colorIndex = 0;
 
     for (let user in data) {
@@ -421,6 +345,16 @@ function processDayOfWeekSnapshot(data) {
 }
 
 function renderChart(chartData) {
+
+    const chartColors = [
+        '#C41E3A',  // Christmas Red
+        '#228B22',  // Forest Green
+        '#FFD700',  // Gold
+        '#A91B0D',  // Dark Red
+        '#1B4D3E',  // Dark Green
+        '#B8860B'   // Dark Gold
+    ];
+
     var options = {
         series: chartData.series,
         chart: {
@@ -439,14 +373,7 @@ function renderChart(chartData) {
             },
             min: 0
         },
-        colors: [
-            '#8B4513',  // Saddle brown
-            '#D2691E',  // Chocolate
-            '#CD853F',  // Peru
-            '#A0522D',  // Sienna  
-            '#B8860B',  // Dark goldenrod
-            '#DAA520'   // Goldenrod
-         ],
+        colors: chartColors,
          fill: {
             type: 'gradient',
             gradient: {
@@ -478,6 +405,17 @@ function renderChart(chartData) {
 }
 
 function renderCumulativeChart(chartData) {
+
+    const chartColors = [
+        '#C41E3A',  // Christmas Red
+        '#228B22',  // Forest Green
+        '#FFD700',  // Gold
+        '#A91B0D',  // Dark Red
+        '#1B4D3E',  // Dark Green
+        '#B8860B'   // Dark Gold
+    ];
+
+
     var cumulativeOptions = {
         series: chartData.series,
         chart: {
@@ -496,14 +434,7 @@ function renderCumulativeChart(chartData) {
             },
             min: 0
         },
-        colors: [
-            '#8B4513',  // Saddle brown 
-            '#D2691E',  // Chocolate
-            '#CD853F',  // Peru 
-            '#A0522D',  // Sienna
-            '#B8860B',  // Dark goldenrod
-            '#DAA520'   // Goldenrod
-         ],
+        colors: chartColors,
          fill: {
             type: 'gradient',
             gradient: {
@@ -535,6 +466,16 @@ function renderCumulativeChart(chartData) {
 }
 
 function renderDayOfWeekChart(chartData) {
+
+    const chartColors = [
+        '#C41E3A',  // Christmas Red
+        '#228B22',  // Forest Green
+        '#FFD700',  // Gold
+        '#A91B0D',  // Dark Red
+        '#1B4D3E',  // Dark Green
+        '#B8860B'   // Dark Gold
+    ];
+
     let series = Object.keys(chartData[0]).filter(key => key !== 'x').map(user => ({
         name: user,
         data: chartData.map(data => data[user])
@@ -565,14 +506,7 @@ function renderDayOfWeekChart(chartData) {
         fill: {
             opacity: 1
         },
-        colors: [
-            '#8B4513',  // Saddle brown 
-            '#D2691E',  // Chocolate
-            '#CD853F',  // Peru
-            '#A0522D',  // Sienna  
-            '#B8860B',  // Dark goldenrod
-            '#DAA520'   // Goldenrod
-         ]
+        colors: chartColors
     };
 
     if (!globalDayOfWeekChart) {
@@ -775,7 +709,7 @@ function renderTimeTrend(userStats) {
                 shade: 'dark',
                 type: 'vertical',
                 shadeIntensity: 0.5,
-                gradientToColors: ['#D2691E'],
+                gradientToColors: ['#A91B0D'],
                 inverseColors: false,
                 opacityFrom: 0.8,
                 opacityTo: 0.9,
@@ -1005,12 +939,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function triggerConfetti() {
     const colors = [
-        '#8B4513',  // Saddle brown
-        '#D2691E',  // Chocolate
-        '#CD853F',  // Peru
-        '#A0522D'   // Sienna
+        '#C41E3A',  // Christmas Red
+        '#228B22',  // Forest Green
+        '#FFD700',  // Gold
+        '#FFFFFF'   // Snow White
     ];
-    const shapes = ['🦃', '🍂', '🍁', '🌰', '🥧'];
+    const shapes = ['🎄', '🎅', '🦌', '🎁', '⛄'];
     
     confetti({
         particleCount: 100,
