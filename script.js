@@ -113,8 +113,6 @@ function sendTelegramMessage(name) {
         `${name} just made the North Pole shift south.`
     ];
 
-
-
     
     const text = messages[Math.floor(Math.random() * messages.length)];
     const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(text)}`;
@@ -276,7 +274,7 @@ function incrementCounter(name) {
         },
         body: JSON.stringify({ name, timestamp })
     })
-    .then(response => response.json())
+    .then(response => response.text())
     .then(data => {
         disableButtons();
         showConfirmation(name);
@@ -1015,30 +1013,16 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function triggerConfetti() {
-    const colors = [
-        '#C41E3A',  // Christmas Red
-        '#228B22',  // Forest Green
-        '#FFD700',  // Gold
-        '#FFFFFF'   // Snow White
-    ];
-    
-    // Create multiple bursts of confetti
-    const duration = 3000;
-    const end = Date.now() + duration;
+    // A single, crisp burst of confetti in holiday colors with a neon twist
+    const end = Date.now() + 1000;
+    const colors = ['#C41E3A', '#228B22', '#FFD700', '#00FFB3', '#FF00CC'];
 
     (function frame() {
         confetti({
-            particleCount: 2,
-            angle: 60,
-            spread: 55,
-            origin: { x: 0 },
-            colors: colors
-        });
-        confetti({
-            particleCount: 2,
-            angle: 120,
-            spread: 55,
-            origin: { x: 1 },
+            particleCount: 5,
+            startVelocity: 20,
+            spread: 60,
+            origin: { y: 0.7 },
             colors: colors
         });
 
@@ -1046,25 +1030,6 @@ function triggerConfetti() {
             requestAnimationFrame(frame);
         }
     }());
-
-    // Add emoji confetti
-    const shapes = ['🎄', '🎅', '🦌', '🎁', '⛄'];
-    confetti({
-        shapes: shapes.map(shape => {
-            return () => {
-                const canvas = document.createElement('canvas');
-                const context = canvas.getContext('2d');
-                canvas.width = 16;
-                canvas.height = 16;
-                context.font = '16px serif';
-                context.fillText(shape, 0, 16);
-                return canvas;
-            };
-        }),
-        particleCount: 15,
-        spread: 90,
-        origin: { y: 0.6 }
-    });
 }
 
 function playFartNoise() {

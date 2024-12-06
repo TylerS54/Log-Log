@@ -2,201 +2,194 @@
     --primary: #C41E3A;    /* Christmas Red */
     --secondary: #228B22;  /* Forest Green */
     --accent: #FFD700;     /* Gold */
-    --background: #F8F9FA; /* Snow White */
-    --text: #1C2833;       /* Dark Pine */
-    --card-bg: rgba(248, 249, 250, 0.9);
+    --background: #0F2417; /* Dark evergreen, nighttime forest */
+    --text: #FFFFFF;       /* White text on dark */
+    --card-bg: #1E2B20;    /* Slightly lighter evergreen for cards */
+    --border-color: #2A3A2C;
+    --neon-green: #00FFB3;
+    --neon-red: #FF3333;
+    --snowflake: '❄';
+}
+
+/* Subtle falling snow animation */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0; left:0; right:0; bottom:0;
+    pointer-events: none;
+    background-image: radial-gradient(#FFFFFF33 1px, transparent 1px);
+    background-size: 20px 20px;
+    animation: snowfall 10s linear infinite;
+    opacity: 0.2;
+    z-index: 1;
 }
 
 @keyframes snowfall {
-    0%, 100% { transform: translateY(0) rotate(-1deg); }
-    50% { transform: translateY(2px) rotate(1deg); }
+    0% { background-position: 0px 0px; }
+    100% { background-position: 0px 500px; }
 }
 
-@keyframes santaBounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-5px); }
-}
-
-/* Christmas Lights Effect */
-body::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(90deg,
-        #C41E3A 0%,
-        #FFD700 25%,
-        #228B22 50%,
-        #C41E3A 75%,
-        #FFD700 100%
-    );
-    animation: christmasLights 2s linear infinite;
-    z-index: 1000;
-}
-
-body::after {
-    content: '';
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(90deg,
-        #FFD700 0%,
-        #228B22 25%,
-        #C41E3A 50%,
-        #FFD700 75%,
-        #228B22 100%
-    );
-    animation: christmasLights 2s linear infinite reverse;
-    z-index: 1000;
-}
-
-@keyframes christmasLights {
-    0% { background-position: 0px; }
-    100% { background-position: 60px; }
-}
-
+/* General Body */
 body {
-    font-family: 'Vollkorn', serif;
-    background: linear-gradient(45deg, 
-        #C41E3A 0%,   /* Christmas Red */
-        #228B22 25%,  /* Forest Green */
-        #C41E3A 50%,  /* Christmas Red */
-        #228B22 75%,  /* Forest Green */
-        #C41E3A 100%  /* Christmas Red */
-    );
-    background-size: 400% 400%;
-    animation: christmasLights 15s ease infinite;
+    font-family: 'Poppins', sans-serif;
+    background: var(--background);
     color: var(--text);
     text-align: center;
     padding: 16px;
     margin: 0;
     overflow-x: hidden;
+    position: relative;
+    min-height: 100vh;
+    z-index: 0;
 }
 
+/* Headings */
 h1 {
-    font-size: 3em;
-    animation: santaBounce 3s ease-in-out infinite;
-    text-shadow: 3px 3px 0 #C41E3A, 
-                 6px 6px 0 #228B22;
+    font-size: 2.2em;
     margin: 40px 0;
-    color: #FFD700; /* Gold */
+    color: var(--accent);
+    font-weight: 700;
+    text-shadow: 0 0 10px var(--neon-red), 0 0 8px var(--neon-green);
 }
 
 h2 {
-    animation: snowfall 4s ease-in-out infinite;
-    color: #C41E3A; /* Christmas Red */
-    text-shadow: 2px 2px 4px rgba(28, 40, 51, 0.4);
+    color: var(--accent);
+    margin-top: 40px;
+    margin-bottom: 20px;
+    font-weight: 700;
+    text-shadow: 0 0 5px var(--neon-green);
+    position: relative;
 }
 
+h2::after {
+    content: "🎄";
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.2em;
+    opacity: 0.8;
+}
+
+
+
+/* Buttons Container */
 .buttons-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    display: flex;
+    flex-wrap: wrap;
     gap: 12px;
     max-width: 600px;
     margin: 20px auto;
-    padding: 0 16px;
-    transform: rotate(-1deg);
+    justify-content: center;
+    z-index: 2;
+    position: relative;
 }
 
 button {
-    background: linear-gradient(45deg, var(--primary), var(--secondary));
+    background: var(--primary);
     color: #FFF;
-    font-family: 'Vollkorn', serif;
     font-weight: bold;
-    border: 3px solid #C41E3A;
-    border-radius: 12px;
-    padding: 16px;
+    border: none;
+    border-radius: 8px;
+    padding: 14px 16px;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 5px 5px 0 #228B22;
-    transform-origin: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.5);
 }
 
 button:hover {
-    animation: santaBounce 1s infinite;
-    box-shadow: 8px 8px 0 #228B22;
-    transform: scale(1.05);
+    background: var(--accent);
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 4px 12px rgba(255, 215, 0, 0.5);
 }
 
 button:active {
-    transform: scale(0.95);
-    box-shadow: 2px 2px 0 #228B22;
+    transform: translateY(1px);
 }
 
-.chart-container {
+/* Card/Chart Containers */
+.chart-container, .stats-card {
     background: var(--card-bg);
-    border-radius: 16px;
-    border: 3px solid #C41E3A;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
     padding: 16px;
-    margin: 24px auto;
+    margin: 0 auto 24px auto;
     max-width: 800px;
-    box-shadow: 8px 8px 0 #228B22;
-    transform: rotate(1deg);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.7);
+    position: relative;
+    z-index: 2;
 }
 
-.chart-container:nth-child(even) {
-    transform: rotate(-1deg);
+.toggle-container {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+    color: #FFF;
 }
 
-.stats-card {
-    background: var(--card-bg);
-    border: 3px solid #C41E3A;
-    border-radius: 16px;
-    padding: 20px;
-    margin: 24px auto;
-    max-width: 800px;
-    box-shadow: 8px 8px 0 #228B22;
-    transform: rotate(-1deg);
-}
-
-.stats-entry {
-    padding: 12px;
-    border-bottom: 2px dashed #C41E3A;
-    transition: all 0.3s ease;
-}
-
-.stats-entry:hover {
-    transform: translateX(10px);
-    background: rgba(196, 30, 58, 0.1);
-}
-
-.rank-1 { 
-    color: #FFD700; /* Gold */
-    text-shadow: 2px 2px 0 #C41E3A;
-    font-size: 1.2em;
-}
-
-.rank-2 { 
-    color: #C0C0C0; /* Silver */
-    text-shadow: 1px 1px 0 #228B22;
-}
-
-.rank-3 { 
-    color: #CD7F32; /* Bronze */
-    text-shadow: 1px 1px 0 #C41E3A;
+.toggle-container input[type="radio"] {
+    margin-right: 4px;
+    accent-color: var(--accent);
 }
 
 #confirmation {
     background: var(--card-bg);
-    border: 3px solid #C41E3A;
-    border-radius: 16px;
-    padding: 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 10px;
     margin: 20px auto;
     max-width: 300px;
-    animation: santaBounce 2s infinite;
-    box-shadow: 5px 5px 0 #228B22;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+    color: var(--accent);
+    font-weight: bold;
+    z-index: 2;
+}
+
+/* Highscore Entries */
+.highscore-entry {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px;
+    border-bottom: 1px dashed var(--border-color);
+    cursor: pointer;
+    transition: background 0.3s, transform 0.3s;
+}
+
+.highscore-entry:hover {
+    background: #2A3A2C;
+    transform: translateX(5px);
+}
+
+.rank-1 { color: var(--accent); }
+.rank-2 { color: #C0C0C0; }
+.rank-3 { color: #CD7F32; }
+
+.venmo-button-container {
+    margin: 40px 0;
+    position: relative;
+    z-index: 2;
 }
 
 .venmo-button {
-    background: #C41E3A !important;
-    animation: snowfall 3s infinite;
+    background: var(--secondary) !important;
+    color: #FFF !important;
+    font-weight: bold;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.5);
 }
 
-/* Modal styles */
+.venmo-button:hover {
+    background: var(--primary) !important;
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(196, 30, 58, 0.5);
+}
+
+/* Modal */
 .modal {
     display: none;
     position: fixed;
@@ -204,40 +197,39 @@ button:active {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(196, 30, 58, 0.9);
+    background: rgba(15,36,23,0.9);
     z-index: 1000;
     overflow-y: auto;
+    padding: 20px;
 }
 
 .modal-content {
     position: relative;
-    background: var(--background);
-    margin: 0;
-    padding: 16px;
-    width: 100%;
-    min-height: 100%;
-    border: none;
-    border-radius: 0;
-    box-shadow: none;
+    background: var(--card-bg);
+    margin: 40px auto;
+    padding: 24px;
+    width: 95%;
+    max-width: 1200px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.7);
 }
 
 .close {
-    position: fixed;
+    position: absolute;
     right: 16px;
     top: 16px;
-    font-size: 32px;
-    color: #8B4513;
-    z-index: 1001;
-    background: var(--background);
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+    font-size: 24px;
+    color: #FFF;
+    cursor: pointer;
+    transition: color 0.3s;
 }
 
+.close:hover {
+    color: var(--accent);
+}
+
+/* Stats and Charts inside Modal */
 .stats-grid {
     display: grid;
     grid-template-columns: 1fr;
@@ -248,15 +240,18 @@ button:active {
 .stat-card, .chart-card {
     background: var(--card-bg);
     padding: 12px;
-    border-radius: 12px;
+    border-radius: 8px;
     margin: 0;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
 }
 
 #modalTitle {
     font-size: 1.5em;
     margin-top: 8px;
     padding-right: 40px;
+    color: var(--accent);
+    text-shadow: 0 0 5px var(--neon-green);
+    font-weight: 700;
 }
 
 .chart-grid {
@@ -266,21 +261,9 @@ button:active {
     margin: 16px 0;
 }
 
-
-/* Make highscore entries clickable */
-.highscore-entry {
-    cursor: pointer;
-    transition: transform 0.2s;
-}
-
-.highscore-entry:hover {
-    transform: translateX(10px) scale(1.02);
-}
-
 .stat-item {
-    padding: 10px;
-    margin: 5px 0;
-    border-bottom: 1px dashed #8B4513;
+    padding: 10px 0;
+    border-bottom: 1px dashed var(--border-color);
 }
 
 .stat-item:last-child {
@@ -289,52 +272,26 @@ button:active {
 
 .stat-label {
     font-size: 0.9em;
-    color: #5C3D2E;
+    color: var(--accent);
     margin-bottom: 5px;
 }
 
 .stat-value {
     font-size: 1.4em;
     font-weight: bold;
-    color: #8B4513;
+    color: var(--neon-green);
 }
 
-/* Ensure charts clear previous renders */
 #heatmap, #timeTrend {
     min-height: 250px;
 }
 
-/* Style tooltips */
-.apexcharts-tooltip {
-    background: #FFF3E4 !important;
-    border: 1px solid #8B4513 !important;
-    box-shadow: 2px 2px 0 #8B4513 !important;
-}
-
+/* Responsive Adjustments */
 @media (min-width: 768px) {
-    h1 { font-size: 2em; }
-    .buttons-container { 
-        grid-template-columns: 1fr;
-        transform: rotate(0deg);
-    }
-    .chart-container, .stats-card {
-        transform: rotate(0deg);
-        margin: 16px 8px;
-    }
-    .modal-content {
-        margin: 20px auto;
-        padding: 24px;
-        width: 90%;
-        max-width: 1200px;
-        min-height: auto;
-        border: 3px solid #8B4513;
-        border-radius: 16px;
-        box-shadow: 8px 8px 0 #8B4513;
-    }
     .stats-grid {
         grid-template-columns: repeat(2, 1fr);
     }
     .chart-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr 1fr;
     }
 }
