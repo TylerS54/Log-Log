@@ -261,6 +261,11 @@ function getLeader(leaderData) {
 
 
 function incrementCounter(name) {
+    // Trigger visual and audio feedback immediately
+    showInProgressState(name); // A new function to disable buttons and show a "Logging..." message.
+    triggerConfetti();         // Start confetti right away
+    playFartNoise();           // Play sound immediately
+
     var now = new Date();
     var timestamp = now.toISOString().split(':')[0]; // Format: YYYY-MM-DDTHH:MM
 
@@ -273,13 +278,39 @@ function incrementCounter(name) {
     })
     .then(response => response.text())
     .then(data => {
-        disableButtons();
+        // If successful, show final confirmation message
         showConfirmation(name);
-        triggerConfetti();
-        playFartNoise();
     })
-    .catch(error => console.error('Error:', error));
+    .catch(error => {
+        console.error('Error:', error);
+        revertInProgressState(); // If error, revert UI or show error message
+    });
 }
+
+function showInProgressState(name) {
+    disableButtons();
+    var confirmationElement = document.getElementById('confirmation');
+    confirmationElement.innerText = `Logging ${name}'s 💩... Please wait.`;
+    confirmationElement.style.display = 'block';
+}
+
+function revertInProgressState() {
+    // Re-enable buttons and remove the logging message if something fails
+    var buttons = document.querySelectorAll('button');
+    buttons.forEach(function(button) {
+        button.disabled = false;
+        button.style.opacity = 1;
+    });
+    var confirmationElement = document.getElementById('confirmation');
+    confirmationElement.style.display = 'none';
+}
+
+// Preload the sound to reduce delay on first play
+document.addEventListener('DOMContentLoaded', function() {
+    const audio = document.getElementById('fart-noise');
+    audio.load(); // Preload the audio so it's ready to play instantly
+});
+
 
 function disableButtons() {
     var buttons = document.querySelectorAll('button');
