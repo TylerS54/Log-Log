@@ -3,14 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CHRISTMAS THRONE CHRONICLES</title>
-    <link href="https://fonts.googleapis.com/css2?family=Vollkorn:wght@400;700&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <title>Poop Chronicles</title>
+    <!-- Example of a modern sans-serif font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="icon" href="favicon.ico">
 </head>
 <body>
     <div id="app">
-        <h1>CHRISTMAS THRONE CHRONICLES</h1>
+        <h1>Poop Chronicles</h1>
+
+        <!-- New dropdown for selecting a year -->
+        <div class="year-dropdown-container">
+            <label for="yearDropdown">Select Year:</label>
+            <select id="yearDropdown"></select>
+        </div>
 
         <div class="buttons-container">
             <button onclick="incrementCounter('Ziggy'); sendTelegramMessage('Ziggy');">Ziggy</button>
@@ -19,24 +26,25 @@
             <button onclick="incrementCounter('AJ'); sendTelegramMessage('AJ');">AJ</button>
             <button onclick="incrementCounter('GGK'); sendTelegramMessage('GGK');">GGK</button>
             <button onclick="incrementCounter('Teddy'); sendTelegramMessage('Teddy');">Teddy</button>
+            <button onclick="incrementCounter('E-Tyler'); sendTelegramMessage('E-Tyler');">E-Tyler</button>
         </div>
 
         <div id="confirmation" style="display:none;"></div>
 
-        <h2>Gift Delivery Status</h2>
+        <!-- Toggle between daily/weekly -->
+        <h2>Poop Logs by Day or Week</h2>
         <div class="toggle-container">
             <input type="radio" id="daily" name="chartView" value="daily" checked>
             <label for="daily">Daily</label>
             <input type="radio" id="weekly" name="chartView" value="weekly">
             <label for="weekly">Weekly</label>
         </div>
-
         <div id="chart" class="chart-container"></div>
 
-        <h2>Cumulative Poop Counts</h2>
+        <h2>Cumulative Poop Totals</h2>
         <div id="cumulativeChart" class="chart-container"></div>
 
-        <h2>Day of the Week Distribution</h2>
+        <h2>Day of Week Distribution</h2>
         <div id="dayOfWeekChart" class="chart-container"></div>
 
         <h2>All-Time Rankings</h2>
@@ -48,11 +56,12 @@
         <h2>Weekly Leader</h2>
         <div id="weekly-leader" class="stats-card"></div>
 
+        <!-- User stats modal -->
         <div id="userModal" class="modal">
             <div class="modal-content">
                 <span class="close">&times;</span>
                 <h2 id="modalTitle">Stats for <span id="userName"></span></h2>
-                
+
                 <div class="stats-grid">
                     <div class="stat-card">
                         <h3>Personal Bests</h3>
@@ -77,7 +86,6 @@
                         <h3>Activity Heatmap</h3>
                         <div id="heatmap"></div>
                     </div>
-                    
                     <div class="chart-card">
                         <h3>Time Trend</h3>
                         <div id="timeTrend"></div>
@@ -87,7 +95,7 @@
         </div>
 
         <div class="venmo-button-container">
-            <button class="venmo-button">+1 Santa's Helper Ticket - $0.99</button>
+            <button class="venmo-button">+1 Helper Ticket - $0.99</button>
         </div>
     </div>
 
