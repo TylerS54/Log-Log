@@ -1,0 +1,41 @@
+1. For the main chart (renderChart function) - replace:
+
+        markers: {
+            size: 5,
+            strokeWidth: 0,
+            hover: {
+                size: 7
+            }
+        },
+
+with:
+
+        markers: {
+            size: 0,
+            strokeWidth: 0,
+            hover: {
+                size: 5,
+                sizeOffset: 3
+            }
+        },
+
+2. For the cumulative chart (renderCumulativeChart function) - replace:
+
+        markers: {
+            size: 3,
+            strokeWidth: 0,
+            hover: {
+                size: 5
+            }
+        },
+
+with:
+
+        markers: {
+            size: 0,
+            strokeWidth: 0,
+            hover: {
+                size: 5,
+                sizeOffset: 3
+            }
+        },

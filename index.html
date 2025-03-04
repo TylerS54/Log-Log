@@ -2,18 +2,20 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0f0f13">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Poop Chronicles</title>
-    <!-- Example of a modern sans-serif font -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="icon" href="favicon.ico">
+    <script src="telegram-messages.js"></script>
 </head>
 <body>
     <div id="app">
         <h1>Poop Chronicles</h1>
 
-        <!-- New dropdown for selecting a year -->
         <div class="year-dropdown-container">
             <label for="yearDropdown">Select Year:</label>
             <select id="yearDropdown"></select>
@@ -31,35 +33,64 @@
 
         <div id="confirmation" style="display:none;"></div>
 
-        <!-- Toggle between daily/weekly -->
-        <h2>Poop Logs by Day or Week</h2>
-        <div class="toggle-container">
-            <input type="radio" id="daily" name="chartView" value="daily" checked>
-            <label for="daily">Daily</label>
-            <input type="radio" id="weekly" name="chartView" value="weekly">
-            <label for="weekly">Weekly</label>
-        </div>
-        <div id="chart" class="chart-container"></div>
+        <!-- Charts Section -->
+        <section class="charts-section">
+            <div class="section-header">
+                <h2>Activity Logs</h2>
+                <!-- Toggle redesigned as pill buttons -->
+                <div class="toggle-container">
+                    <input type="radio" id="daily" name="chartView" value="daily" checked>
+                    <label for="daily">Daily</label>
+                    <input type="radio" id="weekly" name="chartView" value="weekly">
+                    <label for="weekly">Weekly</label>
+                </div>
+            </div>
+            <div id="chart" class="chart-container"></div>
+        </section>
 
-        <h2>Cumulative Poop Totals</h2>
-        <div id="cumulativeChart" class="chart-container"></div>
+        <section class="charts-section">
+            <h2>Cumulative Totals</h2>
+            <div id="cumulativeChart" class="chart-container"></div>
+        </section>
 
-        <h2>Day of Week Distribution</h2>
-        <div id="dayOfWeekChart" class="chart-container"></div>
+        <section class="charts-section">
+            <h2>Day of Week Distribution</h2>
+            <div id="dayOfWeekChart" class="chart-container"></div>
+        </section>
 
-        <h2>All-Time Rankings</h2>
-        <div id="highscore" class="stats-card"></div>
-
-        <h2>Daily Leader</h2>
-        <div id="daily-leader" class="stats-card"></div>
-
-        <h2>Weekly Leader</h2>
-        <div id="weekly-leader" class="stats-card"></div>
+        <!-- Stats Cards Section -->
+        <section class="stats-section">
+            <h2>Leaderboards</h2>
+            
+            <div class="stats-card-group">
+                <div class="stats-card">
+                    <h3>All-Time Rankings</h3>
+                    <div id="highscore"></div>
+                </div>
+                
+                <div class="mobile-stats-grid">
+                    <div class="stats-card">
+                        <h3>Daily Leader</h3>
+                        <div id="daily-leader"></div>
+                    </div>
+                    
+                    <div class="stats-card">
+                        <h3>Weekly Leader</h3>
+                        <div id="weekly-leader"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
         <!-- User stats modal -->
         <div id="userModal" class="modal">
             <div class="modal-content">
-                <span class="close">&times;</span>
+                <span class="close">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </span>
                 <h2 id="modalTitle">Stats for <span id="userName"></span></h2>
 
                 <div class="stats-grid">

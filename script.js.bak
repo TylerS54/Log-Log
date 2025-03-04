@@ -5,9 +5,111 @@ var selectedYear = new Date().getFullYear(); // Default to current year
 function sendTelegramMessage(name) {
     const botToken = '6741155054:AAGSjlsqa7xbJGHkKq9uEREUjNSO22yn6KE';
     const chatId = '-1002084507637';
+    const messages = [
+        `${name} just dropped a presidential campaign in the porcelain polls.`,
+        `${name} just gave the toilet a State of the Feces address.`,
+        `${name} just pulled off a number two coup d’état.`,
+        `${name} just painted the porcelain like Picasso on a bad day.`,
+        `${name} just unleashed a brown revolution in the Oval Office… of the bathroom.`,
+        `${name} just turned the toilet bowl into a war zone, and it surrendered.`,
+        `${name} just donated a mudslide to the city’s waste management department.`,
+        `${name} just made the sewer rats reconsider their life choices.`,
+        `${name} just performed a one-man show of “Phantom of the Crapera.”`,
+        `${name} just lost a close election to the toilet’s flushing mechanism.`,
+        `${name} just committed an act so foul, even the skunks are offended.`,
+        `${name} just expressed their darkest secrets… in the form of excrement.`,
+        `${name} just unleashed more destruction than a failed nuclear test.`,
+        `${name} just staged a coup in their colon, and the rebels won.`,
+        `${name} just re-enacted the Black Plague… with their bowels.`,
+        `${name} just wrote a resignation letter in stench form.`,
+        `${name} just tested the plumbing’s loyalty to the nation.`,
+        `${name} just dropped something that made the toilet question its career path.`,
+        `${name} just gave the Grim Reaper a run for his money—brown was definitely the color of doom.`,
+        `${name} just did a brown exorcism, and the demons are still screaming.`,
+        `${name} just made the entire plumbing system file for early retirement.`,
+        `${name} just turned the restroom into a crime scene—call the FBI.`,
+        `${name} just took “going with the flow” to catastrophic levels.`,
+        `${name} just raised the bathroom’s terror alert to code brown.`,
+        `${name} just unleashed more hot air than a political press conference.`,
+        `${name} just gave new meaning to “running for office”—straight to the toilet.`,
+        `${name} just brought tears to the eyes of innocent bystanders… from two rooms away.`,
+        `${name} just launched a new wave of biological warfare in their own home.`,
+        `${name} just tried to flush out all the world’s problems—starting with that burrito.`,
+        `${name} just held a summit with Taco Tuesday, and the negotiations broke down violently.`,
+        `${name} just provided enough fertilizer to feed the entire county’s crops.`,
+        `${name} just discovered a new species in the toilet, and it’s not friendly.`,
+        `${name} just turned the restroom into a three-act tragedy, starring their colon.`,
+        `${name} just outperformed any horror movie special effects team.`,
+        `${name} just introduced the toilet to the concept of eternal suffering.`,
+        `${name} just gifted the sewage plant a brand-new reason to unionize.`,
+        `${name} just unleashed an unholy ritual that would scare the devil himself.`,
+        `${name} just made the plumber’s phone ring off the hook—emergency meeting required.`,
+        `${name} just made a deposit so large, the bank called to verify the transaction.`,
+        `${name} just triggered a motion alarm in the sewer system—nobody is safe.`,
+        `${name} just initiated the darkest timeline for the sanitation department.`,
+        `${name} just left a memorial service in the toilet bowl—for that burrito’s short life.`,
+        `${name} just taught the pipe system new swear words in every language.`,
+        `${name} just discovered the backside of democracy… and it’s not looking good.`,
+        `${name} just performed a power move so toxic, the EPA has been alerted.`,
+        `${name} just experienced a meltdown more catastrophic than any stock market crash.`,
+        `${name} just redefined the meaning of ‘explosive personality.’`,
+        `${name} just forced the CDC to issue new guidelines on personal bathroom usage.`,
+        `${name} just made the toilet wish it had a witness protection program.`,
+        `${name} just wrote a very dark chapter in the history of bodily functions.`,
+        `${name} just ran a covert operation and left no survivors—except the plunger.`,
+        `${name} just broke the Geneva Conventions with that biological assault.`,
+        `${name} just left the seat looking like a Jackson Pollock tribute gone wrong.`,
+        `${name} just turned the toilet water into a swirling vortex of regret.`,
+        `${name} just flushed away more dignity than any politician’s scandal.`,
+        `${name} just held a funeral for last night’s dinner—no open casket allowed.`,
+        `${name} just made the phrase “shock and awe” sound like child’s play.`,
+        `${name} just unleashed the next pandemic—patient zero is the poor toilet.`,
+        `${name} just summoned Cthulhu with their bowel incantation.`,
+        `${name} just ran out of diplomatic immunity for that atrocity.`,
+        `${name} just caused every candle in the house to wave a white flag.`,
+        `${name} just created a stink so potent, it’s now on a terrorist watch list.`,
+        `${name} just tested the durability of porcelain under extreme pressure.`,
+        `${name} just initiated a worldwide shortage of air freshener.`,
+        `${name} just made the plumber double his rates—hazard pay, indeed.`,
+        `${name} just turned the restroom into the darkest circle of Dante’s Inferno.`,
+        `${name} just turned Taco Tuesday into a war crime Wednesday.`,
+        `${name} just made the water company send an apology letter to the neighbor’s pipes.`,
+        `${name} just stepped down from their own personal throne—still not impeached, though.`,
+        `${name} just hosted a private showing of “When Burritos Strike Back.”`,
+        `${name} just made the toilet ask for asylum in another country.`,
+        `${name} just orchestrated a mass evacuation—of their own bowels.`,
+        `${name} just taught the entire neighborhood the meaning of ‘silent but deadly.’`,
+        `${name} just wrote a love letter to the toilet, sealed with a stench.`,
+        `${name} just re-enacted the apocalypse in the privacy of a four-walled chamber.`,
+        `${name} just gave the exhaust fan PTSD—it may never spin again.`,
+        `${name} just produced more substance than a politician’s entire manifesto.`,
+        `${name} just forced the bathroom scale to file a missing persons report.`,
+        `${name} just gave the plunger a nervous breakdown—therapy recommended.`,
+        `${name} just rewrote the dictionary under the word ‘evacuation.’`,
+        `${name} just redrew the map of the toilet bowl with extreme prejudice.`,
+        `${name} just took the scenic route to digestive Armageddon.`,
+        `${name} just left a legacy that can’t be unclogged without government aid.`,
+        `${name} just put the words ‘porcelain’ and ‘catastrophe’ in the same sentence.`,
+        `${name} just commanded their bowels to perform a filibuster on the toilet.`,
+        `${name} just left the ventilation system begging for a career change.`,
+        `${name} just proved that even gravity has limits to what it can handle.`,
+        `${name} just gave a lecture on “Letting Go,” with explosive visual aids.`,
+        `${name} just unleashed the kind of stench that unites political parties in fear.`,
+        `${name} just authored a 10-volume series called “The Brown Chronicles.”`,
+        `${name} just made the term ‘dirty politics’ take on a whole new meaning.`,
+        `${name} just performed a live demonstration of Newton’s Third Law—every action has an equal and horrifying reaction.`,
+        `${name} just woke up the dead with that unearthly odor—zombies are complaining.`,
+        `${name} just created a new national emergency, starring their colon as the villain.`,
+        `${name} just caused the bathroom mirror to file for a restraining order.`,
+        `${name} just held an impeachment trial for last night’s dinner, and it was unanimously removed.`,
+        `${name} just orchestrated the Great Escape—only it was all from one end.`,
+        `${name} just redefined climate change in their personal ozone layer.`,
+        `${name} just caused the sewage system to release a press statement: ‘We surrender!’`,
+        `${name} just graduated from the School of Hard Plops with top honors.`
+    ];
+
     
-    // Get a random message using the function from telegram-messages.js
-    const text = window.telegramMessages.getRandomTelegramMessage(name);
+    const text = messages[Math.floor(Math.random() * messages.length)];
     const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(text)}`;
 
     fetch(url)
@@ -22,13 +124,13 @@ function parseAndConvertUTCToNaiveET(rawTS) {
     // Convert that to a proper UTC Date
     const dateUTC = new Date(rawTS.substring(0, 13).replace('T', ' ') + ":00:00");
   
-    // Create a copy so we don't mutate the original
+    // Create a copy so we don’t mutate the original
     const dateET = new Date(dateUTC.valueOf());
-    // Subtract 5 hours to approximate ET (will be off during DST but that's acceptable)
+    // Subtract 5 hours to approximate ET
     dateET.setHours(dateET.getHours() - 5);
   
     return dateET;
-}
+  }
   
 
 function getDataForSelectedYear(data) {
@@ -51,7 +153,7 @@ function getDataForSelectedYear(data) {
       }
     }
     return filtered;
-}
+  }
 
 function formatDateET_naive(dateET) {
     const yyyy = dateET.getFullYear();
@@ -59,7 +161,7 @@ function formatDateET_naive(dateET) {
     const dd = String(dateET.getDate()).padStart(2, '0');
     const hh = String(dateET.getHours()).padStart(2, '0');
     return `${yyyy}-${mm}-${dd}T${hh}`;
-}
+  }
   
   
 
@@ -121,10 +223,8 @@ function updateDailyAndWeeklyLeaders(data) {
         let userWeeklyCounts = {};
 
         for (let timestamp in data[user]) {
-            // All data is already in ET from the getDataForSelectedYear function
             let date = new Date(timestamp.substring(0, 13).replace('T', ' ') + ':00:00');
-            // Create date key manually to preserve ET timezone (avoid toISOString which converts to UTC)
-            let dateKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+            let dateKey = date.toISOString().split('T')[0];
             let weekNumber = getWeekNumber(date);
             let weekKey = `${date.getFullYear()}-W${weekNumber}`;
 
@@ -257,9 +357,8 @@ function populateYearDropdown(data) {
     let years = new Set();
     for (let user in data) {
         for (let ts in data[user]) {
-            // Convert to ET before extracting year
-            const dateET = parseAndConvertUTCToNaiveET(ts);
-            let year = dateET.getFullYear().toString();
+            // ts is something like '2023-07-30T12'
+            let year = ts.split('-')[0]; // '2023'
             years.add(year);
         }
     }
@@ -305,41 +404,23 @@ function showConfirmation(name) {
     confirmationElement.style.display = 'block';
 }
 
-// New ET-friendly week calculation function
 function getWeekNumber(d) {
-    // ET-friendly week number calculation that doesn't convert to UTC
-    // Get the local date components
-    const year = d.getFullYear();
-    const month = d.getMonth();
-    const date = d.getDate();
-    
-    // Create a new date with the same local date components
-    const tempDate = new Date(year, month, date);
-    
-    // Set to nearest Thursday: current date + 4 - current day number
-    // Make Sunday's day number 7
-    tempDate.setDate(tempDate.getDate() + 4 - (tempDate.getDay() || 7));
-    
-    // Get first day of year
-    const yearStart = new Date(tempDate.getFullYear(), 0, 1);
-    
-    // Calculate full weeks to nearest Thursday
-    const weekNo = Math.ceil((((tempDate - yearStart) / 86400000) + 1) / 7);
-    
+    d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+    d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
+    var yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+    var weekNo = Math.ceil(((d - yearStart) / 86400000 + 1) / 7);
     return weekNo;
 }
 
 function processSnapshot(data, chartView) {
     let seriesData = [];
     let colors = [
-        '#6c5ce7', // primary 
-        '#00cec9', // secondary
-        '#ff7675', // coral
-        '#00b894', // green
-        '#fdcb6e', // yellow
-        '#e17055', // orange
-        '#74b9ff'  // light blue
-    ];
+        '#bb86fc', // primary
+        '#03dac5', // secondary
+        '#ff0266', // example bright pink
+        '#ffb300', // yellowish
+        '#cf6679', // red-pink
+      ];
       
     let colorIndex = 0;
 
@@ -348,20 +429,20 @@ function processSnapshot(data, chartView) {
         for (let etTS in data[user]) {
             // We stored ET-based keys, so parse them back to a Date
             let dateET = new Date(etTS.substring(0, 13).replace('T', ' ') + ':00:00');
+            // or reuse parseAndConvertUTCToNaiveET if needed
       
             let dateKey;
             if (chartView === 'daily') {
-                // Daily grouping in ET
-                // Create date key manually to preserve ET timezone (avoid toISOString which converts to UTC)
-                dateKey = `${dateET.getFullYear()}-${String(dateET.getMonth() + 1).padStart(2, '0')}-${String(dateET.getDate()).padStart(2, '0')}`;
+              // Daily grouping in ET
+              dateKey = dateET.toISOString().split('T')[0];
             } else {
-                // Weekly grouping in ET
-                const weekNumber = getWeekNumber(dateET);
-                dateKey = `${dateET.getFullYear()}-W${weekNumber}`;
+              // Weekly grouping in ET
+              const weekNumber = getWeekNumber(dateET);
+              dateKey = `${dateET.getFullYear()}-W${weekNumber}`;
             }
       
             dataPoints[dateKey] = (dataPoints[dateKey] || 0) + data[user][etTS];
-        }
+          }
 
         seriesData.push({
             name: user,
@@ -371,8 +452,7 @@ function processSnapshot(data, chartView) {
                     date = new Date(key);
                 } else {
                     let [year, week] = key.split('-W');
-                    // Fixed the 'wk' variable to 'week'
-                    date = new Date(year, 0, (week - 1) * 7 + 1);
+                    date = new Date(year, 0, (wk - 1) * 7 + 1);
                 }
                 return {
                     x: date.getTime(),
@@ -390,14 +470,12 @@ function processSnapshot(data, chartView) {
 function processCumulativeSnapshot(data) {
     let seriesData = [];
     let colors = [
-        '#6c5ce7', // primary 
-        '#00cec9', // secondary
-        '#ff7675', // coral
-        '#00b894', // green
-        '#fdcb6e', // yellow
-        '#e17055', // orange
-        '#74b9ff'  // light blue
-    ];
+        '#bb86fc', // primary
+        '#03dac5', // secondary
+        '#ff0266', // example bright pink
+        '#ffb300', // yellowish
+        '#cf6679', // red-pink
+      ];
       
     let colorIndex = 0;
 
@@ -408,10 +486,9 @@ function processCumulativeSnapshot(data) {
         // Sort ensures ascending date order so cumulative lines display correctly
         for (let time of timestamps) {
             total += data[user][time];
-            // Already in ET time (from filtered data)
-            let dateET = new Date(time.substring(0, 13).replace('T', ' ') + ':00:00');
+            let utcDate = new Date(time.substring(0, 13).replace('T', ' ') + ':00:00');
             dataPoints.push({
-                x: dateET.getTime(),
+                x: utcDate.getTime(),
                 y: total
             });
         }
@@ -435,7 +512,6 @@ function processDayOfWeekSnapshot(data) {
         seriesData[user] = new Array(7).fill(0);
 
         for (let time in data[user]) {
-            // Already in ET time (from filtered data)
             let date = new Date(time.substring(0, 13).replace('T', ' ') + ':00:00');
             let day = date.getDay();
             seriesData[user][day] += data[user][time];
@@ -458,106 +534,21 @@ function renderChart(chartData) {
         series: chartData.series,
         chart: {
             foreColor: '#FFF',
-            background: 'transparent',
             type: 'line',
-            height: 350,
-            toolbar: {
-                show: false
-            },
-            animations: {
-                enabled: true,
-                easing: 'easeinout',
-                speed: 800,
-            },
-            fontFamily: 'Inter, system-ui, sans-serif'
-        },
-        colors: ['#6c5ce7', '#00cec9', '#ff7675', '#00b894', '#fdcb6e', '#e17055', '#74b9ff'],
-        stroke: {
-            curve: 'smooth',
-            width: 3
-        },
-        markers: {
-            size: 0,
-            strokeWidth: 0,
-            hover: {
-                size: 5, sizeOffset: 3
-            }
-        },
-        grid: {
-            borderColor: '#2d2d3a',
-            strokeDashArray: 4,
-            xaxis: {
-                lines: {
-                    show: true
-                }
-            },
-            padding: {
-                top: 0,
-                right: 0,
-                bottom: 0,
-                left: 10
-            }
-        },
-        tooltip: {
-            theme: 'dark',
-            y: {
-                formatter: function(value) {
-                    return value + (value === 1 ? ' log' : ' logs');
-                }
-            }
+            height: 350
         },
         xaxis: {
             type: 'datetime',
-            labels: {
-                style: {
-                    fontSize: '12px',
-                    fontWeight: 500
-                },
-                datetimeUTC: false
-            },
-            tooltip: {
-                enabled: false
-            },
-            axisBorder: {
-                show: false
+            title: {
+                text: 'Date'
             }
         },
         yaxis: {
-            min: 0,
-            labels: {
-                style: {
-                    fontSize: '12px',
-                    fontWeight: 500
-                }
+            title: {
+                text: 'Poops'
             },
-            axisBorder: {
-                show: false
-            }
-        },
-        legend: {
-            position: 'top',
-            horizontalAlign: 'center',
-            fontSize: '14px',
-            fontWeight: 500,
-            markers: {
-                width: 12,
-                height: 12,
-                radius: 6
-            },
-            itemMargin: {
-                horizontal: 10,
-                vertical: 0
-            }
-        },
-        responsive: [{
-            breakpoint: 768,
-            options: {
-                legend: {
-                    position: 'bottom',
-                    offsetY: 20
-                }
-            }
-        }]
+            min: 0
+        }
     };
 
     if (!globalChart) {
@@ -573,106 +564,21 @@ function renderCumulativeChart(chartData) {
         series: chartData.series,
         chart: {
             foreColor: '#FFF',
-            background: 'transparent',
             type: 'line',
-            height: 350,
-            toolbar: {
-                show: false
-            },
-            animations: {
-                enabled: true,
-                easing: 'easeinout',
-                speed: 800,
-            },
-            fontFamily: 'Inter, system-ui, sans-serif'
-        },
-        colors: ['#6c5ce7', '#00cec9', '#ff7675', '#00b894', '#fdcb6e', '#e17055', '#74b9ff'],
-        stroke: {
-            curve: 'smooth',
-            width: 3
-        },
-        markers: {
-            size: 0,
-            strokeWidth: 0,
-            hover: {
-                size: 5, sizeOffset: 3
-            }
-        },
-        grid: {
-            borderColor: '#2d2d3a',
-            strokeDashArray: 4,
-            xaxis: {
-                lines: {
-                    show: true
-                }
-            },
-            padding: {
-                top: 0,
-                right: 0,
-                bottom: 0,
-                left: 10
-            }
-        },
-        tooltip: {
-            theme: 'dark',
-            y: {
-                formatter: function(value) {
-                    return value + ' total logs';
-                }
-            }
+            height: 350
         },
         xaxis: {
             type: 'datetime',
-            labels: {
-                style: {
-                    fontSize: '12px',
-                    fontWeight: 500
-                },
-                datetimeUTC: false
-            },
-            tooltip: {
-                enabled: false
-            },
-            axisBorder: {
-                show: false
+            title: {
+                text: 'Date'
             }
         },
         yaxis: {
-            min: 0,
-            labels: {
-                style: {
-                    fontSize: '12px',
-                    fontWeight: 500
-                }
+            title: {
+                text: 'Cumulative Poops'
             },
-            axisBorder: {
-                show: false
-            }
-        },
-        legend: {
-            position: 'top',
-            horizontalAlign: 'center',
-            fontSize: '14px',
-            fontWeight: 500,
-            markers: {
-                width: 12,
-                height: 12,
-                radius: 6
-            },
-            itemMargin: {
-                horizontal: 10,
-                vertical: 0
-            }
-        },
-        responsive: [{
-            breakpoint: 768,
-            options: {
-                legend: {
-                    position: 'bottom',
-                    offsetY: 20
-                }
-            }
-        }]
+            min: 0
+        }
     };
 
     if (!globalCumulativeChart) {
@@ -694,98 +600,28 @@ function renderDayOfWeekChart(chartData) {
         series: series,
         chart: {
             foreColor: '#FFF',
-            background: 'transparent',
             type: 'bar',
             height: 350,
             stacked: true,
-            toolbar: {
-                show: false
-            },
-            animations: {
-                enabled: true,
-                easing: 'easeinout',
-                speed: 800,
-            },
-            fontFamily: 'Inter, system-ui, sans-serif'
         },
-        colors: ['#6c5ce7', '#00cec9', '#ff7675', '#00b894', '#fdcb6e', '#e17055', '#74b9ff'],
         plotOptions: {
             bar: {
                 horizontal: false,
-                borderRadius: 6,
-                columnWidth: '70%',
-                distributed: false
-            }
-        },
-        grid: {
-            borderColor: '#2d2d3a',
-            strokeDashArray: 4,
-            padding: {
-                top: 0,
-                right: 10,
-                bottom: 0,
-                left: 10
-            }
-        },
-        tooltip: {
-            theme: 'dark',
-            y: {
-                formatter: function(value) {
-                    return value + (value === 1 ? ' log' : ' logs');
-                }
+                borderRadius: 4
             }
         },
         xaxis: {
-            categories: chartData.map(data => data.x),
-            labels: {
-                style: {
-                    fontSize: '12px',
-                    fontWeight: 500
-                }
-            },
-            axisBorder: {
-                show: false
-            }
+            categories: chartData.map(data => data.x)
         },
         yaxis: {
-            min: 0,
-            labels: {
-                style: {
-                    fontSize: '12px',
-                    fontWeight: 500
-                }
+            title: {
+                text: 'Poops'
             },
-            axisBorder: {
-                show: false
-            }
-        },
-        legend: {
-            position: 'top',
-            horizontalAlign: 'center',
-            fontSize: '14px',
-            fontWeight: 500,
-            markers: {
-                width: 12,
-                height: 12,
-                radius: 6
-            },
-            itemMargin: {
-                horizontal: 10,
-                vertical: 0
-            }
+            min: 0
         },
         fill: {
             opacity: 1
-        },
-        responsive: [{
-            breakpoint: 768,
-            options: {
-                legend: {
-                    position: 'bottom',
-                    offsetY: 20
-                }
-            }
-        }]
+        }
     };
 
     if (!globalDayOfWeekChart) {
@@ -819,8 +655,9 @@ function updateDisplay(chartView) {
     renderDayOfWeekChart(dayOfWeekData);
 }
 
-// User modal functions with Eastern Time conversion
+// Additional chart/metrics code for user modal, unchanged:
 function renderHeatmap(userStats) {
+    // Same as original – you can keep or simplify
     const calendarOptions = {
         series: [{
             name: 'Logs',
@@ -831,12 +668,10 @@ function renderHeatmap(userStats) {
         }],
         chart: {
             foreColor: '#FFF',
-            background: 'transparent',
             height: 350,
             type: 'heatmap',
-            toolbar: { show: false },
-            animations: { enabled: false },
-            fontFamily: 'Inter, system-ui, sans-serif'
+            toolbar: { show: true },
+            animations: { enabled: false }
         },
         dataLabels: { enabled: false },
         plotOptions: {
@@ -847,39 +682,31 @@ function renderHeatmap(userStats) {
                 useFillColorAsStroke: true,
                 colorScale: {
                     ranges: [
-                        { from: 0,   to: 0,   color: '#2d2d3a', name: '0 logs' },
-                        { from: 1,   to: 1,   color: '#6c5ce7', name: '1 log' },
-                        { from: 2,   to: 2,   color: '#a29bfb', name: '2 logs' },
-                        { from: 3,   to: 999, color: '#d6d1ff', name: '3+ logs' }
+                        { from: 0,   to: 0,   color: '#e9ecef', name: '0 logs' },
+                        { from: 1,   to: 1,   color: '#aed581', name: '1 log' },
+                        { from: 2,   to: 2,   color: '#7cb342', name: '2 logs' },
+                        { from: 3,   to: 999, color: '#558b2f', name: '3+ logs' }
                     ]
                 }
             }
         },
-        legend: { 
-            show: true, 
-            position: 'bottom', 
-            fontSize: '14px',
-            fontWeight: 500
-        },
+        legend: { show: true, position: 'bottom', fontSize: '14px' },
         grid: {
-            borderColor: '#2d2d3a',
             padding: { top: 0, right: 0, bottom: 0, left: 0 }
         },
         xaxis: {
             type: 'datetime',
             labels: {
                 format: 'MM/dd',
-                style: { fontSize: '12px' },
-                datetimeUTC: false
+                style: { fontSize: '12px' }
             }
         },
         yaxis: { show: false },
         tooltip: {
-            theme: 'dark',
             custom: function({series, seriesIndex, dataPointIndex, w}) {
                 const date = new Date(w.globals.seriesX[seriesIndex][dataPointIndex]);
                 const value = series[seriesIndex][dataPointIndex];
-                return `<div class="apexcharts-tooltip-title">${date.toLocaleDateString()} (ET)</div>
+                return `<div class="apexcharts-tooltip-title">${date.toLocaleDateString()}</div>
                         <div class="apexcharts-tooltip-series-group">
                             <span>Logs: ${value}</span>
                         </div>`;
@@ -897,50 +724,29 @@ function renderTimeTrend(userStats) {
         }],
         chart: {
             foreColor: '#FFF',
-            background: 'transparent',
             type: 'bar',
-            height: 250,
-            toolbar: { show: false },
-            fontFamily: 'Inter, system-ui, sans-serif'
+            height: 250
         },
         plotOptions: {
             bar: {
                 borderRadius: 4,
                 columnWidth: '80%',
-                distributed: false
             }
         },
-        colors: ['#6c5ce7'],
-        grid: {
-            borderColor: '#2d2d3a',
-            strokeDashArray: 4
-        },
+        colors: ['#007bff'],
         xaxis: {
             categories: Array.from({length: 24}, (_, i) => `${String(i).padStart(2, '0')}:00`),
-            labels: { 
-                rotate: -45,
-                style: { 
-                    fontSize: '12px',
-                    fontWeight: 500
-                }
-            }
+            labels: { rotate: -45 }
         },
         yaxis: {
             title: {
                 text: 'Total Logs',
-                style: { color: '#ffffff', fontWeight: 500 }
-            },
-            min: 0,
-            labels: {
-                style: {
-                    fontSize: '12px',
-                    fontWeight: 500
-                }
+                style: { color: '#6c757d' }
             }
         },
         title: {
-            text: 'Time of Day Distribution (Eastern Time)',
-            style: { color: '#ffffff', fontSize: '14px', fontWeight: 500 }
+            text: 'Time of Day Distribution (UTC)',
+            style: { color: '#6c757d' }
         },
         fill: {
             type: 'gradient',
@@ -948,19 +754,11 @@ function renderTimeTrend(userStats) {
                 shade: 'dark',
                 type: 'vertical',
                 shadeIntensity: 0.5,
-                gradientToColors: ['#00cec9'],
+                gradientToColors: ['#17a2b8'],
                 inverseColors: false,
                 opacityFrom: 0.8,
                 opacityTo: 0.9,
                 stops: [0, 100]
-            }
-        },
-        tooltip: {
-            theme: 'dark',
-            y: {
-                formatter: function(value) {
-                    return value + (value === 1 ? ' log' : ' logs');
-                }
             }
         }
     };
@@ -985,18 +783,18 @@ function updatePersonalBests(stats) {
 }
 
 function updateTimeOfDay(stats) {
-    // The data is already in Eastern Time now
     const peakHour = stats.hourlyDistribution.indexOf(Math.max(...stats.hourlyDistribution));
-    
+    const peakHourET = (peakHour - 4 + 24) % 24; // convert UTC to ET approx.
+
     // For morning (6-12 ET)
-    const morningCount = stats.hourlyDistribution.slice(6, 12).reduce((a, b) => a + b, 0);
+    const morningCount = stats.hourlyDistribution.slice(10, 16).reduce((a, b) => a + b, 0);
     // For evening (12-20 ET)
-    const eveningCount = stats.hourlyDistribution.slice(12, 20).reduce((a, b) => a + b, 0);
+    const eveningCount = stats.hourlyDistribution.slice(16, 24).reduce((a, b) => a + b, 0);
 
     document.getElementById('timeOfDay').innerHTML = `
         <div class="stat-item">
             <div class="stat-label">Peak Hour (ET)</div>
-            <div class="stat-value">${String(peakHour).padStart(2, '0')}:00</div>
+            <div class="stat-value">${String(peakHourET).padStart(2, '0')}:00</div>
         </div>
         <div class="stat-item">
             <div class="stat-label">Morning (6-12 ET)</div>
@@ -1060,10 +858,8 @@ function calculateUserStats(username, userData) {
     const monthlyCounts = {};
 
     for (let timestamp in userData) {
-        // Data is already converted to ET in the filtered dataset
         const date = new Date(timestamp.substring(0, 13).replace('T', ' ') + ':00:00');
-        // Create date key manually to preserve ET timezone (avoid toISOString which converts to UTC)
-        const dateKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+        const dateKey = date.toISOString().split('T')[0];
         const weekKey = `${date.getFullYear()}-W${getWeekNumber(date)}`;
         const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
         const hour = date.getHours();
@@ -1080,7 +876,7 @@ function calculateUserStats(username, userData) {
         monthlyCounts[monthKey] = (monthlyCounts[monthKey] || 0) + userData[timestamp];
         stats.monthlyMax = Math.max(stats.monthlyMax, monthlyCounts[monthKey]);
 
-        // Hourly distribution (in ET)
+        // Hourly
         stats.hourlyDistribution[hour] += userData[timestamp];
 
         stats.timeData.push({
@@ -1144,7 +940,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 e.preventDefault();
                 const username = entry.querySelector('.name').textContent.split(' - ')[0];
                 // We only have filtered data in charts,
-                // but for user details we can show *all* data or just the selected year's data.
+                // but for user details we can show *all* data or just the selected year’s data.
                 // If you prefer just the selected year, filter first:
                 let currentFiltered = getDataForSelectedYear(fullData);
                 showUserMetrics(username, currentFiltered);
@@ -1168,22 +964,16 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function triggerConfetti() {
-    // Enhanced confetti burst
-    const end = Date.now() + 1500;
-    const colors = ['#6c5ce7', '#00cec9', '#ff7675', '#00b894', '#fdcb6e'];
+    // A simpler confetti burst
+    const end = Date.now() + 1000;
+    const colors = ['#007bff', '#17a2b8', '#6c757d', '#28a745', '#ff6347'];
 
     (function frame() {
         confetti({
-            particleCount: 12,
-            startVelocity: 25,
-            spread: 90,
-            origin: { y: 0.8 },
-            gravity: 1.2,
-            ticks: 300,
-            shapes: ['circle', 'square'],
-            scalar: 1.2,
-            zIndex: 100,
-            disableForReducedMotion: true,
+            particleCount: 5,
+            startVelocity: 20,
+            spread: 60,
+            origin: { y: 0.7 },
             colors: colors
         });
 

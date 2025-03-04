@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Message Test</title>
+    <script src="telegram-messages.js"></script>
+</head>
+<body>
+    <h1>Telegram Message Test</h1>
+    <p>This page tests that the telegram messages are working correctly.</p>
+    
+    <button id="testButton">Generate Random Message</button>
+    
+    <div id="output" style="margin-top: 20px; padding: 10px; border: 1px solid #ccc;"></div>
+    
+    <script>
+        document.getElementById('testButton').addEventListener('click', function() {
+            try {
+                // Test the getRandomTelegramMessage function
+                const testName = "TestUser";
+                const message = window.telegramMessages.getRandomTelegramMessage(testName);
+                
+                // Display result
+                document.getElementById('output').innerHTML = message;
+                
+                // Log success
+                console.log("Success: Message generated correctly");
+            } catch (error) {
+                // Display error
+                document.getElementById('output').innerHTML = "Error: " + error.message;
+                console.error("Error:", error);
+            }
+        });
+    </script>
+</body>
+</html>
