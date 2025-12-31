@@ -68,6 +68,7 @@ body {
     width: 100%;
     max-width: 100%;
     margin: 0 auto;
+    padding-bottom: calc(var(--space-xl) + env(safe-area-inset-bottom, 0px));
 }
 
 /* Modern typography */
@@ -138,7 +139,7 @@ h3 {
 /* Buttons - modern mobile-optimized */
 .buttons-container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: var(--space-md);
     width: 100%;
     max-width: 500px;
@@ -161,7 +162,9 @@ button {
     box-shadow: var(--shadow-sm);
     position: relative;
     overflow: hidden;
-    height: 60px;
+    height: 70px;
+    min-height: 44px; /* iOS minimum touch target */
+    font-size: 1rem;
 }
 
 button::before {
@@ -182,8 +185,23 @@ button:hover {
 }
 
 button:active {
-    transform: translateY(0);
+    transform: translateY(0) scale(0.98);
     box-shadow: var(--shadow-sm);
+    background: var(--surface-variant);
+}
+
+/* Better mobile touch feedback */
+@media (hover: none) and (pointer: coarse) {
+    button:hover {
+        transform: none;
+        box-shadow: var(--shadow-sm);
+    }
+    
+    button:active {
+        transform: scale(0.95);
+        background: var(--primary);
+        color: white;
+    }
 }
 
 /* Card/Chart Containers - elevated design */
@@ -509,8 +527,9 @@ button:active {
     }
     
     .buttons-container {
-        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-        max-width: 800px;
+        grid-template-columns: repeat(4, 1fr);
+        max-width: 600px;
+        gap: var(--space-lg);
     }
     
     .stats-grid {
@@ -536,5 +555,28 @@ button:active {
     
     button {
         height: 70px;
+    }
+}
+/* Ex
+tra small mobile screens */
+@media (max-width: 360px) {
+    .buttons-container {
+        gap: var(--space-sm);
+        max-width: 100%;
+    }
+    
+    button {
+        height: 65px;
+        font-size: 0.9rem;
+        padding: var(--space-md) var(--space-sm);
+    }
+    
+    h1 {
+        font-size: 1.75rem;
+    }
+    
+    .year-dropdown-container {
+        flex-direction: column;
+        gap: var(--space-xs);
     }
 }
