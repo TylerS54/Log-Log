@@ -332,13 +332,15 @@ function getWeekNumber(d) {
 function processSnapshot(data, chartView) {
     let seriesData = [];
     let colors = [
-        '#6c5ce7', // primary 
-        '#00cec9', // secondary
+        '#6c5ce7', // primary purple
+        '#00cec9', // secondary teal
         '#ff7675', // coral
         '#00b894', // green
         '#fdcb6e', // yellow
         '#e17055', // orange
-        '#74b9ff'  // light blue
+        '#74b9ff', // light blue
+        '#fd79a8', // pink
+        '#a29bfe'  // light purple
     ];
       
     let colorIndex = 0;
@@ -390,13 +392,15 @@ function processSnapshot(data, chartView) {
 function processCumulativeSnapshot(data) {
     let seriesData = [];
     let colors = [
-        '#6c5ce7', // primary 
-        '#00cec9', // secondary
+        '#6c5ce7', // primary purple
+        '#00cec9', // secondary teal
         '#ff7675', // coral
         '#00b894', // green
         '#fdcb6e', // yellow
         '#e17055', // orange
-        '#74b9ff'  // light blue
+        '#74b9ff', // light blue
+        '#fd79a8', // pink
+        '#a29bfe'  // light purple
     ];
       
     let colorIndex = 0;
@@ -471,7 +475,7 @@ function renderChart(chartData) {
             },
             fontFamily: 'Inter, system-ui, sans-serif'
         },
-        colors: ['#6c5ce7', '#00cec9', '#ff7675', '#00b894', '#fdcb6e', '#e17055', '#74b9ff'],
+        colors: ['#6c5ce7', '#00cec9', '#ff7675', '#00b894', '#fdcb6e', '#e17055', '#74b9ff', '#fd79a8', '#a29bfe'],
         stroke: {
             curve: 'smooth',
             width: 3
@@ -586,7 +590,7 @@ function renderCumulativeChart(chartData) {
             },
             fontFamily: 'Inter, system-ui, sans-serif'
         },
-        colors: ['#6c5ce7', '#00cec9', '#ff7675', '#00b894', '#fdcb6e', '#e17055', '#74b9ff'],
+        colors: ['#6c5ce7', '#00cec9', '#ff7675', '#00b894', '#fdcb6e', '#e17055', '#74b9ff', '#fd79a8', '#a29bfe'],
         stroke: {
             curve: 'smooth',
             width: 3
@@ -708,7 +712,7 @@ function renderDayOfWeekChart(chartData) {
             },
             fontFamily: 'Inter, system-ui, sans-serif'
         },
-        colors: ['#6c5ce7', '#00cec9', '#ff7675', '#00b894', '#fdcb6e', '#e17055', '#74b9ff'],
+        colors: ['#6c5ce7', '#00cec9', '#ff7675', '#00b894', '#fdcb6e', '#e17055', '#74b9ff', '#fd79a8', '#a29bfe'],
         plotOptions: {
             bar: {
                 horizontal: false,

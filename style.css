@@ -139,7 +139,7 @@ h3 {
 /* Buttons - modern mobile-optimized */
 .buttons-container {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: var(--space-md);
     width: 100%;
     max-width: 500px;
@@ -527,7 +527,7 @@ button:active {
     }
     
     .buttons-container {
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(3, 1fr);
         max-width: 600px;
         gap: var(--space-lg);
     }
