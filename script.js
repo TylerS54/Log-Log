@@ -1227,15 +1227,20 @@ function generateMarkdownReport(username, userStats, yearData) {
     if (yearData && yearData[username]) {
         for (let timestamp in yearData[username]) {
             totalLogs += yearData[username][timestamp];
-            // Extract just the date part (YYYY-MM-DD) to count unique days
+            // Extract just the date part (YYYY-MM-DD) to count unique active days
             const date = new Date(timestamp.substring(0, 13).replace('T', ' ') + ':00:00');
             const dateKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
             uniqueDays.add(dateKey);
         }
     }
     
-    const totalUniqueDays = uniqueDays.size;
-    const averagePerDay = totalUniqueDays > 0 ? (totalLogs / totalUniqueDays).toFixed(2) : '0';
+    const totalActiveDays = uniqueDays.size;
+    
+    // Calculate days in the selected year (accounting for leap years)
+    const isLeapYear = (parseInt(year) % 4 === 0 && parseInt(year) % 100 !== 0) || (parseInt(year) % 400 === 0);
+    const daysInYear = isLeapYear ? 366 : 365;
+    
+    const averagePerDay = totalLogs > 0 ? (totalLogs / daysInYear).toFixed(2) : '0';
     
     // Find most active day of week
     const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -1311,8 +1316,9 @@ ${generateMarkdownHeatmap(userStats.heatmapData)}
 
 ## 📈 Statistics Summary
 
-- **Average per Day:** ${averagePerDay} logs
-- **Total Active Days:** ${totalUniqueDays} days
+- **Average per Day:** ${averagePerDay} logs (total logs ÷ ${daysInYear} days)
+- **Total Active Days:** ${totalActiveDays} days
+- **Activity Rate:** ${totalActiveDays > 0 ? ((totalActiveDays / daysInYear) * 100).toFixed(1) : '0'}% of year
 - **Most Productive Day of Week:** ${mostActiveDay}
 - **Peak Performance Hour:** ${String(peakHour).padStart(2, '0')}:00 ET
 - **Consistency Score:** ${userStats.activeStreak} day streak
