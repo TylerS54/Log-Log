@@ -579,4 +579,46 @@ tra small mobile screens */
         flex-direction: column;
         gap: var(--space-xs);
     }
+}/* Exp
+ort Button Styling */
+.export-button-container {
+    display: flex;
+    justify-content: center;
+    margin: var(--space-lg) 0;
+}
+
+.export-button {
+    background: linear-gradient(135deg, var(--secondary), var(--success)) !important;
+    color: white !important;
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: var(--space-md) var(--space-lg);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+    width: auto !important;
+    height: auto !important;
+    display: inline-flex !important;
+    align-items: center;
+    gap: var(--space-sm);
+    transition: all var(--transition-normal);
+    border: none;
+    cursor: pointer;
+}
+
+.export-button::before {
+    display: none;
+}
+
+.export-button:hover {
+    transform: scale(1.02) translateY(-1px);
+    box-shadow: var(--shadow-lg);
+    background: linear-gradient(135deg, var(--primary), var(--secondary)) !important;
+}
+
+.export-button:active {
+    transform: scale(0.98);
+}
+
+.export-button svg {
+    flex-shrink: 0;
 }
