@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0f0f13">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Poop Chronicles - Mobile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="mobile-style.css">
+    <link rel="icon" href="favicon.ico">
+    <script src="telegram-messages.js"></script>
+</head>
+<body>
+    <div id="mobile-app">
+        <!-- Header -->
+        <header class="mobile-header">
+            <h1>💩 Poop Chronicles</h1>
+            <div class="header-controls">
+                <select id="mobileYearDropdown" class="year-select"></select>
+                <button class="desktop-link" onclick="window.location.href='index.html'">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                        <line x1="8" y1="21" x2="16" y2="21"></line>
+                        <line x1="12" y1="17" x2="12" y2="21"></line>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Quick Stats Bar -->
+        <div class="quick-stats">
+            <div class="stat-item">
+                <span class="stat-value" id="todayTotal">0</span>
+                <span class="stat-label">Today</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value" id="weekTotal">0</span>
+                <span class="stat-label">This Week</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value" id="monthTotal">0</span>
+                <span class="stat-label">This Month</span>
+            </div>
+        </div>
+
+        <!-- User Grid -->
+        <div class="user-grid">
+            <div class="user-card" data-user="Ziggy">
+                <div class="user-avatar">Z</div>
+                <div class="user-name">Ziggy</div>
+                <div class="user-count" id="count-Ziggy">0</div>
+                <button class="log-button" onclick="quickLog('Ziggy')">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="16"></line>
+                        <line x1="8" y1="12" x2="16" y2="12"></line>
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="user-card" data-user="Mikey">
+                <div class="user-avatar">M</div>
+                <div class="user-name">Mikey</div>
+                <div class="user-count" id="count-Mikey">0</div>
+                <button class="log-button" onclick="quickLog('Mikey')">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="16"></line>
+                        <line x1="8" y1="12" x2="16" y2="12"></line>
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="user-card" data-user="TT">
+                <div class="user-avatar">T</div>
+                <div class="user-name">TT</div>
+                <div class="user-count" id="count-TT">0</div>
+                <button class="log-button" onclick="quickLog('TT')">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="16"></line>
+                        <line x1="8" y1="12" x2="16" y2="12"></line>
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="user-card" data-user="AJ">
+                <div class="user-avatar">A</div>
+                <div class="user-name">AJ</div>
+                <div class="user-count" id="count-AJ">0</div>
+                <button class="log-button" onclick="quickLog('AJ')">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="16"></line>
+                        <line x1="8" y1="12" x2="16" y2="12"></line>
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="user-card" data-user="GGK">
+                <div class="user-avatar">G</div>
+                <div class="user-name">GGK</div>
+                <div class="user-count" id="count-GGK">0</div>
+                <button class="log-button" onclick="quickLog('GGK')">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="16"></line>
+                        <line x1="8" y1="12" x2="16" y2="12"></line>
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="user-card" data-user="Teddy">
+                <div class="user-avatar">T</div>
+                <div class="user-name">Teddy</div>
+                <div class="user-count" id="count-Teddy">0</div>
+                <button class="log-button" onclick="quickLog('Teddy')">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="16"></line>
+                        <line x1="8" y1="12" x2="16" y2="12"></line>
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="user-card" data-user="E-Tyler">
+                <div class="user-avatar">E</div>
+                <div class="user-name">E-Tyler</div>
+                <div class="user-count" id="count-E-Tyler">0</div>
+                <button class="log-button" onclick="quickLog('E-Tyler')">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="16"></line>
+                        <line x1="8" y1="12" x2="16" y2="12"></line>
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="user-card" data-user="Ant">
+                <div class="user-avatar">A</div>
+                <div class="user-name">Ant</div>
+                <div class="user-count" id="count-Ant">0</div>
+                <button class="log-button" onclick="quickLog('Ant')">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="16"></line>
+                        <line x1="8" y1="12" x2="16" y2="12"></line>
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="user-card" data-user="Kyle">
+                <div class="user-avatar">K</div>
+                <div class="user-name">Kyle</div>
+                <div class="user-count" id="count-Kyle">0</div>
+                <button class="log-button" onclick="quickLog('Kyle')">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="16"></line>
+                        <line x1="8" y1="12" x2="16" y2="12"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Leaderboard Section -->
+        <div class="mobile-leaderboard">
+            <h2>🏆 Leaderboard</h2>
+            <div id="mobileLeaderboard"></div>
+        </div>
+
+        <!-- Quick Charts Toggle -->
+        <div class="charts-toggle">
+            <button id="showChartsBtn" class="toggle-charts-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="20" x2="18" y2="10"></line>
+                    <line x1="12" y1="20" x2="12" y2="4"></line>
+                    <line x1="6" y1="20" x2="6" y2="14"></line>
+                </svg>
+                View Charts
+            </button>
+        </div>
+
+        <!-- Collapsible Charts Section -->
+        <div id="mobileCharts" class="mobile-charts hidden">
+            <div class="chart-tabs">
+                <button class="tab-btn active" data-chart="activity">Activity</button>
+                <button class="tab-btn" data-chart="cumulative">Totals</button>
+                <button class="tab-btn" data-chart="weekly">Weekly</button>
+            </div>
+            <div class="chart-container">
+                <div id="mobileChart"></div>
+            </div>
+        </div>
+
+        <!-- Toast Notifications -->
+        <div id="toast" class="toast hidden"></div>
+
+        <!-- User Detail Modal -->
+        <div id="mobileUserModal" class="mobile-modal hidden">
+            <div class="modal-header">
+                <h3 id="mobileModalTitle">User Stats</h3>
+                <button class="close-modal">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-content">
+                <div class="mobile-stats-grid">
+                    <div class="mobile-stat-card">
+                        <div class="stat-title">Daily Best</div>
+                        <div class="stat-number" id="mobileDailyBest">0</div>
+                    </div>
+                    <div class="mobile-stat-card">
+                        <div class="stat-title">Weekly Best</div>
+                        <div class="stat-number" id="mobileWeeklyBest">0</div>
+                    </div>
+                    <div class="mobile-stat-card">
+                        <div class="stat-title">Monthly Best</div>
+                        <div class="stat-number" id="mobileMonthlyBest">0</div>
+                    </div>
+                    <div class="mobile-stat-card">
+                        <div class="stat-title">Total Logs</div>
+                        <div class="stat-number" id="mobileTotalLogs">0</div>
+                    </div>
+                </div>
+                <button id="mobileExportBtn" class="mobile-export-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7,10 12,15 17,10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    Export Stats
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <audio id="mobile-fart-noise" src="fart-sound.mp3"></audio>
+    <script src="mobile-script.js"></script>
+</body>
+</html>
