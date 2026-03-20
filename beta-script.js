@@ -714,13 +714,13 @@ function updateActivityFeed(data) {
 }
 
 function formatFeedTime(utcDate) {
+    // Timestamps are hour-precision, so compare in whole hours
     const diffMs  = Date.now() - utcDate.getTime();
-    const diffMin = Math.floor(diffMs / 60000);
     const diffHr  = Math.floor(diffMs / 3600000);
     const diffDay = Math.floor(diffMs / 86400000);
 
-    if (diffMin < 1)   return 'just now';
-    if (diffMin < 60)  return `${diffMin}m ago`;
+    if (diffHr < 1)    return 'just now';
+    if (diffHr === 1)  return '1h ago';
     if (diffHr < 24)   return `${diffHr}h ago`;
     if (diffDay < 7)   return `${diffDay}d ago`;
 
