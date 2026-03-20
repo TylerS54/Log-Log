@@ -1,14 +1,14 @@
 // ─── User roster ────────────────────────────────────────────────────────────
 const USERS = [
-    { name: 'Ziggy',   color: '#6c5ce7', initial: 'Z'   },
-    { name: 'Mikey',   color: '#00cec9', initial: 'M'   },
-    { name: 'TT',      color: '#ff7675', initial: 'TT'  },
-    { name: 'AJ',      color: '#00b894', initial: 'AJ'  },
-    { name: 'GGK',     color: '#fdcb6e', initial: 'GGK' },
-    { name: 'Teddy',   color: '#e17055', initial: 'TE'  },
-    { name: 'E-Tyler', color: '#74b9ff', initial: 'ET'  },
-    { name: 'Ant',     color: '#fd79a8', initial: 'AN'  },
-    { name: 'Kyle',    color: '#a29bfe', initial: 'K'   },
+    { name: 'Ziggy',   color: '#6c5ce7', initial: 'Z',   pic: 'profiles/Ziggy.png'   },
+    { name: 'Mikey',   color: '#00cec9', initial: 'M',   pic: 'profiles/Mikey.png'   },
+    { name: 'TT',      color: '#ff7675', initial: 'TT',  pic: 'profiles/TT.png'      },
+    { name: 'AJ',      color: '#00b894', initial: 'AJ',  pic: 'profiles/AJ.png'      },
+    { name: 'GGK',     color: '#fdcb6e', initial: 'GGK', pic: 'profiles/GGKpng.png'  },
+    { name: 'Teddy',   color: '#e17055', initial: 'TE',  pic: 'profiles/Teddy.png'   },
+    { name: 'E-Tyler', color: '#74b9ff', initial: 'ET',  pic: 'profiles/E-Tyler.png' },
+    { name: 'Ant',     color: '#fd79a8', initial: 'AN',  pic: 'profiles/Ant.png'     },
+    { name: 'Kyle',    color: '#a29bfe', initial: 'K',   pic: 'profiles/Kyle.png'    },
     // ⚠️ Test user — no Firebase write, no Telegram. Testing page only.
     { name: 'Test',    color: '#94a3b8', initial: 'T'   },
 ];
@@ -67,8 +67,13 @@ function showQuickLog(name) {
     document.getElementById('namePickerMode').classList.add('hidden');
 
     const avatar = document.getElementById('qlAvatar');
-    avatar.textContent = user.initial;
-    avatar.style.background = user.color;
+    if (user.pic) {
+        avatar.textContent = '';
+        avatar.style.background = `url('${user.pic}') center/cover no-repeat`;
+    } else {
+        avatar.textContent = user.initial;
+        avatar.style.background = user.color;
+    }
 
     // Propagate the user's color as a CSS variable for glow effects
     const card = document.getElementById('quickLogCard');
@@ -95,8 +100,12 @@ function buildNameGrid() {
         const card = document.createElement('button');
         card.className = 'name-card';
         card.style.setProperty('--card-color', user.color);
+        const avatarStyle = user.pic
+            ? `background:url('${user.pic}') center/cover no-repeat`
+            : `background:${user.color}`;
+        const avatarContent = user.pic ? '' : user.initial;
         card.innerHTML = `
-            <div class="card-avatar" style="background:${user.color}">${user.initial}</div>
+            <div class="card-avatar" style="${avatarStyle}">${avatarContent}</div>
             <span class="card-name">${user.name}</span>
         `;
         card.addEventListener('click', () => logForUser(user.name, card));
