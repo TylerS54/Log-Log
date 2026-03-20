@@ -555,7 +555,7 @@ function updateDisplay(chartView) {
     renderDayOfWeekChart(processDayOfWeekSnapshot(filtered));
     updateTodayGrid(fullData);
     updateActivityFeed(fullData);
-    applyCrown(fullData);
+    applyCrown(filtered);
     renderGroupHeatmap(fullData);
 }
 

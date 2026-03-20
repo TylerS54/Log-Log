@@ -925,20 +925,20 @@ h3 {
 .crown::after {
     content: '👑';
     position: absolute;
-    top: -10px;
+    top: -14px;
     left: 50%;
     transform: translateX(-50%) rotate(-8deg);
-    font-size: 1.1em;
+    font-size: 1.6em;
     line-height: 1;
-    filter: drop-shadow(0 1px 3px rgba(0,0,0,0.5));
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
     pointer-events: none;
     z-index: 5;
 }
 
 /* Slightly smaller crown on feed avatars */
 .feed-avatar.crown::after {
-    font-size: 0.85em;
-    top: -8px;
+    font-size: 1.2em;
+    top: -10px;
 }
 
 /* ─── Group Heatmap ──────────────────────────────────────────────── */
