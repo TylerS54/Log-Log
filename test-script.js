@@ -605,31 +605,35 @@ function updateTodayGrid(data) {
 }
 
 // ─── Activity Feed ────────────────────────────────────────────────────────────
+
+// Parse a raw UTC timestamp ("YYYY-MM-DDTHH") into a proper UTC Date
+function parseUTC(rawTS) {
+    return new Date(rawTS.substring(0, 13).replace('T', ' ') + ':00:00Z');
+}
+
 function updateActivityFeed(data) {
     const feed = document.getElementById('activityFeed');
     if (!feed) return;
 
-    // Collect all events with ET timestamps
     const events = [];
     for (let user in data) {
         const userInfo = USER_MAP[user];
         if (!userInfo) continue;
         for (let utcTS in data[user]) {
-            const dateET = parseAndConvertUTCToNaiveET(utcTS);
             events.push({
                 name: user,
                 user: userInfo,
-                dateET: dateET,
+                utcDate: parseUTC(utcTS),
                 count: data[user][utcTS]
             });
         }
     }
 
     // Sort newest first
-    events.sort((a, b) => b.dateET - a.dateET);
+    events.sort((a, b) => b.utcDate - a.utcDate);
 
-    // Show the most recent 30
-    const recent = events.slice(0, 30);
+    // Show the most recent 10
+    const recent = events.slice(0, 10);
 
     if (recent.length === 0) {
         feed.innerHTML = '<div class="feed-empty">No activity yet</div>';
@@ -642,7 +646,7 @@ function updateActivityFeed(data) {
             ? `background:url('${evt.user.pic}') center/cover no-repeat`
             : `background:${evt.user.color}`;
         const avatarContent = evt.user.pic ? '' : evt.user.initial;
-        const timeStr = formatFeedTime(evt.dateET);
+        const timeStr = formatFeedTime(evt.utcDate);
 
         const item = document.createElement('div');
         item.className = 'feed-item';
@@ -658,12 +662,8 @@ function updateActivityFeed(data) {
     });
 }
 
-function formatFeedTime(dateET) {
-    const now = new Date();
-    const nowET = new Date(now.valueOf());
-    nowET.setHours(nowET.getHours() - 5);
-
-    const diffMs = nowET - dateET;
+function formatFeedTime(utcDate) {
+    const diffMs  = Date.now() - utcDate.getTime();
     const diffMin = Math.floor(diffMs / 60000);
     const diffHr  = Math.floor(diffMs / 3600000);
     const diffDay = Math.floor(diffMs / 86400000);
@@ -673,8 +673,10 @@ function formatFeedTime(dateET) {
     if (diffHr < 24)   return `${diffHr}h ago`;
     if (diffDay < 7)   return `${diffDay}d ago`;
 
-    const mm = String(dateET.getMonth() + 1).padStart(2, '0');
-    const dd = String(dateET.getDate()).padStart(2, '0');
+    // For older events, show MM/DD in ET
+    const et = new Date(utcDate.getTime() - 5 * 3600000);
+    const mm = String(et.getUTCMonth() + 1).padStart(2, '0');
+    const dd = String(et.getUTCDate()).padStart(2, '0');
     return `${mm}/${dd}`;
 }
 
