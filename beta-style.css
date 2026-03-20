@@ -929,12 +929,12 @@ h3 {
     pointer-events: none;
     z-index: 9999;
     overflow: hidden;
-    animation: overlayFade 2.4s ease forwards;
+    animation: overlayFade 4s ease forwards;
 }
 
 @keyframes overlayFade {
     0%   { opacity: 1; }
-    75%  { opacity: 1; }
+    80%  { opacity: 1; }
     100% { opacity: 0; }
 }
 
@@ -1045,6 +1045,34 @@ h3 {
 @keyframes rippleExpand {
     0%   { transform: scaleX(1) scaleY(1); opacity: 0.8; }
     100% { transform: scaleX(var(--ripple-scale, 12)) scaleY(2.5); opacity: 0; }
+}
+
+/* Minecraft-style text */
+.mc-text {
+    position: absolute;
+    left: 50%;
+    top: calc(var(--water-y, 52%) - 70px);
+    transform: translateX(-50%) translateY(0) scale(0);
+    font-family: 'Press Start 2P', monospace;
+    font-size: clamp(0.7rem, 3vw, 1rem);
+    color: #FFFF55;
+    text-shadow:
+        2px 2px 0 #3F3F00,
+        -1px -1px 0 #3F3F00,
+        1px -1px 0 #3F3F00,
+        -1px 1px 0 #3F3F00;
+    white-space: nowrap;
+    pointer-events: none;
+    image-rendering: pixelated;
+    opacity: 0;
+    animation: mcTextAppear 0.4s 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    z-index: 10;
+}
+
+@keyframes mcTextAppear {
+    0%   { transform: translateX(-50%) translateY(10px) scale(0.5); opacity: 0; }
+    60%  { transform: translateX(-50%) translateY(-4px) scale(1.05); opacity: 1; }
+    100% { transform: translateX(-50%) translateY(0) scale(1); opacity: 1; }
 }
 
 /* Screen shake on impact */

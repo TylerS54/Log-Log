@@ -112,8 +112,7 @@ function logForUser(name, buttonEl) {
     isLogging = true;
 
     const user = USER_MAP[name] || {};
-    triggerLogDrop();
-    playFartNoise();
+    triggerLogDrop(name);
     if (buttonEl) buttonEl.classList.add('loading');
 
     const now = new Date();
@@ -188,11 +187,9 @@ function showToast(msg) {
 }
 
 // ─── Effects ─────────────────────────────────────────────────────────────────
-function triggerLogDrop() {
-    // Water line position (% from top of viewport)
+function triggerLogDrop(name) {
     const waterY = '52%';
 
-    // Overlay container
     const overlay = document.createElement('div');
     overlay.className = 'log-drop-overlay';
     overlay.style.setProperty('--water-y', waterY);
@@ -209,7 +206,7 @@ function triggerLogDrop() {
     water.style.setProperty('--water-y', waterY);
     overlay.appendChild(water);
 
-    // Splash droplets — pixel squares spraying upward
+    // Splash droplets
     const dropConfigs = [
         { x: -45, y: -90,  size: 10, delay: 0.46, dur: 0.85, color: '#3BA3FF' },
         { x:  50, y: -75,  size: 8,  delay: 0.47, dur: 0.80, color: '#5BB8FF' },
@@ -251,20 +248,21 @@ function triggerLogDrop() {
         overlay.appendChild(ripple);
     });
 
+    // Minecraft-style text: "{Name} dropped a log."
+    const mcText = document.createElement('div');
+    mcText.className = 'mc-text';
+    mcText.style.setProperty('--water-y', waterY);
+    mcText.textContent = `${name || 'Someone'} dropped a log.`;
+    overlay.appendChild(mcText);
+
     document.body.appendChild(overlay);
 
     // Screen shake
     document.getElementById('app').classList.add('screen-shake');
     setTimeout(() => document.getElementById('app').classList.remove('screen-shake'), 800);
 
-    // Cleanup
-    overlay.addEventListener('animationend', (e) => {
-        if (e.target === overlay) overlay.remove();
-    }, { once: true });
-}
-
-function playFartNoise() {
-    document.getElementById('fart-noise').play().catch(() => {});
+    // Cleanup after overlay fade animation
+    setTimeout(() => overlay.remove(), 4500);
 }
 
 // ─── Time helpers ─────────────────────────────────────────────────────────────
@@ -706,8 +704,6 @@ function exportUserStats() {
 
 // ─── Init ─────────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('fart-noise').load();
-
     // Build name grid
     buildNameGrid();
 

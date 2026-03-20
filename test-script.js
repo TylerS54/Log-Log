@@ -116,8 +116,7 @@ function logForUser(name, buttonEl) {
     isLogging = true;
 
     const user = USER_MAP[name] || {};
-    triggerLogDrop();
-    playFartNoise();
+    triggerLogDrop(name);
     if (buttonEl) buttonEl.classList.add('loading');
 
     // Test user: skip all real side-effects, just simulate the flow
@@ -201,7 +200,7 @@ function showToast(msg) {
 }
 
 // ─── Effects ─────────────────────────────────────────────────────────────────
-function triggerLogDrop() {
+function triggerLogDrop(name) {
     const waterY = '52%';
 
     const overlay = document.createElement('div');
@@ -258,18 +257,18 @@ function triggerLogDrop() {
         overlay.appendChild(ripple);
     });
 
+    const mcText = document.createElement('div');
+    mcText.className = 'mc-text';
+    mcText.style.setProperty('--water-y', waterY);
+    mcText.textContent = `${name || 'Someone'} dropped a log.`;
+    overlay.appendChild(mcText);
+
     document.body.appendChild(overlay);
 
     document.getElementById('app').classList.add('screen-shake');
     setTimeout(() => document.getElementById('app').classList.remove('screen-shake'), 800);
 
-    overlay.addEventListener('animationend', (e) => {
-        if (e.target === overlay) overlay.remove();
-    }, { once: true });
-}
-
-function playFartNoise() {
-    document.getElementById('fart-noise').play().catch(() => {});
+    setTimeout(() => overlay.remove(), 4500);
 }
 
 // ─── Time helpers ─────────────────────────────────────────────────────────────
@@ -713,8 +712,6 @@ function exportUserStats() {
 document.addEventListener('DOMContentLoaded', () => {
     // Testing page: always reset session lock so the button is clickable
     sessionStorage.removeItem(SESSION_KEY);
-
-    document.getElementById('fart-noise').load();
 
     // Build name grid
     buildNameGrid();
