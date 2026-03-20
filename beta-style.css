@@ -917,6 +917,107 @@ h3 {
     .ql-avatar   { width: 52px; height: 52px; }
 }
 
+/* ─── Crown overlay ──────────────────────────────────────────────── */
+.crown {
+    position: relative;
+}
+
+.crown::after {
+    content: '👑';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-8deg);
+    font-size: 1.1em;
+    line-height: 1;
+    filter: drop-shadow(0 1px 3px rgba(0,0,0,0.5));
+    pointer-events: none;
+    z-index: 5;
+}
+
+/* Slightly smaller crown on feed avatars */
+.feed-avatar.crown::after {
+    font-size: 0.85em;
+    top: -8px;
+}
+
+/* ─── Group Heatmap ──────────────────────────────────────────────── */
+.heatmap-section {
+    margin-bottom: 28px;
+}
+
+.group-heatmap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+}
+
+.heatmap-table {
+    border-collapse: separate;
+    border-spacing: 3px;
+    width: 100%;
+    min-width: 540px;
+}
+
+.heatmap-table th {
+    font-size: 0.55rem;
+    font-weight: 700;
+    color: var(--text-dim);
+    padding: 2px 0;
+    text-align: center;
+    letter-spacing: 0.02em;
+}
+
+.heatmap-table th.heatmap-day {
+    text-align: right;
+    padding-right: 6px;
+    font-size: 0.6rem;
+    color: var(--text-sub);
+    white-space: nowrap;
+    width: 36px;
+}
+
+.heatmap-cell {
+    width: 16px;
+    height: 16px;
+    border-radius: 3px;
+    transition: transform 0.15s ease;
+}
+
+.heatmap-cell:hover {
+    transform: scale(1.8);
+    z-index: 2;
+    position: relative;
+}
+
+.heatmap-cell[title] {
+    cursor: default;
+}
+
+/* Intensity scale */
+.hm-0 { background: rgba(255,255,255,0.04); }
+.hm-1 { background: rgba(45,212,208,0.2); }
+.hm-2 { background: rgba(45,212,208,0.4); }
+.hm-3 { background: rgba(45,212,208,0.6); }
+.hm-4 { background: rgba(45,212,208,0.8); }
+.hm-5 { background: rgba(45,212,208,1.0); box-shadow: 0 0 6px rgba(45,212,208,0.5); }
+
+.heatmap-legend {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 4px;
+    margin-top: 8px;
+    font-size: 0.6rem;
+    color: var(--text-dim);
+}
+
+.heatmap-legend-cell {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+}
+
 /* ─── Group Logs Today ───────────────────────────────────────────── */
 .today-section {
     margin-bottom: 28px;

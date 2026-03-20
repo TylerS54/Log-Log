@@ -555,6 +555,8 @@ function updateDisplay(chartView) {
     renderDayOfWeekChart(processDayOfWeekSnapshot(filtered));
     updateTodayGrid(fullData);
     updateActivityFeed(fullData);
+    applyCrown(fullData);
+    renderGroupHeatmap(fullData);
 }
 
 // ─── Group Logs Today ─────────────────────────────────────────────────────────
@@ -602,6 +604,110 @@ function updateTodayGrid(data) {
         `;
         grid.appendChild(card);
     });
+}
+
+// ─── Crown ────────────────────────────────────────────────────────────────────
+function getLeaderName(data) {
+    let best = { name: null, total: 0 };
+    for (let user in data) {
+        let total = 0;
+        for (let ts in data[user]) total += data[user][ts];
+        if (total > best.total) best = { name: user, total: total };
+    }
+    return best.name;
+}
+
+function applyCrown(data) {
+    // Remove any existing crowns
+    document.querySelectorAll('.crown').forEach(el => el.classList.remove('crown'));
+
+    const leader = getLeaderName(data);
+    if (!leader) return;
+
+    // Crown on name picker cards
+    document.querySelectorAll('.name-card').forEach(card => {
+        const nameEl = card.querySelector('.card-name');
+        if (nameEl && nameEl.textContent === leader) {
+            card.querySelector('.card-avatar').classList.add('crown');
+        }
+    });
+
+    // Crown on quick log avatar
+    const qlName = document.getElementById('qlName');
+    if (qlName && qlName.textContent === leader) {
+        document.getElementById('qlAvatar').classList.add('crown');
+    }
+
+    // Crown on activity feed avatars
+    document.querySelectorAll('.feed-item').forEach(item => {
+        const nameEl = item.querySelector('.feed-name');
+        if (nameEl && nameEl.textContent === leader) {
+            item.querySelector('.feed-avatar').classList.add('crown');
+        }
+    });
+}
+
+// ─── Group Heatmap ────────────────────────────────────────────────────────────
+function renderGroupHeatmap(data) {
+    const container = document.getElementById('groupHeatmap');
+    if (!container) return;
+
+    // Build a 7 (days) x 24 (hours) grid of totals in ET
+    const grid = Array.from({ length: 7 }, () => new Array(24).fill(0));
+    let maxVal = 0;
+
+    for (let user in data) {
+        for (let utcTS in data[user]) {
+            const dateET = parseAndConvertUTCToNaiveET(utcTS);
+            const day  = dateET.getDay();   // 0=Sun
+            const hour = dateET.getHours();
+            grid[day][hour] += data[user][utcTS];
+            if (grid[day][hour] > maxVal) maxVal = grid[day][hour];
+        }
+    }
+
+    const dayLabels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+    // Intensity bucket: 0-5
+    function intensity(val) {
+        if (val === 0) return 0;
+        if (maxVal === 0) return 0;
+        const pct = val / maxVal;
+        if (pct <= 0.15) return 1;
+        if (pct <= 0.35) return 2;
+        if (pct <= 0.55) return 3;
+        if (pct <= 0.80) return 4;
+        return 5;
+    }
+
+    // Build table
+    let html = '<table class="heatmap-table"><thead><tr><th></th>';
+    for (let h = 0; h < 24; h++) {
+        const label = h % 3 === 0 ? `${h}` : '';
+        html += `<th>${label}</th>`;
+    }
+    html += '</tr></thead><tbody>';
+
+    for (let d = 0; d < 7; d++) {
+        html += `<tr><th class="heatmap-day">${dayLabels[d]}</th>`;
+        for (let h = 0; h < 24; h++) {
+            const val = grid[d][h];
+            const lvl = intensity(val);
+            html += `<td class="heatmap-cell hm-${lvl}" title="${dayLabels[d]} ${String(h).padStart(2,'0')}:00 ET — ${val} logs"></td>`;
+        }
+        html += '</tr>';
+    }
+    html += '</tbody></table>';
+
+    // Legend
+    html += '<div class="heatmap-legend">';
+    html += '<span>Less</span>';
+    for (let i = 0; i <= 5; i++) {
+        html += `<div class="heatmap-legend-cell hm-${i}"></div>`;
+    }
+    html += '<span>More</span></div>';
+
+    container.innerHTML = html;
 }
 
 // ─── Activity Feed ────────────────────────────────────────────────────────────
