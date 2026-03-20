@@ -112,7 +112,7 @@ function logForUser(name, buttonEl) {
     isLogging = true;
 
     const user = USER_MAP[name] || {};
-    triggerShockwave(buttonEl, user.color || '#8b7cf8');
+    triggerLogDrop();
     playFartNoise();
     if (buttonEl) buttonEl.classList.add('loading');
 
@@ -188,39 +188,79 @@ function showToast(msg) {
 }
 
 // ─── Effects ─────────────────────────────────────────────────────────────────
-function triggerShockwave(originEl, color) {
-    const rect = originEl
-        ? originEl.getBoundingClientRect()
-        : { left: window.innerWidth / 2, top: window.innerHeight / 2, width: 0, height: 0 };
+function triggerLogDrop() {
+    // Water line position (% from top of viewport)
+    const waterY = '52%';
 
-    const x = rect.left + rect.width  / 2;
-    const y = rect.top  + rect.height / 2;
+    // Overlay container
+    const overlay = document.createElement('div');
+    overlay.className = 'log-drop-overlay';
+    overlay.style.setProperty('--water-y', waterY);
 
-    // Screen flash
-    const flash = document.createElement('div');
-    flash.className = 'shockwave-flash';
-    flash.style.setProperty('--wave-color', color);
-    document.body.appendChild(flash);
-    flash.addEventListener('animationend', () => flash.remove(), { once: true });
+    // Minecraft log block
+    const log = document.createElement('div');
+    log.className = 'mc-log';
+    log.style.setProperty('--water-y', waterY);
+    overlay.appendChild(log);
 
-    // 3 staggered rings
-    const configs = [
-        { delay: 0,   borderWidth: '5px', opacity: 0.95 },
-        { delay: 250, borderWidth: '4px', opacity: 0.65 },
-        { delay: 500, borderWidth: '3px', opacity: 0.4  },
+    // Water surface
+    const water = document.createElement('div');
+    water.className = 'water-surface';
+    water.style.setProperty('--water-y', waterY);
+    overlay.appendChild(water);
+
+    // Splash droplets — pixel squares spraying upward
+    const dropConfigs = [
+        { x: -45, y: -90,  size: 10, delay: 0.46, dur: 0.85, color: '#3BA3FF' },
+        { x:  50, y: -75,  size: 8,  delay: 0.47, dur: 0.80, color: '#5BB8FF' },
+        { x: -25, y: -110, size: 6,  delay: 0.48, dur: 0.90, color: '#2196F3' },
+        { x:  35, y: -100, size: 9,  delay: 0.45, dur: 0.88, color: '#42A5F5' },
+        { x: -60, y: -60,  size: 7,  delay: 0.49, dur: 0.75, color: '#5BB8FF' },
+        { x:  65, y: -55,  size: 6,  delay: 0.50, dur: 0.70, color: '#3BA3FF' },
+        { x: -10, y: -120, size: 8,  delay: 0.46, dur: 0.95, color: '#2196F3' },
+        { x:  15, y: -105, size: 10, delay: 0.47, dur: 0.92, color: '#42A5F5' },
+        { x: -70, y: -40,  size: 5,  delay: 0.51, dur: 0.65, color: '#5BB8FF' },
+        { x:  80, y: -35,  size: 5,  delay: 0.52, dur: 0.60, color: '#3BA3FF' },
     ];
-    configs.forEach(({ delay, borderWidth, opacity }) => {
-        const ring = document.createElement('div');
-        ring.className = 'shockwave-ring';
-        ring.style.left         = `${x}px`;
-        ring.style.top          = `${y}px`;
-        ring.style.borderWidth  = borderWidth;
-        ring.style.opacity      = opacity;
-        ring.style.animationDelay = `${delay}ms`;
-        ring.style.setProperty('--wave-color', color);
-        document.body.appendChild(ring);
-        ring.addEventListener('animationend', () => ring.remove(), { once: true });
+    dropConfigs.forEach(cfg => {
+        const drop = document.createElement('div');
+        drop.className = 'splash-drop';
+        drop.style.setProperty('--water-y', waterY);
+        drop.style.setProperty('--splash-x', `${cfg.x}px`);
+        drop.style.setProperty('--splash-y', `${cfg.y}px`);
+        drop.style.setProperty('--drop-size', `${cfg.size}px`);
+        drop.style.setProperty('--splash-delay', `${cfg.delay}s`);
+        drop.style.setProperty('--splash-dur', `${cfg.dur}s`);
+        drop.style.setProperty('--splash-scale', '0.3');
+        drop.style.setProperty('--drop-color', cfg.color);
+        overlay.appendChild(drop);
     });
+
+    // Water ripple rings
+    [
+        { delay: 0.48, dur: 1.2, scale: 14 },
+        { delay: 0.58, dur: 1.4, scale: 20 },
+        { delay: 0.72, dur: 1.6, scale: 26 },
+    ].forEach(cfg => {
+        const ripple = document.createElement('div');
+        ripple.className = 'water-ripple';
+        ripple.style.setProperty('--water-y', waterY);
+        ripple.style.setProperty('--ripple-delay', `${cfg.delay}s`);
+        ripple.style.setProperty('--ripple-dur', `${cfg.dur}s`);
+        ripple.style.setProperty('--ripple-scale', cfg.scale);
+        overlay.appendChild(ripple);
+    });
+
+    document.body.appendChild(overlay);
+
+    // Screen shake
+    document.getElementById('app').classList.add('screen-shake');
+    setTimeout(() => document.getElementById('app').classList.remove('screen-shake'), 800);
+
+    // Cleanup
+    overlay.addEventListener('animationend', (e) => {
+        if (e.target === overlay) overlay.remove();
+    }, { once: true });
 }
 
 function playFartNoise() {

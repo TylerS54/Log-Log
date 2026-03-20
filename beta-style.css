@@ -922,45 +922,143 @@ h3 {
     all: unset;
 }
 
-/* ─── Shockwave ──────────────────────────────────────────────────── */
-.shockwave-ring {
-    position: fixed;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    border: 5px solid var(--wave-color, #8b7cf8);
-    box-shadow:
-        0 0 24px 4px var(--wave-color, #8b7cf8),
-        inset 0 0 16px color-mix(in srgb, var(--wave-color, #8b7cf8) 50%, transparent);
-    pointer-events: none;
-    z-index: 9999;
-    transform: translate(-50%, -50%) scale(0);
-    animation: shockwaveExpand 1.6s cubic-bezier(0.1, 0.6, 0.3, 1) forwards;
-}
-
-@keyframes shockwaveExpand {
-    0%   { transform: translate(-50%, -50%) scale(0);   opacity: 1;   }
-    60%  { opacity: var(--ring-opacity, 0.85); }
-    100% { transform: translate(-50%, -50%) scale(160); opacity: 0;   }
-}
-
-.shockwave-flash {
+/* ─── Log Drop Animation ─────────────────────────────────────────── */
+.log-drop-overlay {
     position: fixed;
     inset: 0;
-    background: radial-gradient(
-        circle at var(--fx, 50%) var(--fy, 50%),
-        color-mix(in srgb, var(--wave-color, #8b7cf8) 45%, transparent) 0%,
-        transparent 70%
-    );
     pointer-events: none;
-    z-index: 9998;
-    animation: shockwaveFlash 1.1s ease-out forwards;
+    z-index: 9999;
+    overflow: hidden;
+    animation: overlayFade 2.4s ease forwards;
 }
 
-@keyframes shockwaveFlash {
+@keyframes overlayFade {
     0%   { opacity: 1; }
-    30%  { opacity: 0.85; }
+    75%  { opacity: 1; }
     100% { opacity: 0; }
+}
+
+/* Minecraft oak log block */
+.mc-log {
+    position: absolute;
+    width: 56px;
+    height: 56px;
+    left: 50%;
+    top: -80px;
+    margin-left: -28px;
+    image-rendering: pixelated;
+    /* Bark sides */
+    background:
+        repeating-linear-gradient(
+            0deg,
+            #5C3A1E 0px, #5C3A1E 4px,
+            #6B4226 4px, #6B4226 8px,
+            #7B4E2E 8px, #7B4E2E 12px,
+            #6B4226 12px, #6B4226 16px
+        );
+    border: 3px solid #3D2510;
+    box-shadow:
+        inset 6px 0 0 rgba(123,78,46,0.5),
+        inset -6px 0 0 rgba(61,37,16,0.4),
+        inset 0 6px 0 rgba(196,164,108,0.3),
+        0 4px 16px rgba(0,0,0,0.5);
+    animation: logFall 0.5s cubic-bezier(0.6, 0, 0.9, 0.4) forwards;
+}
+
+/* End-grain circle on top face */
+.mc-log::before {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    background: #C4A46C;
+    border: 3px solid #8B6D3F;
+    box-shadow: inset 0 0 0 6px #A68B54, inset 0 0 0 10px #C4A46C;
+}
+
+@keyframes logFall {
+    0%   { top: -80px; transform: rotate(-8deg); }
+    100% { top: var(--water-y, 55%); transform: rotate(4deg); }
+}
+
+/* Water surface line */
+.water-surface {
+    position: absolute;
+    left: 0; right: 0;
+    top: var(--water-y, 55%);
+    height: 45%;
+    background: linear-gradient(
+        180deg,
+        rgba(30, 144, 255, 0.0) 0%,
+        rgba(30, 144, 255, 0.12) 4px,
+        rgba(20, 100, 200, 0.18) 20%,
+        rgba(10, 60, 150, 0.10) 100%
+    );
+    pointer-events: none;
+    opacity: 0;
+    animation: waterAppear 0.15s 0.35s ease forwards;
+}
+
+@keyframes waterAppear {
+    to { opacity: 1; }
+}
+
+/* Splash droplets — pixel squares */
+.splash-drop {
+    position: absolute;
+    width: var(--drop-size, 8px);
+    height: var(--drop-size, 8px);
+    background: var(--drop-color, #3BA3FF);
+    border: 2px solid rgba(255,255,255,0.35);
+    image-rendering: pixelated;
+    left: 50%;
+    top: var(--water-y, 55%);
+    opacity: 0;
+    animation: splashUp var(--splash-dur, 0.9s) var(--splash-delay, 0.45s) cubic-bezier(0.2, 0.8, 0.3, 1) forwards;
+}
+
+@keyframes splashUp {
+    0%   { transform: translate(0, 0) scale(1); opacity: 1; }
+    30%  { opacity: 1; }
+    100% {
+        transform:
+            translate(var(--splash-x, 0px), var(--splash-y, -80px))
+            scale(var(--splash-scale, 0.5));
+        opacity: 0;
+    }
+}
+
+/* Water ripple rings */
+.water-ripple {
+    position: absolute;
+    left: 50%;
+    top: var(--water-y, 55%);
+    width: 20px;
+    height: 8px;
+    margin-left: -10px;
+    margin-top: -4px;
+    border: 3px solid rgba(100, 180, 255, 0.7);
+    border-radius: 50%;
+    opacity: 0;
+    animation: rippleExpand var(--ripple-dur, 1.2s) var(--ripple-delay, 0.5s) ease-out forwards;
+}
+
+@keyframes rippleExpand {
+    0%   { transform: scaleX(1) scaleY(1); opacity: 0.8; }
+    100% { transform: scaleX(var(--ripple-scale, 12)) scaleY(2.5); opacity: 0; }
+}
+
+/* Screen shake on impact */
+.screen-shake {
+    animation: shake 0.3s 0.45s ease-out;
+}
+
+@keyframes shake {
+    0%   { transform: translateY(0); }
+    20%  { transform: translateY(-4px); }
+    40%  { transform: translateY(3px); }
+    60%  { transform: translateY(-2px); }
+    80%  { transform: translateY(1px); }
+    100% { transform: translateY(0); }
 }
 
 /* Logged success state overrides */
