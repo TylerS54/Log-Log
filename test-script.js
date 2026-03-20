@@ -362,8 +362,14 @@ function updateHighscore(data) {
         const rankClass = i === 0 ? 'rank-1' : i === 1 ? 'rank-2' : i === 2 ? 'rank-3' : '';
         const icon      = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `${i+1}.`;
         const title     = i === 0 ? 'Champion' : i === 1 ? 'Second Place' : i === 2 ? 'Third Place' : 'Participant';
+        const userInfo  = USER_MAP[item.user];
+        const avatarStyle = userInfo && userInfo.pic
+            ? `background:url('${userInfo.pic}') center/cover no-repeat`
+            : `background:${(userInfo && userInfo.color) || '#666'}`;
+        const avatarContent = userInfo && userInfo.pic ? '' : (userInfo ? userInfo.initial : '?');
         return `<div class="highscore-entry">
             <span class="rank ${rankClass}">${icon}</span>
+            <div class="hs-avatar" style="${avatarStyle}">${avatarContent}</div>
             <span class="name ${rankClass}">${item.user} — ${title}</span>
             <span class="score">${item.total}</span>
         </div>`;
@@ -643,6 +649,15 @@ function applyCrown(data) {
         const nameEl = item.querySelector('.feed-name');
         if (nameEl && nameEl.textContent === leader) {
             item.querySelector('.feed-avatar').classList.add('crown');
+        }
+    });
+
+    // Crown on leaderboard avatars
+    document.querySelectorAll('.highscore-entry').forEach(entry => {
+        const nameEl = entry.querySelector('.name');
+        if (nameEl && nameEl.textContent.startsWith(leader + ' ')) {
+            const avatar = entry.querySelector('.hs-avatar');
+            if (avatar) avatar.classList.add('crown');
         }
     });
 }

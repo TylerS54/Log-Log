@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════
-   Poop Chronicles · Beta — Liquid Glass UI
+   The Log-Log · Beta — Liquid Glass UI
    Inspired by iOS 26 Liquid Glass + shadcn design system
 ═══════════════════════════════════════════════════════════ */
 
@@ -679,12 +679,28 @@ h3 {
 .highscore-entry:last-child { border-bottom: none; }
 .highscore-entry:hover { background: rgba(255,255,255,0.05); }
 
+.hs-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 0.55rem;
+    color: rgba(0,0,0,0.65);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+}
+
 .highscore-entry .name {
     display: flex;
     align-items: center;
     gap: 8px;
     font-weight: 600;
     font-size: 0.9rem;
+    flex: 1;
+    min-width: 0;
 }
 
 .highscore-entry .score {
@@ -925,19 +941,20 @@ h3 {
 .crown::after {
     content: '👑';
     position: absolute;
-    top: -14px;
+    top: -16px;
     left: 50%;
     transform: translateX(-50%) rotate(-8deg);
-    font-size: 1.6em;
+    font-size: 1.9em;
     line-height: 1;
     filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
     pointer-events: none;
     z-index: 5;
 }
 
-/* Slightly smaller crown on feed avatars */
-.feed-avatar.crown::after {
-    font-size: 1.2em;
+/* Slightly smaller crown on feed/leaderboard avatars */
+.feed-avatar.crown::after,
+.hs-avatar.crown::after {
+    font-size: 1.3em;
     top: -10px;
 }
 
