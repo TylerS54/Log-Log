@@ -356,8 +356,14 @@ function updateHighscore(data) {
         const rankClass = i === 0 ? 'rank-1' : i === 1 ? 'rank-2' : i === 2 ? 'rank-3' : '';
         const icon      = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `${i+1}.`;
         const title     = i === 0 ? 'Champion' : i === 1 ? 'Second Place' : i === 2 ? 'Third Place' : 'Participant';
+        const userInfo  = USER_MAP[item.user];
+        const avatarStyle = userInfo && userInfo.pic
+            ? `background:url('${userInfo.pic}') center/cover no-repeat`
+            : `background:${(userInfo && userInfo.color) || '#666'}`;
+        const avatarContent = userInfo && userInfo.pic ? '' : (userInfo ? userInfo.initial : '?');
         return `<div class="highscore-entry">
             <span class="rank ${rankClass}">${icon}</span>
+            <div class="hs-avatar" style="${avatarStyle}">${avatarContent}</div>
             <span class="name ${rankClass}">${item.user} — ${title}</span>
             <span class="score">${item.total}</span>
         </div>`;
@@ -547,6 +553,181 @@ function updateDisplay(chartView) {
     renderCumulativeChart(processCumulativeSnapshot(filtered));
     updateHighscore(filtered);
     renderDayOfWeekChart(processDayOfWeekSnapshot(filtered));
+    updateActivityFeed(fullData);
+    applyCrown(filtered);
+    renderGroupHeatmap(fullData);
+}
+
+// ─── Crown ────────────────────────────────────────────────────────────────────
+function getLeaderName(data) {
+    let best = { name: null, total: 0 };
+    for (let user in data) {
+        let total = 0;
+        for (let ts in data[user]) total += data[user][ts];
+        if (total > best.total) best = { name: user, total: total };
+    }
+    return best.name;
+}
+
+function applyCrown(data) {
+    document.querySelectorAll('.crown').forEach(el => el.classList.remove('crown'));
+
+    const leader = getLeaderName(data);
+    if (!leader) return;
+
+    // Name picker cards
+    document.querySelectorAll('.name-card').forEach(card => {
+        const nameEl = card.querySelector('.card-name');
+        if (nameEl && nameEl.textContent === leader) {
+            card.querySelector('.card-avatar').classList.add('crown');
+        }
+    });
+
+    // Quick log avatar
+    const qlName = document.getElementById('qlName');
+    if (qlName && qlName.textContent === leader) {
+        document.getElementById('qlAvatar').classList.add('crown');
+    }
+
+    // Activity feed avatars
+    document.querySelectorAll('.feed-item').forEach(item => {
+        const nameEl = item.querySelector('.feed-name');
+        if (nameEl && nameEl.textContent === leader) {
+            item.querySelector('.feed-avatar').classList.add('crown');
+        }
+    });
+
+    // Leaderboard avatars
+    document.querySelectorAll('.highscore-entry').forEach(entry => {
+        const nameEl = entry.querySelector('.name');
+        if (nameEl && nameEl.textContent.startsWith(leader + ' ')) {
+            const avatar = entry.querySelector('.hs-avatar');
+            if (avatar) avatar.classList.add('crown');
+        }
+    });
+}
+
+// ─── Group Heatmap ────────────────────────────────────────────────────────────
+function renderGroupHeatmap(data) {
+    const container = document.getElementById('groupHeatmap');
+    if (!container) return;
+
+    const grid = Array.from({ length: 7 }, () => new Array(24).fill(0));
+    let maxVal = 0;
+
+    for (let user in data) {
+        for (let utcTS in data[user]) {
+            const dateET = parseAndConvertUTCToNaiveET(utcTS);
+            const day  = dateET.getDay();
+            const hour = dateET.getHours();
+            grid[day][hour] += data[user][utcTS];
+            if (grid[day][hour] > maxVal) maxVal = grid[day][hour];
+        }
+    }
+
+    const dayLabels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+    function intensity(val) {
+        if (val === 0 || maxVal === 0) return 0;
+        const pct = val / maxVal;
+        if (pct <= 0.15) return 1;
+        if (pct <= 0.35) return 2;
+        if (pct <= 0.55) return 3;
+        if (pct <= 0.80) return 4;
+        return 5;
+    }
+
+    let html = '<table class="heatmap-table"><thead><tr><th></th>';
+    for (let h = 0; h < 24; h++) {
+        html += `<th>${h % 3 === 0 ? h : ''}</th>`;
+    }
+    html += '</tr></thead><tbody>';
+
+    for (let d = 0; d < 7; d++) {
+        html += `<tr><th class="heatmap-day">${dayLabels[d]}</th>`;
+        for (let h = 0; h < 24; h++) {
+            const val = grid[d][h];
+            html += `<td class="heatmap-cell hm-${intensity(val)}" title="${dayLabels[d]} ${String(h).padStart(2,'0')}:00 ET — ${val} logs"></td>`;
+        }
+        html += '</tr>';
+    }
+    html += '</tbody></table>';
+
+    html += '<div class="heatmap-legend"><span>Less</span>';
+    for (let i = 0; i <= 5; i++) html += `<div class="heatmap-legend-cell hm-${i}"></div>`;
+    html += '<span>More</span></div>';
+
+    container.innerHTML = html;
+}
+
+// ─── Activity Feed ────────────────────────────────────────────────────────────
+function parseUTC(rawTS) {
+    return new Date(rawTS.substring(0, 13).replace('T', ' ') + ':00:00Z');
+}
+
+function updateActivityFeed(data) {
+    const feed = document.getElementById('activityFeed');
+    if (!feed) return;
+
+    const events = [];
+    for (let user in data) {
+        const userInfo = USER_MAP[user];
+        if (!userInfo) continue;
+        for (let utcTS in data[user]) {
+            events.push({
+                name: user,
+                user: userInfo,
+                utcDate: parseUTC(utcTS),
+                count: data[user][utcTS]
+            });
+        }
+    }
+
+    events.sort((a, b) => b.utcDate - a.utcDate);
+    const recent = events.slice(0, 10);
+
+    if (recent.length === 0) {
+        feed.innerHTML = '<div class="feed-empty">No activity yet</div>';
+        return;
+    }
+
+    feed.innerHTML = '';
+    recent.forEach(evt => {
+        const avatarStyle = evt.user.pic
+            ? `background:url('${evt.user.pic}') center/cover no-repeat`
+            : `background:${evt.user.color}`;
+        const avatarContent = evt.user.pic ? '' : evt.user.initial;
+        const timeStr = formatFeedTime(evt.utcDate);
+
+        const item = document.createElement('div');
+        item.className = 'feed-item';
+        item.innerHTML = `
+            <div class="feed-avatar" style="${avatarStyle}">${avatarContent}</div>
+            <div class="feed-body">
+                <span class="feed-name">${evt.name}</span>
+                <span class="feed-action"> dropped a log</span>
+            </div>
+            <span class="feed-time">${timeStr}</span>
+        `;
+        feed.appendChild(item);
+    });
+}
+
+function formatFeedTime(utcDate) {
+    const diffMs  = Date.now() - utcDate.getTime();
+    const diffMin = Math.floor(diffMs / 60000);
+    const diffHr  = Math.floor(diffMs / 3600000);
+    const diffDay = Math.floor(diffMs / 86400000);
+
+    if (diffMin < 1)   return 'just now';
+    if (diffMin < 60)  return `${diffMin}m ago`;
+    if (diffHr < 24)   return `${diffHr}h ago`;
+    if (diffDay < 7)   return `${diffDay}d ago`;
+
+    const et = new Date(utcDate.getTime() - 5 * 3600000);
+    const mm = String(et.getUTCMonth() + 1).padStart(2, '0');
+    const dd = String(et.getUTCDate()).padStart(2, '0');
+    return `${mm}/${dd}`;
 }
 
 // ─── User modal ───────────────────────────────────────────────────────────────
