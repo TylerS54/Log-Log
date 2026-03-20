@@ -5,7 +5,7 @@ const USERS = [
     { name: 'TT',      color: '#ff7675', initial: 'TT',  pic: 'profiles/TT.png'      },
     { name: 'AJ',      color: '#00b894', initial: 'AJ',  pic: 'profiles/AJ.png'      },
     { name: 'GGK',     color: '#fdcb6e', initial: 'GGK', pic: 'profiles/GGKpng.png'  },
-    { name: 'Teddy',   color: '#e17055', initial: '💩'                              },
+    { name: 'Teddy',   color: '#e17055', initial: '💩', emoji: true                  },
     { name: 'E-Tyler', color: '#74b9ff', initial: 'ET',  pic: 'profiles/E-Tyler.png' },
     { name: 'Ant',     color: '#fd79a8', initial: 'AN',  pic: 'profiles/Ant.png'     },
     { name: 'Kyle',    color: '#a29bfe', initial: 'K',   pic: 'profiles/Kyle.png'    },
@@ -69,6 +69,7 @@ function showQuickLog(name) {
     } else {
         avatar.textContent = user.initial;
         avatar.style.background = user.color;
+        avatar.classList.toggle('emoji-avatar', !!user.emoji);
     }
 
     // Propagate the user's color as a CSS variable for glow effects
@@ -100,8 +101,9 @@ function buildNameGrid() {
             ? `background:url('${user.pic}') center/cover no-repeat`
             : `background:${user.color}`;
         const avatarContent = user.pic ? '' : user.initial;
+        const emojiClass = user.emoji ? ' emoji-avatar' : '';
         card.innerHTML = `
-            <div class="card-avatar" style="${avatarStyle}">${avatarContent}</div>
+            <div class="card-avatar${emojiClass}" style="${avatarStyle}">${avatarContent}</div>
             <span class="card-name">${user.name}</span>
         `;
         card.addEventListener('click', () => logForUser(user.name, card));
@@ -361,9 +363,10 @@ function updateHighscore(data) {
             ? `background:url('${userInfo.pic}') center/cover no-repeat`
             : `background:${(userInfo && userInfo.color) || '#666'}`;
         const avatarContent = userInfo && userInfo.pic ? '' : (userInfo ? userInfo.initial : '?');
+        const emojiClass = userInfo && userInfo.emoji ? ' emoji-avatar' : '';
         return `<div class="highscore-entry">
             <span class="rank ${rankClass}">${icon}</span>
-            <div class="hs-avatar" style="${avatarStyle}">${avatarContent}</div>
+            <div class="hs-avatar${emojiClass}" style="${avatarStyle}">${avatarContent}</div>
             <span class="name ${rankClass}">${item.user} — ${title}</span>
             <span class="score">${item.total}</span>
         </div>`;
@@ -697,12 +700,13 @@ function updateActivityFeed(data) {
             ? `background:url('${evt.user.pic}') center/cover no-repeat`
             : `background:${evt.user.color}`;
         const avatarContent = evt.user.pic ? '' : evt.user.initial;
+        const emojiClass = evt.user.emoji ? ' emoji-avatar' : '';
         const timeStr = formatFeedTime(evt.utcDate);
 
         const item = document.createElement('div');
         item.className = 'feed-item';
         item.innerHTML = `
-            <div class="feed-avatar" style="${avatarStyle}">${avatarContent}</div>
+            <div class="feed-avatar${emojiClass}" style="${avatarStyle}">${avatarContent}</div>
             <div class="feed-body">
                 <span class="feed-name">${evt.name}</span>
                 <span class="feed-action"> dropped a log</span>

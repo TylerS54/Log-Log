@@ -526,6 +526,10 @@ body {
     z-index: 1;
 }
 
+.emoji-avatar { font-size: 1.5rem !important; line-height: 1; }
+.hs-avatar.emoji-avatar,
+.feed-avatar.emoji-avatar { font-size: 1.1rem !important; }
+
 .name-card:hover .card-avatar {
     transform: scale(1.12);
     box-shadow:
