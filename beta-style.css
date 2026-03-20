@@ -921,3 +921,53 @@ h3 {
 #app button:not(.quick-log-card):not(.name-card):not(.switch-user-btn):not(.back-btn):not(.export-button) {
     all: unset;
 }
+
+/* ─── Shockwave ──────────────────────────────────────────────────── */
+.shockwave-ring {
+    position: fixed;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 3px solid var(--wave-color, #8b7cf8);
+    box-shadow:
+        0 0 12px var(--wave-color, #8b7cf8),
+        inset 0 0 8px color-mix(in srgb, var(--wave-color, #8b7cf8) 40%, transparent);
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%) scale(0);
+    animation: shockwaveExpand 0.75s cubic-bezier(0.12, 0.8, 0.32, 1) forwards;
+}
+
+@keyframes shockwaveExpand {
+    0%   { transform: translate(-50%, -50%) scale(0);   opacity: 1;   }
+    70%  { opacity: var(--ring-opacity, 0.9); }
+    100% { transform: translate(-50%, -50%) scale(160); opacity: 0;   }
+}
+
+.shockwave-flash {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(
+        circle at var(--fx, 50%) var(--fy, 50%),
+        color-mix(in srgb, var(--wave-color, #8b7cf8) 30%, transparent) 0%,
+        transparent 70%
+    );
+    pointer-events: none;
+    z-index: 9998;
+    animation: shockwaveFlash 0.5s ease-out forwards;
+}
+
+@keyframes shockwaveFlash {
+    0%   { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+/* Logged success state overrides */
+.quick-log-card[style*="cursor: default"] {
+    animation: none;
+}
+.quick-log-card[style*="cursor: default"]::after {
+    background: linear-gradient(135deg, #00e5a0, #00cec9, #00e5a0);
+    animation: iridescent 4s linear infinite;
+    opacity: 0.6;
+}

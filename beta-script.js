@@ -12,7 +12,8 @@ const USERS = [
 ];
 
 const USER_MAP = Object.fromEntries(USERS.map(u => [u.name, u]));
-const CACHE_KEY = 'loglog_lastUser';
+const CACHE_KEY   = 'loglog_lastUser';
+const SESSION_KEY = 'loglog_sessionLogged';
 
 // ─── Global state ────────────────────────────────────────────────────────────
 var globalChart, globalCumulativeChart, globalDayOfWeekChart;
@@ -21,6 +22,15 @@ var selectedYear = new Date().getFullYear();
 var currentUserStats = null;
 var currentUserName = null;
 var isLogging = false;
+
+// ─── Session helpers ──────────────────────────────────────────────────────────
+function hasLoggedThisSession() {
+    return sessionStorage.getItem(SESSION_KEY) === 'true';
+}
+
+function markSessionLogged() {
+    sessionStorage.setItem(SESSION_KEY, 'true');
+}
 
 // ─── Telegram ────────────────────────────────────────────────────────────────
 function sendTelegramMessage(name) {
@@ -93,16 +103,16 @@ function buildNameGrid() {
 // ─── Logging ─────────────────────────────────────────────────────────────────
 function handleQuickLog() {
     const name = getCachedUser();
-    if (!name || isLogging) return;
+    if (!name || isLogging || hasLoggedThisSession()) return;
     logForUser(name, document.getElementById('quickLogCard'));
 }
 
 function logForUser(name, buttonEl) {
-    if (isLogging) return;
+    if (isLogging || hasLoggedThisSession()) return;
     isLogging = true;
 
-    // Optimistic feedback
-    triggerConfetti();
+    const user = USER_MAP[name] || {};
+    triggerShockwave(buttonEl, user.color || '#8b7cf8');
     playFartNoise();
     if (buttonEl) buttonEl.classList.add('loading');
 
@@ -117,18 +127,53 @@ function logForUser(name, buttonEl) {
     .then(r => r.text())
     .then(() => {
         setCachedUser(name);
+        markSessionLogged();
         sendTelegramMessage(name);
-        showToast(`${name}'s poop has been logged 💩`);
-        // Transition to Quick Log mode (if not already there)
-        showQuickLog(name);
+        showLoggedState(name);
     })
     .catch(err => {
         console.error(err);
         showToast('Something went wrong. Try again.');
-    })
-    .finally(() => {
         isLogging = false;
         if (buttonEl) buttonEl.classList.remove('loading');
+    });
+}
+
+function showLoggedState(name) {
+    const user = USER_MAP[name] || {};
+    isLogging = false;
+
+    // Switch to quick log mode so the card is visible
+    document.getElementById('namePickerMode').classList.add('hidden');
+    document.getElementById('quickLogMode').classList.remove('hidden');
+
+    const card = document.getElementById('quickLogCard');
+    card.classList.remove('loading');
+    card.style.setProperty('--ql-glow', `rgba(0,229,160,0.35)`);
+    card.style.cursor = 'default';
+    card.onclick = null;
+
+    // Update card content to success state
+    document.getElementById('qlAvatar').innerHTML = '✓';
+    document.getElementById('qlAvatar').style.background = '#00e5a0';
+    document.getElementById('qlAvatar').style.color = 'rgba(0,0,0,0.7)';
+    document.getElementById('qlAvatar').style.fontSize = '1.5rem';
+    document.querySelector('.ql-action').textContent = 'Logged!';
+    document.getElementById('qlName').textContent = name;
+    document.querySelector('.ql-arrow').style.opacity = '0';
+
+    // Replace switch-user with a friendly message
+    const switchBtn = document.querySelector('.switch-user-btn');
+    if (switchBtn) {
+        switchBtn.textContent = 'See you next session 👋';
+        switchBtn.style.cursor = 'default';
+        switchBtn.onclick = null;
+    }
+
+    // Disable all name cards too
+    document.querySelectorAll('.name-card').forEach(c => {
+        c.classList.add('logging');
+        c.style.opacity = '0.4';
     });
 }
 
@@ -143,15 +188,39 @@ function showToast(msg) {
 }
 
 // ─── Effects ─────────────────────────────────────────────────────────────────
-function triggerConfetti() {
-    const end = Date.now() + 1500;
-    const colors = ['#6c5ce7', '#00cec9', '#ff7675', '#00b894', '#fdcb6e'];
-    (function frame() {
-        confetti({ particleCount: 12, startVelocity: 25, spread: 90, origin: { y: 0.8 },
-                   gravity: 1.2, ticks: 300, shapes: ['circle', 'square'], scalar: 1.2,
-                   zIndex: 100, disableForReducedMotion: true, colors });
-        if (Date.now() < end) requestAnimationFrame(frame);
-    }());
+function triggerShockwave(originEl, color) {
+    const rect = originEl
+        ? originEl.getBoundingClientRect()
+        : { left: window.innerWidth / 2, top: window.innerHeight / 2, width: 0, height: 0 };
+
+    const x = rect.left + rect.width  / 2;
+    const y = rect.top  + rect.height / 2;
+
+    // Screen flash
+    const flash = document.createElement('div');
+    flash.className = 'shockwave-flash';
+    flash.style.setProperty('--wave-color', color);
+    document.body.appendChild(flash);
+    flash.addEventListener('animationend', () => flash.remove(), { once: true });
+
+    // 3 staggered rings
+    const configs = [
+        { delay: 0,   borderWidth: '3px', opacity: 0.9 },
+        { delay: 100, borderWidth: '2px', opacity: 0.55 },
+        { delay: 220, borderWidth: '1.5px', opacity: 0.3 },
+    ];
+    configs.forEach(({ delay, borderWidth, opacity }) => {
+        const ring = document.createElement('div');
+        ring.className = 'shockwave-ring';
+        ring.style.left         = `${x}px`;
+        ring.style.top          = `${y}px`;
+        ring.style.borderWidth  = borderWidth;
+        ring.style.opacity      = opacity;
+        ring.style.animationDelay = `${delay}ms`;
+        ring.style.setProperty('--wave-color', color);
+        document.body.appendChild(ring);
+        ring.addEventListener('animationend', () => ring.remove(), { once: true });
+    });
 }
 
 function playFartNoise() {
@@ -603,8 +672,12 @@ document.addEventListener('DOMContentLoaded', () => {
     buildNameGrid();
 
     // Check cache → route to correct UI mode
+    // If already logged this session, show the success state immediately
     const cached = getCachedUser();
-    if (cached && USER_MAP[cached]) {
+    if (hasLoggedThisSession() && cached && USER_MAP[cached]) {
+        showQuickLog(cached);
+        showLoggedState(cached);
+    } else if (cached && USER_MAP[cached]) {
         showQuickLog(cached);
     } else {
         showNamePicker();
