@@ -5,7 +5,7 @@ const USERS = [
     { name: 'TT',      color: '#ff7675', initial: 'TT',  pic: 'profiles/TT.png'      },
     { name: 'AJ',      color: '#00b894', initial: 'AJ',  pic: 'profiles/AJ.png'      },
     { name: 'GGK',     color: '#fdcb6e', initial: 'GGK', pic: 'profiles/GGKpng.png'  },
-    { name: 'Teddy',   color: '#e17055', initial: 'TE',  pic: 'profiles/Teddy.png'   },
+    { name: 'Teddy',   color: '#e17055', initial: '💩'                              },
     { name: 'E-Tyler', color: '#74b9ff', initial: 'ET',  pic: 'profiles/E-Tyler.png' },
     { name: 'Ant',     color: '#fd79a8', initial: 'AN',  pic: 'profiles/Ant.png'     },
     { name: 'Kyle',    color: '#a29bfe', initial: 'K',   pic: 'profiles/Kyle.png'    },
