@@ -553,6 +553,54 @@ function updateDisplay(chartView) {
     renderCumulativeChart(processCumulativeSnapshot(filtered));
     updateHighscore(filtered);
     renderDayOfWeekChart(processDayOfWeekSnapshot(filtered));
+    updateTodayGrid(fullData);
+}
+
+// ─── Group Logs Today ─────────────────────────────────────────────────────────
+function getTodayKeyET() {
+    // Current time → ET (UTC - 5)
+    const now = new Date();
+    const et = new Date(now.valueOf());
+    et.setHours(et.getHours() - 5);
+    const yyyy = et.getFullYear();
+    const mm = String(et.getMonth() + 1).padStart(2, '0');
+    const dd = String(et.getDate()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}`;
+}
+
+function updateTodayGrid(data) {
+    const grid = document.getElementById('todayGrid');
+    if (!grid) return;
+
+    const todayKey = getTodayKeyET();
+    grid.innerHTML = '';
+
+    USERS.filter(u => u.name !== TEST_USER).forEach(user => {
+        let count = 0;
+        if (data[user.name]) {
+            for (let utcTS in data[user.name]) {
+                const dateET = parseAndConvertUTCToNaiveET(utcTS);
+                const dk = `${dateET.getFullYear()}-${String(dateET.getMonth()+1).padStart(2,'0')}-${String(dateET.getDate()).padStart(2,'0')}`;
+                if (dk === todayKey) {
+                    count += data[user.name][utcTS];
+                }
+            }
+        }
+
+        const avatarStyle = user.pic
+            ? `background:url('${user.pic}') center/cover no-repeat`
+            : `background:${user.color}`;
+        const avatarContent = user.pic ? '' : user.initial;
+
+        const card = document.createElement('div');
+        card.className = 'today-card';
+        card.innerHTML = `
+            <div class="today-avatar" style="${avatarStyle}">${avatarContent}</div>
+            <span class="today-name">${user.name}</span>
+            <span class="today-count ${count > 0 ? 'has-logs' : ''}">${count}</span>
+        `;
+        grid.appendChild(card);
+    });
 }
 
 // ─── User modal ───────────────────────────────────────────────────────────────

@@ -917,6 +917,70 @@ h3 {
     .ql-avatar   { width: 52px; height: 52px; }
 }
 
+/* ─── Group Logs Today ───────────────────────────────────────────── */
+.today-section {
+    margin-bottom: 28px;
+}
+
+.today-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.today-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 14px 8px;
+    background:
+        linear-gradient(160deg, rgba(255,255,255,0.055), rgba(255,255,255,0.015)) padding-box,
+        linear-gradient(135deg, rgba(255,255,255,0.14), rgba(255,255,255,0.04) 50%, rgba(255,255,255,0.10)) border-box;
+    border: 1px solid transparent;
+    border-radius: var(--radius-md);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.08) inset, 0 4px 12px rgba(0,0,0,0.2);
+    transition: transform 0.2s ease;
+}
+
+.today-card:hover {
+    transform: translateY(-2px);
+}
+
+.today-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 0.7rem;
+    color: rgba(0,0,0,0.65);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+}
+
+.today-name {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--text-sub);
+    letter-spacing: -0.01em;
+}
+
+.today-count {
+    font-size: 1.5rem;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    color: var(--text);
+}
+
+.today-count.has-logs {
+    color: var(--teal);
+    text-shadow: 0 0 12px rgba(45, 212, 208, 0.3);
+}
+
 /* ─── Reset all generic buttons inside #app ──────────────────────── */
 #app button:not(.quick-log-card):not(.name-card):not(.switch-user-btn):not(.back-btn):not(.export-button) {
     all: unset;
