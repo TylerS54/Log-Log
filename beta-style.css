@@ -981,6 +981,102 @@ h3 {
     text-shadow: 0 0 12px rgba(45, 212, 208, 0.3);
 }
 
+/* ─── Activity Feed ──────────────────────────────────────────────── */
+.feed-section {
+    margin-bottom: 28px;
+}
+
+.activity-feed {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    background:
+        linear-gradient(160deg, rgba(255,255,255,0.055), rgba(255,255,255,0.015)) padding-box,
+        linear-gradient(135deg, rgba(255,255,255,0.14), rgba(255,255,255,0.04) 50%, rgba(255,255,255,0.10)) border-box;
+    border: 1px solid transparent;
+    border-radius: var(--radius-lg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.08) inset, 0 4px 12px rgba(0,0,0,0.2);
+    overflow: hidden;
+    max-height: 360px;
+    overflow-y: auto;
+}
+
+.feed-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    transition: background 0.15s ease;
+}
+
+.feed-item:last-child {
+    border-bottom: none;
+}
+
+.feed-item:hover {
+    background: rgba(255,255,255,0.03);
+}
+
+.feed-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 0.6rem;
+    color: rgba(0,0,0,0.65);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+}
+
+.feed-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.feed-name {
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--text);
+}
+
+.feed-action {
+    font-size: 0.85rem;
+    color: var(--text-sub);
+}
+
+.feed-time {
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    font-weight: 600;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.feed-empty {
+    padding: 24px 16px;
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 0.85rem;
+}
+
+/* scrollbar for the feed */
+.activity-feed::-webkit-scrollbar {
+    width: 4px;
+}
+.activity-feed::-webkit-scrollbar-track {
+    background: transparent;
+}
+.activity-feed::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.1);
+    border-radius: 4px;
+}
+
 /* ─── Reset all generic buttons inside #app ──────────────────────── */
 #app button:not(.quick-log-card):not(.name-card):not(.switch-user-btn):not(.back-btn):not(.export-button) {
     all: unset;

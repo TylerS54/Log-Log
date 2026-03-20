@@ -554,6 +554,7 @@ function updateDisplay(chartView) {
     updateHighscore(filtered);
     renderDayOfWeekChart(processDayOfWeekSnapshot(filtered));
     updateTodayGrid(fullData);
+    updateActivityFeed(fullData);
 }
 
 // ─── Group Logs Today ─────────────────────────────────────────────────────────
@@ -601,6 +602,80 @@ function updateTodayGrid(data) {
         `;
         grid.appendChild(card);
     });
+}
+
+// ─── Activity Feed ────────────────────────────────────────────────────────────
+function updateActivityFeed(data) {
+    const feed = document.getElementById('activityFeed');
+    if (!feed) return;
+
+    // Collect all events with ET timestamps
+    const events = [];
+    for (let user in data) {
+        const userInfo = USER_MAP[user];
+        if (!userInfo) continue;
+        for (let utcTS in data[user]) {
+            const dateET = parseAndConvertUTCToNaiveET(utcTS);
+            events.push({
+                name: user,
+                user: userInfo,
+                dateET: dateET,
+                count: data[user][utcTS]
+            });
+        }
+    }
+
+    // Sort newest first
+    events.sort((a, b) => b.dateET - a.dateET);
+
+    // Show the most recent 30
+    const recent = events.slice(0, 30);
+
+    if (recent.length === 0) {
+        feed.innerHTML = '<div class="feed-empty">No activity yet</div>';
+        return;
+    }
+
+    feed.innerHTML = '';
+    recent.forEach(evt => {
+        const avatarStyle = evt.user.pic
+            ? `background:url('${evt.user.pic}') center/cover no-repeat`
+            : `background:${evt.user.color}`;
+        const avatarContent = evt.user.pic ? '' : evt.user.initial;
+        const timeStr = formatFeedTime(evt.dateET);
+
+        const item = document.createElement('div');
+        item.className = 'feed-item';
+        item.innerHTML = `
+            <div class="feed-avatar" style="${avatarStyle}">${avatarContent}</div>
+            <div class="feed-body">
+                <span class="feed-name">${evt.name}</span>
+                <span class="feed-action"> dropped a log</span>
+            </div>
+            <span class="feed-time">${timeStr}</span>
+        `;
+        feed.appendChild(item);
+    });
+}
+
+function formatFeedTime(dateET) {
+    const now = new Date();
+    const nowET = new Date(now.valueOf());
+    nowET.setHours(nowET.getHours() - 5);
+
+    const diffMs = nowET - dateET;
+    const diffMin = Math.floor(diffMs / 60000);
+    const diffHr  = Math.floor(diffMs / 3600000);
+    const diffDay = Math.floor(diffMs / 86400000);
+
+    if (diffMin < 1)   return 'just now';
+    if (diffMin < 60)  return `${diffMin}m ago`;
+    if (diffHr < 24)   return `${diffHr}h ago`;
+    if (diffDay < 7)   return `${diffDay}d ago`;
+
+    const mm = String(dateET.getMonth() + 1).padStart(2, '0');
+    const dd = String(dateET.getDate()).padStart(2, '0');
+    return `${mm}/${dd}`;
 }
 
 // ─── User modal ───────────────────────────────────────────────────────────────
