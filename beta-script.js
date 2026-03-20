@@ -205,9 +205,9 @@ function triggerShockwave(originEl, color) {
 
     // 3 staggered rings
     const configs = [
-        { delay: 0,   borderWidth: '3px', opacity: 0.9 },
-        { delay: 100, borderWidth: '2px', opacity: 0.55 },
-        { delay: 220, borderWidth: '1.5px', opacity: 0.3 },
+        { delay: 0,   borderWidth: '5px', opacity: 0.95 },
+        { delay: 250, borderWidth: '4px', opacity: 0.65 },
+        { delay: 500, borderWidth: '3px', opacity: 0.4  },
     ];
     configs.forEach(({ delay, borderWidth, opacity }) => {
         const ring = document.createElement('div');
