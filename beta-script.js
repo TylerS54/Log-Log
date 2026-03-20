@@ -12,8 +12,7 @@ const USERS = [
 ];
 
 const USER_MAP = Object.fromEntries(USERS.map(u => [u.name, u]));
-const CACHE_KEY   = 'loglog_lastUser';
-const SESSION_KEY = 'loglog_sessionLogged';
+const CACHE_KEY = 'loglog_lastUser';
 
 // ─── Global state ────────────────────────────────────────────────────────────
 var globalChart, globalCumulativeChart, globalDayOfWeekChart;
@@ -22,14 +21,15 @@ var selectedYear = new Date().getFullYear();
 var currentUserStats = null;
 var currentUserName = null;
 var isLogging = false;
+var hasLogged  = false; // resets on every page load/refresh
 
 // ─── Session helpers ──────────────────────────────────────────────────────────
 function hasLoggedThisSession() {
-    return sessionStorage.getItem(SESSION_KEY) === 'true';
+    return hasLogged;
 }
 
 function markSessionLogged() {
-    sessionStorage.setItem(SESSION_KEY, 'true');
+    hasLogged = true;
 }
 
 // ─── Telegram ────────────────────────────────────────────────────────────────
@@ -672,12 +672,8 @@ document.addEventListener('DOMContentLoaded', () => {
     buildNameGrid();
 
     // Check cache → route to correct UI mode
-    // If already logged this session, show the success state immediately
     const cached = getCachedUser();
-    if (hasLoggedThisSession() && cached && USER_MAP[cached]) {
-        showQuickLog(cached);
-        showLoggedState(cached);
-    } else if (cached && USER_MAP[cached]) {
+    if (cached && USER_MAP[cached]) {
         showQuickLog(cached);
     } else {
         showNamePicker();
