@@ -679,6 +679,9 @@ function exportUserStats() {
 
 // ─── Init ─────────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
+    // Testing page: always reset session lock so the button is clickable
+    sessionStorage.removeItem(SESSION_KEY);
+
     document.getElementById('fart-noise').load();
 
     // Build name grid
