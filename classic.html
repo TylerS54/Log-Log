@@ -3,68 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#080810">
+    <meta name="theme-color" content="#0f0f13">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Poop Chronicles</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="beta-style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
     <link rel="icon" href="favicon.ico">
     <script src="telegram-messages.js"></script>
 </head>
 <body>
-    <!-- Ambient background orbs -->
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
-    <div class="orb orb-3"></div>
-
     <div id="app">
-        <!-- Header -->
-        <header class="header">
-            <div class="header-top">
-                <h1 class="title">💩 Poop Chronicles</h1>
-            </div>
-            <div class="year-picker">
-                <label for="yearDropdown">Year</label>
-                <select id="yearDropdown"></select>
-            </div>
-        </header>
+        <h1>Poop Chronicles</h1>
 
-        <!-- Log Section -->
-        <section class="log-section">
-            <!-- Quick Log Mode (shown when user is cached) -->
-            <div id="quickLogMode" class="quick-log-mode hidden">
-                <p class="section-label">Ready to log?</p>
-                <button class="quick-log-card" id="quickLogCard" onclick="handleQuickLog()">
-                    <div class="ql-avatar" id="qlAvatar"></div>
-                    <div class="ql-body">
-                        <span class="ql-action">Quick Log</span>
-                        <span class="ql-name" id="qlName"></span>
-                    </div>
-                    <div class="ql-arrow">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="5" y1="12" x2="19" y2="12"/>
-                            <polyline points="12 5 19 12 12 19"/>
-                        </svg>
-                    </div>
-                </button>
-                <button class="switch-user-btn" onclick="showNamePicker()">Not you? Switch user</button>
-            </div>
+        <div class="year-dropdown-container">
+            <label for="yearDropdown">Select Year:</label>
+            <select id="yearDropdown"></select>
+        </div>
 
-            <!-- Name Picker Mode (shown by default or after switch) -->
-            <div id="namePickerMode" class="name-picker-mode hidden">
-                <p class="section-label">Who's logging today?</p>
-                <div class="names-grid" id="namesGrid"></div>
-            </div>
-        </section>
+        <div class="buttons-container">
+            <button onclick="incrementCounter('Ziggy'); sendTelegramMessage('Ziggy');">Ziggy</button>
+            <button onclick="incrementCounter('Mikey'); sendTelegramMessage('Mikey');">Mikey</button>
+            <button onclick="incrementCounter('TT'); sendTelegramMessage('TT');">TT</button>
+            <button onclick="incrementCounter('AJ'); sendTelegramMessage('AJ');">AJ</button>
+            <button onclick="incrementCounter('GGK'); sendTelegramMessage('GGK');">GGK</button>
+            <button onclick="incrementCounter('Teddy'); sendTelegramMessage('Teddy');">Teddy</button>
+            <button onclick="incrementCounter('E-Tyler'); sendTelegramMessage('E-Tyler');">E-Tyler</button>
+            <button onclick="incrementCounter('Ant'); sendTelegramMessage('Ant');">Ant</button>
+            <button onclick="incrementCounter('Kyle'); sendTelegramMessage('Kyle');">Kyle</button>
+        </div>
 
-        <!-- Toast notification -->
-        <div id="toast" class="toast" role="status" aria-live="polite"></div>
+        <div id="confirmation" style="display:none;"></div>
 
         <!-- Charts Section -->
         <section class="charts-section">
             <div class="section-header">
                 <h2>Activity Logs</h2>
+                <!-- Toggle redesigned as pill buttons -->
                 <div class="toggle-container">
                     <input type="radio" id="daily" name="chartView" value="daily" checked>
                     <label for="daily">Daily</label>
@@ -85,19 +60,22 @@
             <div id="dayOfWeekChart" class="chart-container"></div>
         </section>
 
-        <!-- Leaderboards Section -->
+        <!-- Stats Cards Section -->
         <section class="stats-section">
             <h2>Leaderboards</h2>
+            
             <div class="stats-card-group">
                 <div class="stats-card">
                     <h3>All-Time Rankings</h3>
                     <div id="highscore"></div>
                 </div>
+                
                 <div class="mobile-stats-grid">
                     <div class="stats-card">
                         <h3>Daily Leader</h3>
                         <div id="daily-leader"></div>
                     </div>
+                    
                     <div class="stats-card">
                         <h3>Weekly Leader</h3>
                         <div id="weekly-leader"></div>
@@ -106,7 +84,7 @@
             </div>
         </section>
 
-        <!-- User Stats Modal -->
+        <!-- User stats modal -->
         <div id="userModal" class="modal">
             <div class="modal-content">
                 <span class="close">
@@ -116,6 +94,8 @@
                     </svg>
                 </span>
                 <h2 id="modalTitle">Stats for <span id="userName"></span></h2>
+
+                <!-- Export Button -->
                 <div class="export-button-container">
                     <button id="exportStatsBtn" class="export-button">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -126,27 +106,45 @@
                         Export Stats (.md)
                     </button>
                 </div>
+
                 <div class="stats-grid">
-                    <div class="stat-card"><h3>Personal Bests</h3><div id="personalBests"></div></div>
-                    <div class="stat-card"><h3>Time of Day</h3><div id="timeOfDay"></div></div>
-                    <div class="stat-card"><h3>Active Streak</h3><div id="activeStreak"></div></div>
-                    <div class="stat-card"><h3>Monthly Average</h3><div id="monthlyAvg"></div></div>
+                    <div class="stat-card">
+                        <h3>Personal Bests</h3>
+                        <div id="personalBests"></div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Time of Day</h3>
+                        <div id="timeOfDay"></div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Active Streak</h3>
+                        <div id="activeStreak"></div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Monthly Average</h3>
+                        <div id="monthlyAvg"></div>
+                    </div>
                 </div>
+
                 <div class="chart-grid">
-                    <div class="chart-card"><h3>Activity Heatmap</h3><div id="heatmap"></div></div>
-                    <div class="chart-card"><h3>Time Trend</h3><div id="timeTrend"></div></div>
+                    <div class="chart-card">
+                        <h3>Activity Heatmap</h3>
+                        <div id="heatmap"></div>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Time Trend</h3>
+                        <div id="timeTrend"></div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Footer -->
-        <div class="footer">
-            <button class="back-btn" onclick="window.location.href='classic.html'">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="19" y1="12" x2="5" y2="12"/>
-                    <polyline points="12 19 5 12 12 5"/>
+        <div class="venmo-button-container">
+            <button class="venmo-button" onclick="window.location.href='index.html'">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
                 </svg>
-                Classic UI
+                Try Beta UI
             </button>
         </div>
     </div>
@@ -154,6 +152,6 @@
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <audio id="fart-noise" src="fart-sound.mp3"></audio>
-    <script src="beta-script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
