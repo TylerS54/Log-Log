@@ -51,7 +51,7 @@ function quickLog(name) {
     
     // Send to server
     const now = new Date();
-    const timestamp = now.toISOString().split(':')[0];
+    const timestamp = now.toISOString().substring(0, 16);
 
     fetch('https://us-central1-loglog-a3cf1.cloudfunctions.net/incrementCounter', {
         method: 'POST',

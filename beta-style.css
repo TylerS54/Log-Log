@@ -1187,6 +1187,16 @@ h3 {
     font-size: 0.85rem;
 }
 
+.feed-sync {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px 0;
+    font-size: 0.85rem;
+    opacity: 0.8;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.04), transparent);
+}
+
 /* scrollbar for the feed */
 .activity-feed::-webkit-scrollbar {
     width: 4px;

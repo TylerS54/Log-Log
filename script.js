@@ -192,7 +192,7 @@ function incrementCounter(name) {
     playFartNoise();
 
     var now = new Date();
-    var timestamp = now.toISOString().split(':')[0]; // YYYY-MM-DDTHH:MM
+    var timestamp = now.toISOString().substring(0, 16); // YYYY-MM-DDTHH:MM
 
     fetch('https://us-central1-loglog-a3cf1.cloudfunctions.net/incrementCounter', {
         method: 'POST',

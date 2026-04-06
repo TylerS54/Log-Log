@@ -127,7 +127,7 @@ function logForUser(name, buttonEl) {
     if (buttonEl) buttonEl.classList.add('loading');
 
     const now = new Date();
-    const timestamp = now.toISOString().split(':')[0];
+    const timestamp = now.toISOString().substring(0, 16);
 
     fetch('https://us-central1-loglog-a3cf1.cloudfunctions.net/incrementCounter', {
         method: 'POST',
@@ -665,7 +665,8 @@ function renderGroupHeatmap(data) {
 
 // ─── Activity Feed ────────────────────────────────────────────────────────────
 function parseUTC(rawTS) {
-    return new Date(rawTS.substring(0, 13).replace('T', ' ') + ':00:00Z');
+    const mm = rawTS.length >= 16 ? rawTS.substring(14, 16) : '00';
+    return new Date(rawTS.substring(0, 13).replace('T', ' ') + ':' + mm + ':00Z');
 }
 
 function updateActivityFeed(data) {
@@ -681,7 +682,8 @@ function updateActivityFeed(data) {
                 name: user,
                 user: userInfo,
                 utcDate: parseUTC(utcTS),
-                count: data[user][utcTS]
+                count: data[user][utcTS],
+                hasMinutes: utcTS.length >= 16
             });
         }
     }
@@ -695,7 +697,7 @@ function updateActivityFeed(data) {
     }
 
     feed.innerHTML = '';
-    recent.forEach(evt => {
+    recent.forEach((evt, i) => {
         const avatarStyle = evt.user.pic
             ? `background:url('${evt.user.pic}') center/cover no-repeat`
             : `background:${evt.user.color}`;
@@ -714,16 +716,31 @@ function updateActivityFeed(data) {
             <span class="feed-time">${timeStr}</span>
         `;
         feed.appendChild(item);
+
+        // Show sync-drop handshake if next entry is a different user within 10 minutes
+        // Both entries must have minute-precision timestamps
+        if (i < recent.length - 1) {
+            const next = recent[i + 1];
+            const gap = Math.abs(evt.utcDate - next.utcDate);
+            if (evt.hasMinutes && next.hasMinutes && evt.name !== next.name && gap <= 10 * 60000) {
+                const sync = document.createElement('div');
+                sync.className = 'feed-sync';
+                sync.innerHTML = '🤝';
+                feed.appendChild(sync);
+            }
+        }
     });
 }
 
 function formatFeedTime(utcDate) {
-    // Timestamps are hour-precision, so compare in whole hours
     const diffMs  = Date.now() - utcDate.getTime();
+    const diffMin = Math.floor(diffMs / 60000);
     const diffHr  = Math.floor(diffMs / 3600000);
     const diffDay = Math.floor(diffMs / 86400000);
 
-    if (diffHr < 1)    return 'just now';
+    if (diffMin < 1)   return 'just now';
+    if (diffMin === 1) return '1m ago';
+    if (diffMin < 60)  return `${diffMin}m ago`;
     if (diffHr === 1)  return '1h ago';
     if (diffHr < 24)   return `${diffHr}h ago`;
     if (diffDay < 7)   return `${diffDay}d ago`;
