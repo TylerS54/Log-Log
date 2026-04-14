@@ -140,6 +140,13 @@ function logForUser(name, buttonEl) {
         markSessionLogged();
         sendTelegramMessage(name);
         showLoggedState(name);
+
+        // Update local data and refresh activity feed
+        if (fullData) {
+            if (!fullData[name]) fullData[name] = {};
+            fullData[name][timestamp] = (fullData[name][timestamp] || 0) + 1;
+            updateDisplay('daily');
+        }
     })
     .catch(err => {
         console.error(err);
